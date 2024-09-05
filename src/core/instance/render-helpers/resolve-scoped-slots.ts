@@ -15,7 +15,7 @@ export function resolveScopedSlots(
       resolveScopedSlots(slot, res, hasDynamicKeys)
     } else if (slot) {
       // 用于反向代理 v-slot 的 marker 而不在 this 上$slots
-// @ts期望错误
+      // @ts期望错误
       if (slot.proxy) {
         // @ts-expect-error
         slot.fn.proxy = true
@@ -24,7 +24,7 @@ export function resolveScopedSlots(
     }
   }
   if (contentHashKey) {
-    ;(res as any).$key = contentHashKey
+    ; (res as any).$key = contentHashKey
   }
   return res as any
 }

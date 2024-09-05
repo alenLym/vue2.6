@@ -11,7 +11,7 @@ export function renderStatic(
   const cached = this._staticTrees || (this._staticTrees = [])
   let tree = cached[index]
   // 如果已经渲染了静态树，而不是在 v-for 中，
-// 我们可以重用同一棵树。
+  // 我们可以重用同一棵树。
   if (tree && !isInFor) {
     return tree
   }

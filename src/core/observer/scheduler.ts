@@ -46,9 +46,9 @@ if (inBrowser && !isIE) {
     getNow() > document.createEvent('Event').timeStamp
   ) {
     // 如果事件时间戳（尽管在 Date.now（） 之后计算）为
-// 小于它，则表示事件使用的是高分辨率时间戳，
-// 我们需要将 Hi-Res 版本用于事件监听器时间戳，如
-// 井。
+    // 小于它，则表示事件使用的是高分辨率时间戳，
+    // 我们需要将 Hi-Res 版本用于事件监听器时间戳，如
+    // 井。
     getNow = () => performance.now()
   }
 }
@@ -71,17 +71,17 @@ function flushSchedulerQueue() {
   let watcher, id
 
   // 在 flush 之前对队列进行排序。
-// 这可确保：
-// 1. 组件从父组件更新为子组件。（因为 parent 始终是
-//    在 Child 之前创建）
-// 2. 组件的用户观察器在其渲染观察器之前运行（因为
-//    用户观察者是在渲染观察者之前创建的）
-// 3. 如果组件在父组件的 watcher 运行期间被销毁，
-//    可以跳过它的 watchers。
+  // 这可确保：
+  // 1. 组件从父组件更新为子组件。（因为 parent 始终是
+  //    在 Child 之前创建）
+  // 2. 组件的用户观察器在其渲染观察器之前运行（因为
+  //    用户观察者是在渲染观察者之前创建的）
+  // 3. 如果组件在父组件的 watcher 运行期间被销毁，
+  //    可以跳过它的 watchers。
   queue.sort(sortCompareFn)
 
   // 不要缓存长度，因为可能会推送更多侦听器
-// 当我们运行现有 watchers 时
+  // 当我们运行现有 watchers 时
   for (index = 0; index < queue.length; index++) {
     watcher = queue[index]
     if (watcher.before) {
@@ -96,9 +96,9 @@ function flushSchedulerQueue() {
       if (circular[id] > MAX_UPDATE_COUNT) {
         warn(
           'You may have an infinite update loop ' +
-            (watcher.user
-              ? `in watcher with expression "${watcher.expression}"`
-              : `in a component render function.`),
+          (watcher.user
+            ? `in watcher with expression "${watcher.expression}"`
+            : `in a component render function.`),
           watcher.vm
         )
         break
@@ -141,7 +141,7 @@ function callUpdatedHooks(queue: Watcher[]) {
  */
 export function queueActivatedComponent(vm: Component) {
   // 在此处将 _inactive 设置为 false，以便 render 函数可以
-// 依赖于检查它是否在非活动树中（例如 router-view）
+  // 依赖于检查它是否在非活动树中（例如 router-view）
   vm._inactive = false
   activatedChildren.push(vm)
 }
@@ -172,7 +172,7 @@ export function queueWatcher(watcher: Watcher) {
     queue.push(watcher)
   } else {
     // 如果已经 flush，则根据 watcher 的 id 拼接 Watcher
-// 如果已超过其 ID，它将立即运行 Next。
+    // 如果已超过其 ID，它将立即运行 Next。
     let i = queue.length - 1
     while (i > index && queue[i].id > watcher.id) {
       i--

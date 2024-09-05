@@ -27,15 +27,15 @@ export function FunctionalRenderContext(
 ) {
   const options = Ctor.options
   // 确保功能组件中的 createElement 函数
-// 获取唯一上下文 - 这对于正确的命名槽检查是必需的
+  // 获取唯一上下文 - 这对于正确的命名槽检查是必需的
   let contextVm
   if (hasOwn(parent, '_uid')) {
     contextVm = Object.create(parent)
     contextVm._original = parent
   } else {
     // 传入的上下文 VM 也是一个功能上下文。
-// 在这种情况下，我们希望确保能够保留
-// real context 实例。
+    // 在这种情况下，我们希望确保能够保留
+    // real context 实例。
     contextVm = parent
     // @ts-ignore
     parent = parent._original
@@ -158,17 +158,17 @@ function cloneAndMarkFunctionalResult(
   renderContext
 ) {
   // #7817 在设置 fnContext 之前克隆节点，否则如果该节点被重用
-// （例如，它来自缓存的普通插槽）fnContext 导致命名插槽
-// 这不应该被匹配到 MATCH。
+  // （例如，它来自缓存的普通插槽）fnContext 导致命名插槽
+  // 这不应该被匹配到 MATCH。
   const clone = cloneVNode(vnode)
   clone.fnContext = contextVm
   clone.fnOptions = options
   if (__DEV__) {
-    ;(clone.devtoolsMeta = clone.devtoolsMeta || ({} as any)).renderContext =
+    ; (clone.devtoolsMeta = clone.devtoolsMeta || ({} as any)).renderContext =
       renderContext
   }
   if (data.slot) {
-    ;(clone.data || (clone.data = {})).slot = data.slot
+    ; (clone.data || (clone.data = {})).slot = data.slot
   }
   return clone
 }

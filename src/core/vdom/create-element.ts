@@ -72,7 +72,7 @@ export function _createElement(
   if (__DEV__ && isDef(data) && isDef(data.key) && !isPrimitive(data.key)) {
     warn(
       'Avoid using non-primitive value as key, ' +
-        'use string/number value instead.',
+      'use string/number value instead.',
       context
     )
   }
@@ -120,8 +120,8 @@ export function _createElement(
       vnode = createComponent(Ctor, data, context, children, tag)
     } else {
       // 未知或未列出的命名空间元素
-// 检查，因为它可能会在其
-// 父级 （parent） 规范化子项
+      // 检查，因为它可能会在其
+      // 父级 （parent） 规范化子项
       vnode = new VNode(tag, data, children, undefined, undefined, context)
     }
   } else {

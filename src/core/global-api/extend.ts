@@ -31,8 +31,10 @@ export function initExtend(Vue: GlobalAPI) {
     }
 
     const Sub = function VueComponent(this: any, options: any) {
+      //初始化
       this._init(options)
     } as unknown as typeof Component
+
     Sub.prototype = Object.create(Super.prototype)
     Sub.prototype.constructor = Sub
     Sub.cid = cid++
@@ -53,7 +55,7 @@ export function initExtend(Vue: GlobalAPI) {
     Sub.use = Super.use
 
     // 创建资产寄存器，因此扩展类
-// 也可以拥有他们的私人资产。
+    // 也可以拥有他们的私人资产。
     ASSET_TYPES.forEach(function (type) {
       Sub[type] = Super[type]
     })
@@ -63,8 +65,8 @@ export function initExtend(Vue: GlobalAPI) {
     }
 
     // 在扩展时保留对 Super Options 的引用。
-// 稍后在 instantiation 中，我们可以检查 Super 的选项是否具有
-// 已更新。
+    // 稍后在 instantiation 中，我们可以检查 Super 的选项是否具有
+    // 已更新。
     Sub.superOptions = Super.options
     Sub.extendOptions = extendOptions
     Sub.sealedOptions = extend({}, Sub.options)

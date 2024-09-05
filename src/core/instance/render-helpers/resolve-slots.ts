@@ -20,7 +20,7 @@ export function resolveSlots(
       delete data.attrs.slot
     }
     // 仅当 vnode 在
-// 相同的上下文。
+    // 相同的上下文。
     if (
       (child.context === context || child.fnContext === context) &&
       data &&
@@ -34,7 +34,7 @@ export function resolveSlots(
         slot.push(child)
       }
     } else {
-      ;(slots.default || (slots.default = [])).push(child)
+      ; (slots.default || (slots.default = [])).push(child)
     }
   }
   // 忽略仅包含空格的插槽

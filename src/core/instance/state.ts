@@ -73,7 +73,7 @@ function initProps(vm: Component, propsOptions: Object) {
   const propsData = vm.$options.propsData || {}
   const props = (vm._props = shallowReactive({}))
   // cache prop 键，以便将来的 props 更新可以使用 Array 进行迭代
-// 而不是动态对象键枚举。
+  // 而不是动态对象键枚举。
   const keys: string[] = (vm.$options._propKeys = [])
   const isRoot = !vm.$parent
   // 根实例 props 应该被转换
@@ -103,9 +103,9 @@ function initProps(vm: Component, propsOptions: Object) {
           if (!isRoot && !isUpdatingChildComponent) {
             warn(
               `Avoid mutating a prop directly since the value will be ` +
-                `overwritten whenever the parent component re-renders. ` +
-                `Instead, use a data or computed property based on the prop's ` +
-                `value. Prop being mutated: "${key}"`,
+              `overwritten whenever the parent component re-renders. ` +
+              `Instead, use a data or computed property based on the prop's ` +
+              `value. Prop being mutated: "${key}"`,
               vm
             )
           }
@@ -116,8 +116,8 @@ function initProps(vm: Component, propsOptions: Object) {
       defineReactive(props, key, value, undefined, true /* shallow */)
     }
     // static props 已经代理在组件的原型上
-// 在 Vue.extend（） 期间。我们只需要代理定义在
-// 实例化。
+    // 在 Vue.extend（） 期间。我们只需要代理定义在
+    // 实例化。
     if (!(key in vm)) {
       proxy(vm, `_props`, key)
     }
@@ -133,7 +133,7 @@ function initData(vm: Component) {
     __DEV__ &&
       warn(
         'data functions should return an object:\n' +
-          'https://v2.vuejs.org/v2/guide/components.html#data-Must-Be-a-Function',
+        'https://v2.vuejs.org/v2/guide/components.html#data-Must-Be-a-Function',
         vm
       )
   }
@@ -153,7 +153,7 @@ function initData(vm: Component) {
       __DEV__ &&
         warn(
           `The data property "${key}" is already declared as a prop. ` +
-            `Use prop default value instead.`,
+          `Use prop default value instead.`,
           vm
         )
     } else if (!isReserved(key)) {
@@ -204,8 +204,8 @@ function initComputed(vm: Component, computed: Object) {
     }
 
     // 组件定义的计算属性已经在
-// 组件原型。我们只需要定义定义的计算属性
-// 在此处实例化。
+    // 组件原型。我们只需要定义定义的计算属性
+    // 在此处实例化。
     if (!(key in vm)) {
       defineComputed(vm, key, userDef)
     } else if (__DEV__) {
@@ -281,7 +281,6 @@ function createGetterInvoker(fn) {
     return fn.call(this, this)
   }
 }
-
 function initMethods(vm: Component, methods: Object) {
   const props = vm.$options.props
   for (const key in methods) {
@@ -289,9 +288,9 @@ function initMethods(vm: Component, methods: Object) {
       if (typeof methods[key] !== 'function') {
         warn(
           `Method "${key}" has type "${typeof methods[
-            key
+          key
           ]}" in the component definition. ` +
-            `Did you reference the function correctly?`,
+          `Did you reference the function correctly?`,
           vm
         )
       }
@@ -301,7 +300,7 @@ function initMethods(vm: Component, methods: Object) {
       if (key in vm && isReserved(key)) {
         warn(
           `Method "${key}" conflicts with an existing Vue instance method. ` +
-            `Avoid defining component methods that start with _ or $.`
+          `Avoid defining component methods that start with _ or $.`
         )
       }
     }
@@ -340,8 +339,8 @@ function createWatcher(
 
 export function stateMixin(Vue: typeof Component) {
   // flow 不知何故与直接声明的定义对象有问题
-// 当使用 Object.defineProperty 时，我们必须按程序构建
-// 这里的对象。
+  // 当使用 Object.defineProperty 时，我们必须按程序构建
+  // 这里的对象。
   const dataDef: any = {}
   dataDef.get = function () {
     return this._data
@@ -354,7 +353,7 @@ export function stateMixin(Vue: typeof Component) {
     dataDef.set = function () {
       warn(
         'Avoid replacing instance root $data. ' +
-          'Use nested data properties instead.',
+        'Use nested data properties instead.',
         this
       )
     }

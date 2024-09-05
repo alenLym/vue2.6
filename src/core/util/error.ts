@@ -6,7 +6,7 @@ import { pushTarget, popTarget } from '../observer/dep'
 
 export function handleError(err: Error, vm: any, info: string) {
   // 在处理错误处理程序时停用 deps tracking，以避免可能的无限渲染。
-// 另请： https://github.com/vuejs/vuex/issues/1505
+  // 另请： https://github.com/vuejs/vuex/issues/1505
   pushTarget()
   try {
     if (vm) {
@@ -43,9 +43,9 @@ export function invokeWithErrorHandling(
     res = args ? handler.apply(context, args) : handler.call(context)
     if (res && !res._isVue && isPromise(res) && !(res as any)._handled) {
       res.catch(e => handleError(e, vm, info + ` (Promise/async)`))
-      // 问题 #9511
-// 避免在嵌套调用时多次触发 catch
-      ;(res as any)._handled = true
+        // 问题 #9511
+        // 避免在嵌套调用时多次触发 catch
+        ; (res as any)._handled = true
     }
   } catch (e: any) {
     handleError(e, vm, info)
@@ -59,7 +59,7 @@ function globalHandleError(err, vm, info) {
       return config.errorHandler.call(null, err, vm, info)
     } catch (e: any) {
       // 如果用户有意在处理程序中抛出原始错误，
-// 不要记录两次
+      // 不要记录两次
       if (e !== err) {
         logError(e, null, 'config.errorHandler')
       }

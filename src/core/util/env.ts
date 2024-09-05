@@ -28,7 +28,7 @@ if (inBrowser) {
       }
     } as object) // https://github.com/facebook/flow/issues/285
     window.addEventListener('test-passive', null as any, opts)
-  } catch (e: any) {}
+  } catch (e: any) { }
 }
 
 // 这需要 lazy-evale，因为之前可能需要 Vue
@@ -39,7 +39,7 @@ export const isServerRendering = () => {
     /* istanbul ignore if */
     if (!inBrowser && typeof global !== 'undefined') {
       // 检测 vue-server-renderer 的存在并避免
-// Webpack 填充进程
+      // Webpack 填充进程
       _isServer =
         global['process'] && global['process'].env.VUE_ENV === 'server'
     } else {

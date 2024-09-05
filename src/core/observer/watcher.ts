@@ -73,12 +73,12 @@ export default class Watcher implements DepTarget {
     recordEffectScope(
       this,
       // 如果活动效果范围是手动创建的（不是组件范围），
-// 确定 IT 的优先级
+      // 确定 IT 的优先级
       activeEffectScope && !activeEffectScope._vm
         ? activeEffectScope
         : vm
-        ? vm._scope
-        : undefined
+          ? vm._scope
+          : undefined
     )
     if ((this.vm = vm) && isRenderWatcher) {
       vm._watcher = this
@@ -117,8 +117,8 @@ export default class Watcher implements DepTarget {
         __DEV__ &&
           warn(
             `Failed watching path: "${expOrFn}" ` +
-              'Watcher only accepts simple dot-delimited paths. ' +
-              'For full control, use a function instead.',
+            'Watcher only accepts simple dot-delimited paths. ' +
+            'For full control, use a function instead.',
             vm
           )
       }
@@ -143,7 +143,7 @@ export default class Watcher implements DepTarget {
       }
     } finally {
       // “touch” 每个属性，以便将它们全部作为
-// 深度监视的依赖项
+      // 深度监视的依赖项
       if (this.deep) {
         traverse(value)
       }

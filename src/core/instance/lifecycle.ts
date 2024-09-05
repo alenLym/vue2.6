@@ -94,7 +94,7 @@ export function lifecycleMixin(Vue: typeof Component) {
       wrapper = wrapper.$parent
     }
     // updated 钩子被调度器调用，以确保子
-// updated 的 hook 中。
+    // updated 的 hook 中。
   }
 
   Vue.prototype.$forceUpdate = function () {
@@ -117,10 +117,10 @@ export function lifecycleMixin(Vue: typeof Component) {
       remove(parent.$children, vm)
     }
     // teardown 范围。这包括 Render Watcher 和其他
-// 已创建 Watchers
+    // 已创建 Watchers
     vm._scope.stop()
     // 从数据 OB 中删除引用
-// 冻结的对象可能没有 Observer。
+    // 冻结的对象可能没有 Observer。
     if (vm._data.__ob__) {
       vm._data.__ob__.vmCount--
     }
@@ -161,8 +161,8 @@ export function mountComponent(
       ) {
         warn(
           'You are using the runtime-only build of Vue where the template ' +
-            'compiler is not available. Either pre-compile the templates into ' +
-            'render functions, or use the compiler-included build.',
+          'compiler is not available. Either pre-compile the templates into ' +
+          'render functions, or use the compiler-included build.',
           vm
         )
       } else {
@@ -214,8 +214,8 @@ export function mountComponent(
   }
 
   // 我们在 watcher 的构造函数中将其设置为 vm._watcher
-// 由于 watcher 的初始 patch 可能会调用 $forceUpdate（例如在 child 中
-// 组件的 mounted 钩子），它依赖于已经定义的 vm._watcher
+  // 由于 watcher 的初始 patch 可能会调用 $forceUpdate（例如在 child 中
+  // 组件的 mounted 钩子），它依赖于已经定义的 vm._watcher
   new Watcher(
     vm,
     updateComponent,
@@ -234,7 +234,7 @@ export function mountComponent(
   }
 
   // 手动挂载的实例，调用 mounted on self
-// mounted 在其插入的钩子中为渲染创建的子组件调用
+  // mounted 在其插入的钩子中为渲染创建的子组件调用
   if (vm.$vnode == null) {
     vm._isMounted = true
     callHook(vm, 'mounted')
@@ -254,11 +254,11 @@ export function updateChildComponent(
   }
 
   // 确定组件是否具有插槽子项
-// 我们需要在覆盖 $options._renderChildren 之前执行此操作。
+  // 我们需要在覆盖 $options._renderChildren 之前执行此操作。
 
   // 检查是否有动态 scopedSlots（手写或编译，但带有
-// 动态插槽名称）。从模板编译的静态作用域插槽具有
-// “$stable”标记。
+  // 动态插槽名称）。从模板编译的静态作用域插槽具有
+  // “$stable”标记。
   const newScopedSlots = parentVnode.data.scopedSlots
   const oldScopedSlots = vm.$scopedSlots
   const hasDynamicScopedSlot = !!(
@@ -286,12 +286,12 @@ export function updateChildComponent(
   vm.$options._renderChildren = renderChildren
 
   // 更新 $attrs 和 $listeners 哈希
-// 这些也是响应式的，因此如果
-// 在渲染期间使用它们
+  // 这些也是响应式的，因此如果
+  // 在渲染期间使用它们
   const attrs = parentVnode.data.attrs || emptyObject
   if (vm._attrsProxy) {
     // 如果 Attrs 被访问并已更改，则强制更新，因为它可能是
-// 传递给子组件。
+    // 传递给子组件。
     if (
       syncSetupProxy(
         vm._attrsProxy,

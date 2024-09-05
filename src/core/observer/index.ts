@@ -54,7 +54,7 @@ export class Observer {
       if (!mock) {
         if (hasProto) {
           /* eslint-disable no-proto */
-          ;(value as any).__proto__ = arrayMethods
+          ; (value as any).__proto__ = arrayMethods
           /* eslint-enable no-proto */
         } else {
           for (let i = 0, l = arrayKeys.length; i < l; i++) {
@@ -241,7 +241,7 @@ export function set(
     __DEV__ &&
       warn(
         'Avoid adding reactive properties to a Vue instance or its root $data ' +
-          'at runtime - declare it upfront in the data option.'
+        'at runtime - declare it upfront in the data option.'
       )
     return val
   }
@@ -284,7 +284,7 @@ export function del(target: any[] | object, key: any) {
     __DEV__ &&
       warn(
         'Avoid deleting properties on a Vue instance or its root $data ' +
-          '- just set it to null.'
+        '- just set it to null.'
       )
     return
   }

@@ -146,10 +146,10 @@ export function createPatchFunction(backend) {
         if (isUnknownElement(vnode, creatingElmInVPre)) {
           warn(
             'Unknown custom element: <' +
-              tag +
-              '> - did you ' +
-              'register the component correctly? For recursive components, ' +
-              'make sure to provide the "name" option.',
+            tag +
+            '> - did you ' +
+            'register the component correctly? For recursive components, ' +
+            'make sure to provide the "name" option.',
             vnode.context
           )
         }
@@ -186,9 +186,9 @@ export function createPatchFunction(backend) {
         i(vnode, false /* hydrating */)
       }
       // 调用 init 钩子后，如果 vnode 是子组件
-// 它应该创建一个子实例并挂载它。孩子
-// 组件还设置了占位符 vnode 的 elm。
-// 在这种情况下，我们只需返回元素即可完成。
+      // 它应该创建一个子实例并挂载它。孩子
+      // 组件还设置了占位符 vnode 的 elm。
+      // 在这种情况下，我们只需返回元素即可完成。
       if (isDef(vnode.componentInstance)) {
         initComponent(vnode, insertedVnodeQueue)
         insert(parentElm, vnode.elm, refElm)
@@ -214,7 +214,7 @@ export function createPatchFunction(backend) {
       setScope(vnode)
     } else {
       // 空组件根。
-// 跳过除 ref 之外的所有元素相关模块 （#3455）
+      // 跳过除 ref 之外的所有元素相关模块 （#3455）
       registerRef(vnode)
       // 确保调用 Insert 钩子
       insertedVnodeQueue.push(vnode)
@@ -224,9 +224,9 @@ export function createPatchFunction(backend) {
   function reactivateComponent(vnode, insertedVnodeQueue, parentElm, refElm) {
     let i
     // 针对 #4339 的 hack：具有内部过渡的重新激活组件
-// 不会触发，因为内部节点创建的钩子没有被调用
-// 再。在这里涉及特定于模块的 logic 并不理想，但是
-// 似乎没有更好的方法来做到这一点。
+    // 不会触发，因为内部节点创建的钩子没有被调用
+    // 再。在这里涉及特定于模块的 logic 并不理想，但是
+    // 似乎没有更好的方法来做到这一点。
     let innerNode = vnode
     while (innerNode.componentInstance) {
       innerNode = innerNode.componentInstance._vnode
@@ -239,7 +239,7 @@ export function createPatchFunction(backend) {
       }
     }
     // 与新创建的组件不同，
-// 重新激活的 keep-alive 组件不会自行插入
+    // 重新激活的 keep-alive 组件不会自行插入
     insert(parentElm, vnode.elm, refElm)
   }
 
@@ -295,8 +295,8 @@ export function createPatchFunction(backend) {
   }
 
   // set scope id 属性。
-// 这是作为特殊情况实现的，以避免开销
-// 完成正常的属性修补过程。
+  // 这是作为特殊情况实现的，以避免开销
+  // 完成正常的属性修补过程。
   function setScope(vnode) {
     let i
     if (isDef((i = vnode.fnScopeId))) {
@@ -377,7 +377,7 @@ export function createPatchFunction(backend) {
       const listeners = cbs.remove.length + 1
       if (isDef(rm)) {
         // 我们有一个递归传递的 rm 回调
-// 增加侦听器计数
+        // 增加侦听器计数
         rm.listeners += listeners
       } else {
         // directly removing
@@ -422,8 +422,8 @@ export function createPatchFunction(backend) {
     let oldKeyToIdx, idxInOld, vnodeToMove, refElm
 
     // removeOnly 是仅由<transition-group>
-// 确保删除的元素保持在正确的相对位置
-// 在离开过渡期间
+    // 确保删除的元素保持在正确的相对位置
+    // 在离开过渡期间
     const canMove = !removeOnly
 
     if (__DEV__) {
@@ -604,9 +604,9 @@ export function createPatchFunction(backend) {
     }
 
     // reuse 元素。
-// 注意：我们只在 vnode 被克隆时执行此操作 -
-// 如果未克隆新节点，则表示渲染函数已
-// reset 的 reset ，我们需要做一个正确的重新渲染。
+    // 注意：我们只在 vnode 被克隆时执行此操作 -
+    // 如果未克隆新节点，则表示渲染函数已
+    // reset 的 reset ，我们需要做一个正确的重新渲染。
     if (
       isTrue(vnode.isStatic) &&
       isTrue(oldVnode.isStatic) &&
@@ -654,7 +654,7 @@ export function createPatchFunction(backend) {
 
   function invokeInsertHook(vnode, queue, initial) {
     // delay insert 钩子，请在组件根节点的
-// 元素确实插入了
+    // 元素确实插入了
     if (isTrue(initial) && isDef(vnode.parent)) {
       vnode.parent.data.pendingInsert = queue
     } else {
@@ -666,8 +666,8 @@ export function createPatchFunction(backend) {
 
   let hydrationBailed = false
   // 可以在 hydration 期间跳过 create hook 的模块列表，因为它们
-// 已在客户端上呈现或不需要初始化
-// 注意：排除 style 是因为它依赖于初始克隆进行未来的深度更新 （#7063）。
+  // 已在客户端上呈现或不需要初始化
+  // 注意：排除 style 是因为它依赖于初始克隆进行未来的深度更新 （#7063）。
   const isRenderedModule = makeMap('attrs,class,staticClass,staticStyle,key')
 
   // 注意：这是一个仅限浏览器的函数，因此我们可以假设 elms 是 DOM 节点。
@@ -737,7 +737,7 @@ export function createPatchFunction(backend) {
               childNode = childNode.nextSibling
             }
             // 如果 childNode 不为 null，则表示实际的 childNodes 列表为
-// 比 Virtual Children 列表长。
+            // 比 Virtual Children 列表长。
             if (!childrenMatch || childNode) {
               /* istanbul ignore if */
               if (
@@ -784,7 +784,7 @@ export function createPatchFunction(backend) {
         vnode.tag.indexOf('vue-component') === 0 ||
         (!isUnknownElement(vnode, inVPre) &&
           vnode.tag.toLowerCase() ===
-            (node.tagName && node.tagName.toLowerCase()))
+          (node.tagName && node.tagName.toLowerCase()))
       )
     } else {
       return node.nodeType === (vnode.isComment ? 8 : 3)
@@ -812,8 +812,8 @@ export function createPatchFunction(backend) {
       } else {
         if (isRealElement) {
           // 安装到真实元件
-// 检查这是否是服务器渲染的内容，以及我们是否可以执行
-// 一次成功的补水。
+          // 检查这是否是服务器渲染的内容，以及我们是否可以执行
+          // 一次成功的补水。
           if (oldVnode.nodeType === 1 && oldVnode.hasAttribute(SSR_ATTR)) {
             oldVnode.removeAttribute(SSR_ATTR)
             hydrating = true
@@ -825,15 +825,15 @@ export function createPatchFunction(backend) {
             } else if (__DEV__) {
               warn(
                 'The client-side rendered virtual DOM tree is not matching ' +
-                  'server-rendered content. This is likely caused by incorrect ' +
-                  'HTML markup, for example nesting block-level elements inside ' +
-                  '<p>, or missing <tbody>. Bailing hydration and performing ' +
-                  'full client-side render.'
+                'server-rendered content. This is likely caused by incorrect ' +
+                'HTML markup, for example nesting block-level elements inside ' +
+                '<p>, or missing <tbody>. Bailing hydration and performing ' +
+                'full client-side render.'
               )
             }
           }
           // 未服务器渲染，或者 hydration 失败。
-// 创建一个空节点并替换它
+          // 创建一个空节点并替换它
           oldVnode = emptyNodeAt(oldVnode)
         }
 
@@ -846,8 +846,8 @@ export function createPatchFunction(backend) {
           vnode,
           insertedVnodeQueue,
           // 极其罕见的边缘情况：如果旧元素位于
-// 离开过渡。仅在将过渡 +
-// keep-alive + HOC 中。(#4590)
+          // 离开过渡。仅在将过渡 +
+          // keep-alive + HOC 中。(#4590)
           oldElm._leaveCb ? null : parentElm,
           nodeOps.nextSibling(oldElm)
         )
@@ -866,13 +866,13 @@ export function createPatchFunction(backend) {
                 cbs.create[i](emptyNode, ancestor)
               }
               // #6513
-// 调用可能已被 create hooks 合并的 Insert hooks。
-// 例如，对于使用 “inserted” 钩子的指令。
+              // 调用可能已被 create hooks 合并的 Insert hooks。
+              // 例如，对于使用 “inserted” 钩子的指令。
               const insert = ancestor.data.hook.insert
               if (insert.merged) {
                 // 从索引 1 开始，以避免重新调用组件挂载的钩子
-// clone insert hooks 以避免在迭代过程中发生突变。
-// 例如，对于 transition group 下的自定义指令。
+                // clone insert hooks 以避免在迭代过程中发生突变。
+                // 例如，对于 transition group 下的自定义指令。
                 const cloned = insert.fns.slice(1)
                 for (let i = 0; i < cloned.length; i++) {
                   cloned[i]()

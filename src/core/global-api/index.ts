@@ -28,10 +28,11 @@ export function initGlobalAPI(Vue: GlobalAPI) {
       )
     }
   }
+
   Object.defineProperty(Vue, 'config', configDef)
 
   // 暴露的 util 方法。
-// 注意：这些不被视为公共 API 的一部分 - 除非您意识到风险，否则请避免依赖它们。
+  // 注意：这些不被视为公共 API 的一部分 - 除非您意识到风险，否则请避免依赖它们。
   Vue.util = {
     warn,
     extend,
@@ -39,6 +40,7 @@ export function initGlobalAPI(Vue: GlobalAPI) {
     defineReactive
   }
 
+  // Vue static
   Vue.set = set
   Vue.delete = del
   Vue.nextTick = nextTick
@@ -55,7 +57,7 @@ export function initGlobalAPI(Vue: GlobalAPI) {
   })
 
   // 这用于标识 “base” 构造函数以扩展所有 plain-object
-// 组件。
+  // 组件。
   Vue.options._base = Vue
 
   extend(Vue.options.components, builtInComponents)

@@ -36,7 +36,7 @@ if (typeof Promise !== 'undefined' && isNative(Promise)) {
   timerFunc = () => {
     p.then(flushCallbacks)
     // 在有问题的 UIWebView 中，Promise.then 并没有完全崩溃，但它可能会陷入一种奇怪的状态，即回调被推送到微任务队列中，但队列没有被刷新，直到浏览器需要做一些其他工作，例如处理计时器。因此，我们可以
-// 通过添加空计时器来 “强制” 刷新 MicroTask 队列。
+    // 通过添加空计时器来 “强制” 刷新 MicroTask 队列。
     if (isIOS) setTimeout(noop)
   }
   isUsingMicroTask = true
@@ -48,7 +48,7 @@ if (typeof Promise !== 'undefined' && isNative(Promise)) {
     MutationObserver.toString() === '[object MutationObserverConstructor]')
 ) {
   // 在原生 Promise 不可用的地方使用 MutationObserver，例如 PhantomJS、iOS7、Android 4.4
-// （#6466 MutationObserver 在 IE11 中不可靠）
+  // （#6466 MutationObserver 在 IE11 中不可靠）
   let counter = 1
   const observer = new MutationObserver(flushCallbacks)
   const textNode = document.createTextNode(String(counter))
@@ -62,7 +62,7 @@ if (typeof Promise !== 'undefined' && isNative(Promise)) {
   isUsingMicroTask = true
 } else if (typeof setImmediate !== 'undefined' && isNative(setImmediate)) {
   // 回退到 setImmediate。
-// 从技术上讲，它利用了（宏）任务队列，但它仍然是比 setTimeout 更好的选择。
+  // 从技术上讲，它利用了（宏）任务队列，但它仍然是比 setTimeout 更好的选择。
   timerFunc = () => {
     setImmediate(flushCallbacks)
   }

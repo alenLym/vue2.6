@@ -16,7 +16,7 @@ export function mergeVNodeHook(
   function wrappedHook() {
     hook.apply(this, arguments)
     // 重要提示：删除合并的 hook 以确保它只被调用一次
-// 并防止内存泄漏
+    // 并防止内存泄漏
     remove(invoker.fns, wrappedHook)
   }
 

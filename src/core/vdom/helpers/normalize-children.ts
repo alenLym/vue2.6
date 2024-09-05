@@ -33,8 +33,8 @@ export function normalizeChildren(children: any): Array<VNode> | undefined {
   return isPrimitive(children)
     ? [createTextVNode(children)]
     : isArray(children)
-    ? normalizeArrayChildren(children)
-    : undefined
+      ? normalizeArrayChildren(children)
+      : undefined
 }
 
 function isTextNode(node): boolean {
@@ -66,8 +66,8 @@ function normalizeArrayChildren(
     } else if (isPrimitive(c)) {
       if (isTextNode(last)) {
         // 合并相邻文本节点
-// 这对于 SSR 激活是必需的，因为文本节点是
-// 渲染为 HTML 字符串时基本上合并
+        // 这对于 SSR 激活是必需的，因为文本节点是
+        // 渲染为 HTML 字符串时基本上合并
         res[lastIndex] = createTextVNode(last.text + c)
       } else if (c !== '') {
         // 将基元转换为 vnode

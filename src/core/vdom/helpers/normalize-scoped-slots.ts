@@ -30,7 +30,7 @@ export function normalizeScopedSlots(
     !prevScopedSlots.$hasNormal
   ) {
     // Fast Path 2：稳定的 Scoped 插槽，没有普通的插槽到代理，
-// 只需要规范化一次
+    // 只需要规范化一次
     return prevScopedSlots
   } else {
     res = {}
@@ -52,7 +52,7 @@ export function normalizeScopedSlots(
     }
   }
   // Avoriaz 似乎模拟了一个不可扩展的 $scopedSlots 对象
-// 当它被传递时，这将导致错误
+  // 当它被传递时，这将导致错误
   if (scopedSlots && Object.isExtensible(scopedSlots)) {
     scopedSlots._normalized = res
   }
@@ -80,8 +80,8 @@ function normalizeScopedSlot(vm, normalSlots, key, fn) {
       : res
   }
   // 这是一个使用新的 v-slot 语法的 slot ，没有 scope。虽然它是
-// 编译为范围插槽，则 render fn 用户会期望它存在
-// 在 this.$slots 上，因为该用法在语义上是一个普通的 slot。
+  // 编译为范围插槽，则 render fn 用户会期望它存在
+  // 在 this.$slots 上，因为该用法在语义上是一个普通的 slot。
   if (fn.proxy) {
     Object.defineProperty(normalSlots, key, {
       get: normalized,

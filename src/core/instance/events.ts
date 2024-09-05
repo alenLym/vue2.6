@@ -69,9 +69,9 @@ export function eventsMixin(Vue: typeof Component) {
         vm.$on(event[i], fn)
       }
     } else {
-      ;(vm._events[event] || (vm._events[event] = [])).push(fn)
+      ; (vm._events[event] || (vm._events[event] = [])).push(fn)
       // 通过使用注册时标记的布尔标志来优化 hook：event 成本
-// 而不是哈希查找
+      // 而不是哈希查找
       if (hookRE.test(event)) {
         vm._hasHookEvent = true
       }
@@ -136,14 +136,14 @@ export function eventsMixin(Vue: typeof Component) {
       if (lowerCaseEvent !== event && vm._events[lowerCaseEvent]) {
         tip(
           `Event "${lowerCaseEvent}" is emitted in component ` +
-            `${formatComponentName(
-              vm
-            )} but the handler is registered for "${event}". ` +
-            `Note that HTML attributes are case-insensitive and you cannot use ` +
-            `v-on to listen to camelCase events when using in-DOM templates. ` +
-            `You should probably use "${hyphenate(
-              event
-            )}" instead of "${event}".`
+          `${formatComponentName(
+            vm
+          )} but the handler is registered for "${event}". ` +
+          `Note that HTML attributes are case-insensitive and you cannot use ` +
+          `v-on to listen to camelCase events when using in-DOM templates. ` +
+          `You should probably use "${hyphenate(
+            event
+          )}" instead of "${event}".`
         )
       }
     }

@@ -27,24 +27,24 @@ export function initRender(vm: Component) {
   vm.$slots = resolveSlots(options._renderChildren, renderContext)
   vm.$scopedSlots = parentVnode
     ? normalizeScopedSlots(
-        vm.$parent!,
-        parentVnode.data!.scopedSlots,
-        vm.$slots
-      )
+      vm.$parent!,
+      parentVnode.data!.scopedSlots,
+      vm.$slots
+    )
     : emptyObject
   // 将 createElement fn 绑定到此实例
-// 这样我们就可以在其中获得适当的渲染上下文。
-// 参数顺序：tag、data、children、normalizationType、alwaysNormalize
-// internal 版本由从模板编译的 render 函数使用
-// @ts期望错误
+  // 这样我们就可以在其中获得适当的渲染上下文。
+  // 参数顺序：tag、data、children、normalizationType、alwaysNormalize
+  // internal 版本由从模板编译的 render 函数使用
+  // @ts期望错误
   vm._c = (a, b, c, d) => createElement(vm, a, b, c, d, false)
   // 规范化始终应用于 Public 版本，用于
-// 用户编写的 render 函数。
-// @ts期望错误
+  // 用户编写的 render 函数。
+  // @ts期望错误
   vm.$createElement = (a, b, c, d) => createElement(vm, a, b, c, d, true)
 
   // $attrs & $listeners 被公开，以便于创建 HOC。
-// 它们需要是响应式的，以便使用它们的 HOC 始终处于更新
+  // 它们需要是响应式的，以便使用它们的 HOC 始终处于更新
   const parentData = parentVnode && parentVnode.data
 
   /* istanbul ignore else */
@@ -117,7 +117,7 @@ export function renderMixin(Vue: typeof Component) {
     }
 
     // 设置 Parent vnode。这允许 render 函数访问
-// 添加到占位符节点上的数据。
+    // 添加到占位符节点上的数据。
     vm.$vnode = _parentVnode!
     // 渲染自身
     const prevInst = currentInstance
@@ -130,7 +130,7 @@ export function renderMixin(Vue: typeof Component) {
     } catch (e: any) {
       handleError(e, vm, `render`)
       // 返回错误渲染结果，
-// 或上一个 vnode 来防止渲染错误导致空白组件
+      // 或上一个 vnode 来防止渲染错误导致空白组件
       /* istanbul ignore else */
       if (__DEV__ && vm.$options.renderError) {
         try {
@@ -159,7 +159,7 @@ export function renderMixin(Vue: typeof Component) {
       if (__DEV__ && isArray(vnode)) {
         warn(
           'Multiple root nodes returned from render function. Render function ' +
-            'should return a single root node.',
+          'should return a single root node.',
           vm
         )
       }

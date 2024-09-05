@@ -35,7 +35,7 @@ export function validateProp(
       value = false
     } else if (value === '' || value === hyphenate(key)) {
       // Only cast empty string / same name to boolean if （仅将空字符串 / 相同名称转换为布尔值 if
-// 布尔值具有更高的优先级
+      // 布尔值具有更高的优先级
       const stringIndex = getTypeIndex(String, prop.type)
       if (stringIndex < 0 || booleanIndex < stringIndex) {
         value = true
@@ -46,7 +46,7 @@ export function validateProp(
   if (value === undefined) {
     value = getPropDefaultValue(vm, prop, key)
     // 由于默认值是新副本，因此
-// 请务必遵守它。
+    // 请务必遵守它。
     const prevShouldObserve = shouldObserve
     toggleObserving(true)
     observe(value)
@@ -75,15 +75,15 @@ function getPropDefaultValue(
   if (__DEV__ && isObject(def)) {
     warn(
       'Invalid default value for prop "' +
-        key +
-        '": ' +
-        'Props with type Object/Array must use a factory function ' +
-        'to return the default value.',
+      key +
+      '": ' +
+      'Props with type Object/Array must use a factory function ' +
+      'to return the default value.',
       vm
     )
   }
   // raw prop 值在之前的渲染中也是未定义的，
-// 返回以前的默认值以避免不必要的观察程序触发器
+  // 返回以前的默认值以避免不必要的观察程序触发器
   if (
     vm &&
     vm.$options.propsData &&
@@ -93,7 +93,7 @@ function getPropDefaultValue(
     return vm._props[key]
   }
   // 为非 Function 类型调用 factory function
-// 如果其原型是 function，则值为 Function，即使在不同的执行上下文中也是如此
+  // 如果其原型是 function，则值为 Function，即使在不同的执行上下文中也是如此
   return isFunction(def) && getType(prop.type) !== 'Function'
     ? def.call(vm)
     : def

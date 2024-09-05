@@ -45,9 +45,9 @@ export default class Dep {
 
   removeSub(sub: DepTarget) {
     // #12696 拥有大量订阅者的 deps 速度非常慢
-// 在 Chromium 中清理
-// 为了解决这个问题，我们现在取消设置 sub，然后清除它们
-// next scheduler flush 的 Flush 命令。
+    // 在 Chromium 中清理
+    // 为了解决这个问题，我们现在取消设置 sub，然后清除它们
+    // next scheduler flush 的 Flush 命令。
     this.subs[this.subs.indexOf(sub)] = null
     if (!this._pending) {
       this._pending = true
@@ -72,8 +72,8 @@ export default class Dep {
     const subs = this.subs.filter(s => s) as DepTarget[]
     if (__DEV__ && !config.async) {
       // 如果不运行 async，则不会在 Scheduler 中对 sub 进行排序
-// 我们现在需要对它们进行排序，以确保它们正确触发
-// 次序
+      // 我们现在需要对它们进行排序，以确保它们正确触发
+      // 次序
       subs.sort((a, b) => a.id - b.id)
     }
     for (let i = 0, l = subs.length; i < l; i++) {

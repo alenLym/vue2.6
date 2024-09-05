@@ -37,7 +37,7 @@ if (__DEV__) {
     if (!vm) {
       warn(
         `option "${key}" can only be used during instance ` +
-          'creation with the `new` keyword.'
+        'creation with the `new` keyword.'
       )
     }
     return defaultStrat(parent, child)
@@ -95,10 +95,10 @@ export function mergeDataOrFn(
       return childVal
     }
     // 当parentVal和childVal都存在时，
-// 我们需要返回一个函数，该函数返回
-// 两个函数的合并结果...无需
-// 检查 parentVal 是否是一个函数，因为
-// 它必须是一个函数来传递以前的合并。
+    // 我们需要返回一个函数，该函数返回
+    // 两个函数的合并结果...无需
+    // 检查 parentVal 是否是一个函数，因为
+    // 它必须是一个函数来传递以前的合并。
     return function mergedDataFn() {
       return mergeData(
         isFunction(childVal) ? childVal.call(this, this) : childVal,
@@ -133,8 +133,8 @@ strats.data = function (
       __DEV__ &&
         warn(
           'The "data" option should be a function ' +
-            'that returns a per-instance value in component ' +
-            'definitions.',
+          'that returns a per-instance value in component ' +
+          'definitions.',
           vm
         )
 
@@ -157,8 +157,8 @@ export function mergeLifecycleHook(
     ? parentVal
       ? parentVal.concat(childVal)
       : isArray(childVal)
-      ? childVal
-      : [childVal]
+        ? childVal
+        : [childVal]
     : parentVal
   return res ? dedupeHooks(res) : res
 }
@@ -213,7 +213,7 @@ strats.watch = function (
   key: string
 ): Object | null {
   // 解决 Firefox 的 Object.prototype.watch...
-//@ts-expect-error 解决方法
+  //@ts-expect-error 解决方法
   if (parentVal === nativeWatch) parentVal = undefined
   //@ts-expect-error work around
   if (childVal === nativeWatch) childVal = undefined
@@ -243,21 +243,21 @@ strats.props =
   strats.methods =
   strats.inject =
   strats.computed =
-    function (
-      parentVal: Object | null,
-      childVal: Object | null,
-      vm: Component | null,
-      key: string
-    ): Object | null {
-      if (childVal && __DEV__) {
-        assertObjectType(key, childVal, vm)
-      }
-      if (!parentVal) return childVal
-      const ret = Object.create(null)
-      extend(ret, parentVal)
-      if (childVal) extend(ret, childVal)
-      return ret
+  function (
+    parentVal: Object | null,
+    childVal: Object | null,
+    vm: Component | null,
+    key: string
+  ): Object | null {
+    if (childVal && __DEV__) {
+      assertObjectType(key, childVal, vm)
     }
+    if (!parentVal) return childVal
+    const ret = Object.create(null)
+    extend(ret, parentVal)
+    if (childVal) extend(ret, childVal)
+    return ret
+  }
 
 strats.provide = function (parentVal: Object | null, childVal: Object | null) {
   if (!parentVal) return childVal
@@ -297,16 +297,16 @@ export function validateComponentName(name: string) {
   ) {
     warn(
       'Invalid component name: "' +
-        name +
-        '". Component names ' +
-        'should conform to valid custom element name in html5 specification.'
+      name +
+      '". Component names ' +
+      'should conform to valid custom element name in html5 specification.'
     )
   }
   if (isBuiltInTag(name) || config.isReservedTag(name)) {
     warn(
       'Do not use built-in or reserved HTML elements as component ' +
-        'id: ' +
-        name
+      'id: ' +
+      name
     )
   }
 }
@@ -340,7 +340,7 @@ function normalizeProps(options: Record<string, any>, vm?: Component | null) {
   } else if (__DEV__) {
     warn(
       `Invalid value for option "props": expected an Array or an Object, ` +
-        `but got ${toRawType(props)}.`,
+      `but got ${toRawType(props)}.`,
       vm
     )
   }
@@ -368,7 +368,7 @@ function normalizeInject(options: Record<string, any>, vm?: Component | null) {
   } else if (__DEV__) {
     warn(
       `Invalid value for option "inject": expected an Array or an Object, ` +
-        `but got ${toRawType(inject)}.`,
+      `but got ${toRawType(inject)}.`,
       vm
     )
   }
@@ -393,7 +393,7 @@ function assertObjectType(name: string, value: any, vm: Component | null) {
   if (!isPlainObject(value)) {
     warn(
       `Invalid value for option "${name}": expected an Object, ` +
-        `but got ${toRawType(value)}.`,
+      `but got ${toRawType(value)}.`,
       vm
     )
   }
@@ -422,7 +422,7 @@ export function mergeOptions(
   normalizeDirectives(child)
 
   // 对子选项应用 extends 和 mixins，但前提是它是不是另一个 mergeOptions 调用的结果的原始选项对象。
-// 只有 merged options 具有 _base 属性。
+  // 只有 merged options 具有 _base 属性。
   if (!child._base) {
     if (child.extends) {
       parent = mergeOptions(parent, child.extends, vm)

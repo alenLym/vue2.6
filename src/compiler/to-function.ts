@@ -32,7 +32,7 @@ export function createCompileToFunctionFn(compile: Function): Function {
 
     /* istanbul ignore if */
     if (__DEV__) {
-      // detect possible CSP restriction
+      // 检测可能的 CSP 限制
       try {
         new Function('return 1')
       } catch (e: any) {
@@ -48,7 +48,7 @@ export function createCompileToFunctionFn(compile: Function): Function {
       }
     }
 
-    // check cache
+    // 检查缓存
     const key = options.delimiters
       ? String(options.delimiters) + template
       : template
@@ -56,10 +56,10 @@ export function createCompileToFunctionFn(compile: Function): Function {
       return cache[key]
     }
 
-    // compile
+    // 编译
     const compiled = compile(template, options)
 
-    // check compilation errors/tips
+    // 检查编译错误/提示
     if (__DEV__) {
       if (compiled.errors && compiled.errors.length) {
         if (options.outputSourceRange) {
@@ -88,7 +88,7 @@ export function createCompileToFunctionFn(compile: Function): Function {
       }
     }
 
-    // turn code into functions
+    // 将代码转换为函数
     const res: any = {}
     const fnGenErrors: any[] = []
     res.render = createFunction(compiled.render, fnGenErrors)
@@ -96,9 +96,9 @@ export function createCompileToFunctionFn(compile: Function): Function {
       return createFunction(code, fnGenErrors)
     })
 
-    // check function generation errors.
-    // this should only happen if there is a bug in the compiler itself.
-    // mostly for codegen development use
+    // 检查函数生成错误。
+// 仅当编译器本身存在 bug 时，才应发生这种情况。
+// 主要用于 Codegen 开发
     /* istanbul ignore if */
     if (__DEV__) {
       if ((!compiled.errors || !compiled.errors.length) && fnGenErrors.length) {

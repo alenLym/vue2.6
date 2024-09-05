@@ -18,13 +18,13 @@ function updateClass(oldVnode: any, vnode: any) {
 
   let cls = genClassForVnode(vnode)
 
-  // handle transition classes
+  // handle 过渡类
   const transitionClass = el._transitionClasses
   if (isDef(transitionClass)) {
     cls = concat(cls, stringifyClass(transitionClass))
   }
 
-  // set the class
+  // 设置类
   if (cls !== el._prevClass) {
     el.setAttribute('class', cls)
     el._prevClass = cls

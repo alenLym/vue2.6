@@ -32,7 +32,7 @@ export function getComponentName(options: ComponentOptions) {
   return options.name || options.__name || options._componentTag
 }
 
-// inline hooks to be invoked on component VNodes during patch
+// 在修补期间在组件 VNode 上调用的内联钩子
 const componentVNodeHooks = {
   init(vnode: VNodeWithData, hydrating: boolean): boolean | void {
     if (
@@ -40,7 +40,7 @@ const componentVNodeHooks = {
       !vnode.componentInstance._isDestroyed &&
       vnode.data.keepAlive
     ) {
-      // kept-alive components, treat as a patch
+      // keept-alive 组件，视为补丁
       const mountedNode: any = vnode // work around flow
       componentVNodeHooks.prepatch(mountedNode, mountedNode)
     } else {
@@ -57,10 +57,10 @@ const componentVNodeHooks = {
     const child = (vnode.componentInstance = oldVnode.componentInstance)
     updateChildComponent(
       child,
-      options.propsData, // updated props
-      options.listeners, // updated listeners
-      vnode, // new parent vnode
-      options.children // new children
+      options.propsData, // 更新的 props
+      options.listeners, // 更新的侦听器
+      vnode, // 新建父 vnode
+      options.children // 新子项
     )
   },
 
@@ -72,11 +72,8 @@ const componentVNodeHooks = {
     }
     if (vnode.data.keepAlive) {
       if (context._isMounted) {
-        // vue-router#1212
-        // During updates, a kept-alive component's child components may
-        // change, so directly walking the tree here may call activated hooks
-        // on incorrect children. Instead we push them into a queue which will
-        // be processed after the whole patch process ended.
+        // vue-router 的 #1212
+// 在更新期间，保持活动状态组件的子组件可能会发生变化，因此直接遍历树可能会在不正确的子组件上调用 activated 钩子。相反，我们将它们推送到一个队列中，该队列将在整个补丁过程结束后进行处理。
         queueActivatedComponent(componentInstance)
       } else {
         activateChildComponent(componentInstance, true /* direct */)
@@ -111,13 +108,13 @@ export function createComponent(
 
   const baseCtor = context.$options._base
 
-  // plain options object: turn it into a constructor
+  // plain options 对象：将其转换为构造函数
   if (isObject(Ctor)) {
     Ctor = baseCtor.extend(Ctor as typeof Component)
   }
 
-  // if at this stage it's not a constructor or an async component factory,
-  // reject.
+  // 如果在此阶段它不是构造函数或异步组件工厂，
+// 拒绝。
   if (typeof Ctor !== 'function') {
     if (__DEV__) {
       warn(`Invalid Component definition: ${String(Ctor)}`, context)
@@ -125,38 +122,38 @@ export function createComponent(
     return
   }
 
-  // async component
+  // async 组件
   let asyncFactory
   // @ts-expect-error
   if (isUndef(Ctor.cid)) {
     asyncFactory = Ctor
     Ctor = resolveAsyncComponent(asyncFactory, baseCtor)
     if (Ctor === undefined) {
-      // return a placeholder node for async component, which is rendered
-      // as a comment node but preserves all the raw information for the node.
-      // the information will be used for async server-rendering and hydration.
+      // 返回 async 组件的 placeholder 节点，该节点被渲染
+// 作为 comment 节点，但保留该节点的所有原始信息。
+// 该信息将用于异步服务器渲染和合成。
       return createAsyncPlaceholder(asyncFactory, data, context, children, tag)
     }
   }
 
   data = data || {}
 
-  // resolve constructor options in case global mixins are applied after
-  // component constructor creation
+  // 解析构造函数选项，以防全局混合在
+// 组件构造函数创建
   resolveConstructorOptions(Ctor as typeof Component)
 
-  // transform component v-model data into props & events
+  // 将组件 V-model 数据转换为 props & events
   if (isDef(data.model)) {
     // @ts-expect-error
     transformModel(Ctor.options, data)
   }
 
-  // extract props
-  // @ts-expect-error
+  // 提取 props
+// @ts期望错误
   const propsData = extractPropsFromVNodeData(data, Ctor, tag)
 
-  // functional component
-  // @ts-expect-error
+  // 功能组件
+// @ts期望错误
   if (isTrue(Ctor.options.functional)) {
     return createFunctionalComponent(
       Ctor as typeof Component,
@@ -167,8 +164,8 @@ export function createComponent(
     )
   }
 
-  // extract listeners, since these needs to be treated as
-  // child component listeners instead of DOM listeners
+  // 提取侦听器，因为这些需要被视为
+// 子组件侦听器而不是 DOM 侦听器
   const listeners = data.on
   // replace with listeners with .native modifier
   // so it gets processed during parent component patch.

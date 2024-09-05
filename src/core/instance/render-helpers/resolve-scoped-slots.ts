@@ -4,7 +4,7 @@ import { isArray } from 'core/util'
 export function resolveScopedSlots(
   fns: ScopedSlotsData,
   res?: Record<string, any>,
-  // the following are added in 2.6
+  // 在 2.6 中添加了以下内容
   hasDynamicKeys?: boolean,
   contentHashKey?: number
 ): { $stable: boolean } & { [key: string]: Function } {
@@ -14,8 +14,8 @@ export function resolveScopedSlots(
     if (isArray(slot)) {
       resolveScopedSlots(slot, res, hasDynamicKeys)
     } else if (slot) {
-      // marker for reverse proxying v-slot without scope on this.$slots
-      // @ts-expect-error
+      // 用于反向代理 v-slot 的 marker 而不在 this 上$slots
+// @ts期望错误
       if (slot.proxy) {
         // @ts-expect-error
         slot.fn.proxy = true

@@ -1,6 +1,5 @@
 /**
- * Not type checking this file because flow doesn't like attaching
- * properties to Elements.
+ * 不对此文件进行类型检查，因为 flow 不喜欢将属性附加到 Elements。
  */
 
 import { isTextInputType } from 'web/util/element'
@@ -37,10 +36,7 @@ const directive = {
       if (!binding.modifiers.lazy) {
         el.addEventListener('compositionstart', onCompositionStart)
         el.addEventListener('compositionend', onCompositionEnd)
-        // Safari < 10.2 & UIWebView doesn't fire compositionend when
-        // switching focus before confirming composition choice
-        // this also fixes the issue where some browsers e.g. iOS Chrome
-        // fires "change" instead of "input" on autocomplete.
+        // Safari < 10.2 & UIWebView在确认合成选择之前切换焦点时不触发合成结束，这也修复了某些浏览器，例如iOS：Chrome在自动完成时触发“更改”而不是“输入”的问题。
         el.addEventListener('change', onCompositionEnd)
         /* istanbul ignore if */
         if (isIE9) {
@@ -53,15 +49,15 @@ const directive = {
   componentUpdated(el, binding, vnode) {
     if (vnode.tag === 'select') {
       setSelected(el, binding, vnode.context)
-      // in case the options rendered by v-for have changed,
-      // it's possible that the value is out-of-sync with the rendered options.
-      // detect such cases and filter out values that no longer has a matching
-      // option in the DOM.
+      // 如果 v-for 渲染的选项发生了变化，
+// 该值可能与渲染的选项不同步。
+// 检测此类情况并筛选出不再具有匹配项的值
+// 选项。
       const prevOptions = el._vOptions
       const curOptions = (el._vOptions = [].map.call(el.options, getValue))
       if (curOptions.some((o, i) => !looseEqual(o, prevOptions[i]))) {
-        // trigger change event if
-        // no matching option found for at least one value
+        // 如果出现 Trigger Change Event，则触发更改事件
+// 未找到至少一个值的匹配选项
         const needReset = el.multiple
           ? binding.value.some(v => hasNoMatchingOption(v, curOptions))
           : binding.value !== binding.oldValue &&
@@ -133,7 +129,7 @@ function onCompositionStart(e) {
 }
 
 function onCompositionEnd(e) {
-  // prevent triggering an input event for no reason
+  // 无故阻止触发输入事件
   if (!e.target.composing) return
   e.target.composing = false
   trigger(e.target, 'input')

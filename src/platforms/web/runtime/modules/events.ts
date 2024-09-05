@@ -9,10 +9,10 @@ import { currentFlushTimestamp } from 'core/observer/scheduler'
 import { emptyNode } from 'core/vdom/patch'
 import type { VNodeWithData } from 'types/vnode'
 
-// normalize v-model event tokens that can only be determined at runtime.
-// it's important to place the event as the first in the array because
-// the whole point is ensuring the v-model callback gets called before
-// user-attached handlers.
+// 规范化只能在运行时确定的 V-Model 事件标记。
+// 将事件放在数组中的第一个很重要，因为
+// 关键是确保 v-model 回调在之前被调用
+// 用户附加的处理程序。
 function normalizeEvents(on) {
   /* istanbul ignore if */
   if (isDef(on[RANGE_TOKEN])) {
@@ -21,8 +21,7 @@ function normalizeEvents(on) {
     on[event] = [].concat(on[RANGE_TOKEN], on[event] || [])
     delete on[RANGE_TOKEN]
   }
-  // This was originally intended to fix #4521 but no longer necessary
-  // after 2.5. Keeping it for backwards compat with generated code from < 2.4
+  // 这最初是为了修复 #4521，但在 2.5 之后不再需要。保持它与 < 2.4 生成的代码向后兼容
   /* istanbul ignore if */
   if (isDef(on[CHECKBOX_RADIO_TOKEN])) {
     on.change = [].concat(on[CHECKBOX_RADIO_TOKEN], on.change || [])
@@ -33,7 +32,7 @@ function normalizeEvents(on) {
 let target: any
 
 function createOnceHandler(event, handler, capture) {
-  const _target = target // save current target element in closure
+  const _target = target // 将当前目标元素保存在闭包中
   return function onceHandler() {
     const res = handler.apply(null, arguments)
     if (res !== null) {
@@ -42,9 +41,9 @@ function createOnceHandler(event, handler, capture) {
   }
 }
 
-// #9446: Firefox <= 53 (in particular, ESR 52) has incorrect Event.timeStamp
-// implementation and does not fire microtasks in between event propagation, so
-// safe to exclude.
+// #9446： Firefox <= 53（特别是 ESR 52）的 Event.timeStamp 不正确
+// 实现，并且不会在事件传播之间触发微任务，因此
+// 可以安全排除。
 const useMicrotaskFix = isUsingMicroTask && !(isFF && Number(isFF[1]) <= 53)
 
 function add(
@@ -53,31 +52,31 @@ function add(
   capture: boolean,
   passive: boolean
 ) {
-  // async edge case #6566: inner click event triggers patch, event handler
-  // attached to outer element during patch, and triggered again. This
-  // happens because browsers fire microtask ticks between event propagation.
-  // the solution is simple: we save the timestamp when a handler is attached,
-  // and the handler would only fire if the event passed to it was fired
-  // AFTER it was attached.
+  // 异步边缘案例 #6566： 内部点击事件触发补丁、事件处理程序
+// 在 patch 期间附加到 outer element，并再次触发。这
+// 发生这种情况是因为浏览器在事件传播之间触发了微任务 tick。
+// 解决方案很简单：我们在附加处理程序时保存时间戳，
+// 并且处理程序仅在传递给它的事件被触发时触发
+// 在它被附上之后。
   if (useMicrotaskFix) {
     const attachedTimestamp = currentFlushTimestamp
     const original = handler
     //@ts-expect-error
     handler = original._wrapper = function (e) {
       if (
-        // no bubbling, should always fire.
-        // this is just a safety net in case event.timeStamp is unreliable in
-        // certain weird environments...
+        // 没有冒泡，应该总是触发。
+// 这只是一个安全网，以防 event.timeStamp 在
+// 某些奇怪的环境......
         e.target === e.currentTarget ||
-        // event is fired after handler attachment
+        // 事件在处理程序附件后触发
         e.timeStamp >= attachedTimestamp ||
-        // bail for environments that have buggy event.timeStamp implementations
-        // #9462 iOS 9 bug: event.timeStamp is 0 after history.pushState
-        // #9681 QtWebEngine event.timeStamp is negative value
+        // bail 用于具有 bug event.timeStamp 实现的环境
+// #9462 iOS 9 错误：history.pushState 后 event.timeStamp 为 0
+// #9681 QtWebEngine event.timeStamp 为负值
         e.timeStamp <= 0 ||
-        // #9448 bail if event is fired in another document in a multi-page
-        // electron/nw.js app, since event.timeStamp will be using a different
-        // starting reference
+        // #9448 如果在多页的另一个文档中触发事件，则保释
+// electron/nw.js 应用程序，因为 event.timeStamp 将使用不同的
+// 起始参考
         e.target.ownerDocument !== document
       ) {
         return original.apply(this, arguments)
@@ -111,8 +110,8 @@ function updateDOMListeners(oldVnode: VNodeWithData, vnode: VNodeWithData) {
   }
   const on = vnode.data.on || {}
   const oldOn = oldVnode.data.on || {}
-  // vnode is empty when removing all listeners,
-  // and use old vnode dom element
+  // vnode 在删除所有侦听器时为空，
+// 并使用旧的 vnode DOM 元素
   target = vnode.elm || oldVnode.elm
   normalizeEvents(on)
   updateListeners(on, oldOn, add, remove, createOnceHandler, vnode.context)
@@ -122,6 +121,6 @@ function updateDOMListeners(oldVnode: VNodeWithData, vnode: VNodeWithData) {
 export default {
   create: updateDOMListeners,
   update: updateDOMListeners,
-  // @ts-expect-error emptyNode has actually data
+  // @ts-expect-error emptyNode 实际上有数据
   destroy: (vnode: VNodeWithData) => updateDOMListeners(vnode, emptyNode)
 }

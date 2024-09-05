@@ -5,7 +5,7 @@ const fnInvokeRE = /\([^)]*?\);*$/
 const simplePathRE =
   /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*|\['[^']*?']|\["[^"]*?"]|\[\d+]|\[[A-Za-z_$][\w$]*])*$/
 
-// KeyboardEvent.keyCode aliases
+// KeyboardEvent.keyCode 别名
 const keyCodes: { [key: string]: number | Array<number> } = {
   esc: 27,
   tab: 9,
@@ -18,15 +18,15 @@ const keyCodes: { [key: string]: number | Array<number> } = {
   delete: [8, 46]
 }
 
-// KeyboardEvent.key aliases
+// KeyboardEvent.key别名
 const keyNames: { [key: string]: string | Array<string> } = {
-  // #7880: IE11 and Edge use `Esc` for Escape key name.
+  // #7880： IE11 和 Edge 使用 'Esc' 作为 Escape 键名称。
   esc: ['Esc', 'Escape'],
   tab: 'Tab',
   enter: 'Enter',
-  // #9112: IE11 uses `Spacebar` for Space key name.
+  // #9112： IE11 使用“空格键”作为空间键名称。
   space: [' ', 'Spacebar'],
-  // #7806: IE11 uses key names without `Arrow` prefix for arrow keys.
+  // #7806： IE11 使用不带 'Arrow' 前缀的键名称作为箭头键。
   up: ['Up', 'ArrowUp'],
   left: ['Left', 'ArrowLeft'],
   right: ['Right', 'ArrowRight'],
@@ -35,9 +35,9 @@ const keyNames: { [key: string]: string | Array<string> } = {
   delete: ['Backspace', 'Delete', 'Del']
 }
 
-// #4868: modifiers that prevent the execution of the listener
-// need to explicitly return null so that we can determine whether to remove
-// the listener for .once
+// #4868： 阻止执行侦听器的修饰符
+// 需要显式返回 null，以便我们可以确定是否删除
+// .once 的侦听器
 const genGuard = condition => `if(${condition})return null;`
 
 const modifierCode: { [key: string]: string } = {
@@ -100,7 +100,7 @@ function genHandler(
     }
     return `function($event){${
       isFunctionInvocation ? `return ${handler.value}` : handler.value
-    }}` // inline statement
+    }}` // inline 语句
   } else {
     let code = ''
     let genModifierCode = ''
@@ -127,7 +127,7 @@ function genHandler(
     if (keys.length) {
       code += genKeyFilter(keys)
     }
-    // Make sure modifiers like prevent and stop get executed after key filtering
+    // 确保在键筛选后执行 prevent 和 stop 等修饰符
     if (genModifierCode) {
       code += genModifierCode
     }
@@ -144,9 +144,9 @@ function genHandler(
 
 function genKeyFilter(keys: Array<string>): string {
   return (
-    // make sure the key filters only apply to KeyboardEvents
-    // #9441: can't use 'keyCode' in $event because Chrome autofill fires fake
-    // key events that do not have keyCode property...
+    // 确保键筛选器仅适用于 KeyboardEvents
+// #9441： 无法在 $event 中使用“keyCode”，因为 Chrome 自动填充会触发假
+// 没有 keyCode 属性的 key 事件...
     `if(!$event.type.indexOf('key')&&` +
     `${keys.map(genFilterCode).join('&&')})return null;`
   )

@@ -12,7 +12,8 @@ import { updateListeners } from '../vdom/helpers/index'
 export function initEvents(vm: Component) {
   vm._events = Object.create(null)
   vm._hasHookEvent = false
-  // init parent attached events
+  // 初始化父级附加事件
+  //! 获取父级附加事件
   const listeners = vm.$options._parentListeners
   if (listeners) {
     updateComponentListeners(vm, listeners)
@@ -69,8 +70,8 @@ export function eventsMixin(Vue: typeof Component) {
       }
     } else {
       ;(vm._events[event] || (vm._events[event] = [])).push(fn)
-      // optimize hook:event cost by using a boolean flag marked at registration
-      // instead of a hash lookup
+      // 通过使用注册时标记的布尔标志来优化 hook：event 成本
+// 而不是哈希查找
       if (hookRE.test(event)) {
         vm._hasHookEvent = true
       }
@@ -94,19 +95,19 @@ export function eventsMixin(Vue: typeof Component) {
     fn?: Function
   ): Component {
     const vm: Component = this
-    // all
+    // 都
     if (!arguments.length) {
       vm._events = Object.create(null)
       return vm
     }
-    // array of events
+    // 事件数组
     if (isArray(event)) {
       for (let i = 0, l = event.length; i < l; i++) {
         vm.$off(event[i], fn)
       }
       return vm
     }
-    // specific event
+    // 特定事件
     const cbs = vm._events[event!]
     if (!cbs) {
       return vm
@@ -115,7 +116,7 @@ export function eventsMixin(Vue: typeof Component) {
       vm._events[event!] = null
       return vm
     }
-    // specific handler
+    // 特定处理程序
     let cb
     let i = cbs.length
     while (i--) {

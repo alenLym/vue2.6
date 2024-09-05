@@ -10,17 +10,17 @@ export function provide<T>(key: InjectionKey<T> | string | number, value: T) {
       warn(`provide() can only be used inside setup().`)
     }
   } else {
-    // TS doesn't allow symbol as index type
+    // TS 不允许将 symbol 作为索引类型
     resolveProvided(currentInstance)[key as string] = value
   }
 }
 
 export function resolveProvided(vm: Component): Record<string, any> {
-  // by default an instance inherits its parent's provides object
-  // but when it needs to provide values of its own, it creates its
-  // own provides object using parent provides object as prototype.
-  // this way in `inject` we can simply look up injections from direct
-  // parent and let the prototype chain do the work.
+  // 默认情况下，实例会继承其父级的 Provides 对象
+// 但是当它需要提供自己的值时，它会创建其
+// own 提供对象 使用 parent 提供对象作为原型。
+// 这样在 'inject' 中，我们可以简单地从 Direct 中查找注入
+// parent 并让原型链完成工作。
   const existing = vm._provided
   const parentProvides = vm.$parent && vm.$parent._provided
   if (parentProvides === existing) {
@@ -46,13 +46,13 @@ export function inject(
   defaultValue?: unknown,
   treatDefaultAsFactory = false
 ) {
-  // fallback to `currentRenderingInstance` so that this can be called in
-  // a functional component
+  // 回退到 'currentRenderingInstance' 中，以便可以在
+// 功能组件
   const instance = currentInstance
   if (instance) {
     // #2400
-    // to support `app.use` plugins,
-    // fallback to appContext's `provides` if the instance is at root
+// 要支持 'app.use' 插件，
+// 如果实例位于根目录，则回退到 appContext 的 'provides'
     const provides = instance.$parent && instance.$parent._provided
 
     if (provides && (key as string | symbol) in provides) {

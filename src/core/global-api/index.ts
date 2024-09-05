@@ -30,9 +30,8 @@ export function initGlobalAPI(Vue: GlobalAPI) {
   }
   Object.defineProperty(Vue, 'config', configDef)
 
-  // exposed util methods.
-  // NOTE: these are not considered part of the public API - avoid relying on
-  // them unless you are aware of the risk.
+  // 暴露的 util 方法。
+// 注意：这些不被视为公共 API 的一部分 - 除非您意识到风险，否则请避免依赖它们。
   Vue.util = {
     warn,
     extend,
@@ -44,7 +43,7 @@ export function initGlobalAPI(Vue: GlobalAPI) {
   Vue.delete = del
   Vue.nextTick = nextTick
 
-  // 2.6 explicit observable API
+  // 2.6 显式 observable API
   Vue.observable = <T>(obj: T): T => {
     observe(obj)
     return obj
@@ -55,8 +54,8 @@ export function initGlobalAPI(Vue: GlobalAPI) {
     Vue.options[type + 's'] = Object.create(null)
   })
 
-  // this is used to identify the "base" constructor to extend all plain-object
-  // components with in Weex's multi-instance scenarios.
+  // 这用于标识 “base” 构造函数以扩展所有 plain-object
+// 组件。
   Vue.options._base = Vue
 
   extend(Vue.options.components, builtInComponents)

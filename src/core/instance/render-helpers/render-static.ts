@@ -2,7 +2,7 @@ import VNode from 'core/vdom/vnode'
 import { isArray } from 'core/util'
 
 /**
- * Runtime helper for rendering static trees.
+ * 用于渲染静态树的运行时帮助程序。
  */
 export function renderStatic(
   index: number,
@@ -10,24 +10,24 @@ export function renderStatic(
 ): VNode | Array<VNode> {
   const cached = this._staticTrees || (this._staticTrees = [])
   let tree = cached[index]
-  // if has already-rendered static tree and not inside v-for,
-  // we can reuse the same tree.
+  // 如果已经渲染了静态树，而不是在 v-for 中，
+// 我们可以重用同一棵树。
   if (tree && !isInFor) {
     return tree
   }
-  // otherwise, render a fresh tree.
+  // 否则，渲染一棵新鲜的树。
   tree = cached[index] = this.$options.staticRenderFns[index].call(
     this._renderProxy,
     this._c,
-    this // for render fns generated for functional component templates
+    this // 对于为功能组件模板生成的渲染 FNS
   )
   markStatic(tree, `__static__${index}`, false)
   return tree
 }
 
 /**
- * Runtime helper for v-once.
- * Effectively it means marking the node as static with a unique key.
+ * v-once 的运行时帮助程序。
+ * 实际上，这意味着使用唯一键将节点标记为 static。
  */
 export function markOnce(
   tree: VNode | Array<VNode>,

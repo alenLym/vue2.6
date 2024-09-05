@@ -20,14 +20,12 @@ import type { Component } from 'types/component'
 import type { ComponentOptions } from 'types/options'
 
 /**
- * Option overwriting strategies are functions that handle
- * how to merge a parent option value and a child option
- * value into the final value.
+ * 选项覆盖策略是处理如何将父选项值和子选项值合并到最终值的函数。
  */
 const strats = config.optionMergeStrategies
 
 /**
- * Options with restrictions
+ * 有限制的选项
  */
 if (__DEV__) {
   strats.el = strats.propsData = function (
@@ -47,7 +45,7 @@ if (__DEV__) {
 }
 
 /**
- * Helper that recursively merges two data objects together.
+ * 以递归方式将两个数据对象合并在一起的 Helper。
  */
 function mergeData(
   to: Record<string | symbol, any>,
@@ -63,7 +61,7 @@ function mergeData(
 
   for (let i = 0; i < keys.length; i++) {
     key = keys[i]
-    // in case the object is already observed...
+    // 如果该物体已经被观察到......
     if (key === '__ob__') continue
     toVal = to[key]
     fromVal = from[key]
@@ -81,7 +79,7 @@ function mergeData(
 }
 
 /**
- * Data
+ * 数据
  */
 export function mergeDataOrFn(
   parentVal: any,
@@ -89,18 +87,18 @@ export function mergeDataOrFn(
   vm?: Component
 ): Function | null {
   if (!vm) {
-    // in a Vue.extend merge, both should be functions
+    // 在 Vue.extend 合并中，两者都应该是函数
     if (!childVal) {
       return parentVal
     }
     if (!parentVal) {
       return childVal
     }
-    // when parentVal & childVal are both present,
-    // we need to return a function that returns the
-    // merged result of both functions... no need to
-    // check if parentVal is a function here because
-    // it has to be a function to pass previous merges.
+    // 当parentVal和childVal都存在时，
+// 我们需要返回一个函数，该函数返回
+// 两个函数的合并结果...无需
+// 检查 parentVal 是否是一个函数，因为
+// 它必须是一个函数来传递以前的合并。
     return function mergedDataFn() {
       return mergeData(
         isFunction(childVal) ? childVal.call(this, this) : childVal,
@@ -109,7 +107,7 @@ export function mergeDataOrFn(
     }
   } else {
     return function mergedInstanceDataFn() {
-      // instance merge
+      // 实例合并
       const instanceData = isFunction(childVal)
         ? childVal.call(vm, vm)
         : childVal
@@ -149,7 +147,7 @@ strats.data = function (
 }
 
 /**
- * Hooks and props are merged as arrays.
+ * 钩子和 props 合并为数组。
  */
 export function mergeLifecycleHook(
   parentVal: Array<Function> | null,
@@ -180,11 +178,9 @@ LIFECYCLE_HOOKS.forEach(hook => {
 })
 
 /**
- * Assets
+ * 资产
  *
- * When a vm is present (instance creation), we need to do
- * a three-way merge between constructor options, instance
- * options and parent options.
+ * 当 vm 存在（实例创建）时，我们需要在构造函数选项、实例选项和父选项之间进行三向合并。
  */
 function mergeAssets(
   parentVal: Object | null,
@@ -206,10 +202,9 @@ ASSET_TYPES.forEach(function (type) {
 })
 
 /**
- * Watchers.
+ * 观察家。
  *
- * Watchers hashes should not overwrite one
- * another, so we merge them as arrays.
+ * 观察者哈希值不应该相互覆盖，因此我们将它们合并为数组。
  */
 strats.watch = function (
   parentVal: Record<string, any> | null,
@@ -217,8 +212,8 @@ strats.watch = function (
   vm: Component | null,
   key: string
 ): Object | null {
-  // work around Firefox's Object.prototype.watch...
-  //@ts-expect-error work around
+  // 解决 Firefox 的 Object.prototype.watch...
+//@ts-expect-error 解决方法
   if (parentVal === nativeWatch) parentVal = undefined
   //@ts-expect-error work around
   if (childVal === nativeWatch) childVal = undefined
@@ -242,7 +237,7 @@ strats.watch = function (
 }
 
 /**
- * Other object hashes.
+ * 其他对象哈希。
  */
 strats.props =
   strats.methods =
@@ -273,7 +268,7 @@ strats.provide = function (parentVal: Object | null, childVal: Object | null) {
       mergeData(
         ret,
         isFunction(childVal) ? childVal.call(this) : childVal,
-        false // non-recursive
+        false // 非递归
       )
     }
     return ret
@@ -281,14 +276,14 @@ strats.provide = function (parentVal: Object | null, childVal: Object | null) {
 }
 
 /**
- * Default strategy.
+ * 默认策略。
  */
 const defaultStrat = function (parentVal: any, childVal: any): any {
   return childVal === undefined ? parentVal : childVal
 }
 
 /**
- * Validate component names
+ * 验证组件名称
  */
 function checkComponents(options: Record<string, any>) {
   for (const key in options.components) {
@@ -317,8 +312,8 @@ export function validateComponentName(name: string) {
 }
 
 /**
- * Ensure all props option syntax are normalized into the
- * Object-based format.
+ * 确保所有 props 选项语法都规范化为
+ * 基于对象的格式。
  */
 function normalizeProps(options: Record<string, any>, vm?: Component | null) {
   const props = options.props
@@ -353,7 +348,7 @@ function normalizeProps(options: Record<string, any>, vm?: Component | null) {
 }
 
 /**
- * Normalize all injections into Object-based format
+ * 将所有进样标准化为基于对象的格式
  */
 function normalizeInject(options: Record<string, any>, vm?: Component | null) {
   const inject = options.inject
@@ -380,7 +375,7 @@ function normalizeInject(options: Record<string, any>, vm?: Component | null) {
 }
 
 /**
- * Normalize raw function directives into object format.
+ * 将原始函数指令规范化为对象格式。
  */
 function normalizeDirectives(options: Record<string, any>) {
   const dirs = options.directives
@@ -405,8 +400,8 @@ function assertObjectType(name: string, value: any, vm: Component | null) {
 }
 
 /**
- * Merge two option objects into a new one.
- * Core utility used in both instantiation and inheritance.
+ * 将两个选项对象合并为一个新的选项对象。
+ * 实例化和继承中使用的 Core 实用程序。
  */
 export function mergeOptions(
   parent: Record<string, any>,
@@ -426,10 +421,8 @@ export function mergeOptions(
   normalizeInject(child, vm)
   normalizeDirectives(child)
 
-  // Apply extends and mixins on the child options,
-  // but only if it is a raw options object that isn't
-  // the result of another mergeOptions call.
-  // Only merged options has the _base property.
+  // 对子选项应用 extends 和 mixins，但前提是它是不是另一个 mergeOptions 调用的结果的原始选项对象。
+// 只有 merged options 具有 _base 属性。
   if (!child._base) {
     if (child.extends) {
       parent = mergeOptions(parent, child.extends, vm)
@@ -459,9 +452,8 @@ export function mergeOptions(
 }
 
 /**
- * Resolve an asset.
- * This function is used because child instances need access
- * to assets defined in its ancestor chain.
+ * 解决资产问题。
+ * 使用此函数是因为子实例需要访问其祖先链中定义的资产。
  */
 export function resolveAsset(
   options: Record<string, any>,
@@ -474,13 +466,13 @@ export function resolveAsset(
     return
   }
   const assets = options[type]
-  // check local registration variations first
+  // 首先检查本地注册变体
   if (hasOwn(assets, id)) return assets[id]
   const camelizedId = camelize(id)
   if (hasOwn(assets, camelizedId)) return assets[camelizedId]
   const PascalCaseId = capitalize(camelizedId)
   if (hasOwn(assets, PascalCaseId)) return assets[PascalCaseId]
-  // fallback to prototype chain
+  // 回退到原型链
   const res = assets[id] || assets[camelizedId] || assets[PascalCaseId]
   if (__DEV__ && warnMissing && !res) {
     warn('Failed to resolve ' + type.slice(0, -1) + ': ' + id)

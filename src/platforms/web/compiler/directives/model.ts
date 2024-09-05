@@ -5,8 +5,8 @@ import { ASTDirective, ASTElement, ASTModifiers } from 'types/compiler'
 
 let warn
 
-// in some cases, the event used has to be determined at runtime
-// so we used some reserved tokens during compile.
+// 在某些情况下，必须在运行时确定使用的事件
+// 所以我们在编译过程中使用了一些 reserved token。
 export const RANGE_TOKEN = '__r'
 export const CHECKBOX_RADIO_TOKEN = '__c'
 
@@ -22,8 +22,8 @@ export default function model(
   const type = el.attrsMap.type
 
   if (__DEV__) {
-    // inputs with type="file" are read only and setting the input's
-    // value will throw an error.
+    // 带有 type=“file” 的输入是只读的，并将输入的
+// value 将引发错误。
     if (tag === 'input' && type === 'file') {
       warn(
         `<${el.tag} v-model="${value}" type="file">:\n` +
@@ -35,7 +35,7 @@ export default function model(
 
   if (el.component) {
     genComponentModel(el, value, modifiers)
-    // component v-model doesn't need extra runtime
+    // 组件 v-model 不需要额外的运行时
     return false
   } else if (tag === 'select') {
     genSelect(el, value, modifiers)
@@ -47,7 +47,7 @@ export default function model(
     genDefaultModel(el, value, modifiers)
   } else if (!config.isReservedTag(tag)) {
     genComponentModel(el, value, modifiers)
-    // component v-model doesn't need extra runtime
+    // 组件 v-model 不需要额外的运行时
     return false
   } else if (__DEV__) {
     warn(
@@ -59,7 +59,7 @@ export default function model(
     )
   }
 
-  // ensure runtime directive metadata
+  // 确保运行时指令元数据
   return true
 }
 
@@ -141,8 +141,8 @@ function genDefaultModel(
 ): boolean | void {
   const type = el.attrsMap.type
 
-  // warn if v-bind:value conflicts with v-model
-  // except for inputs with v-bind:type
+  // 如果 v-bind：value 与 v-model 冲突，则发出警告
+// 除了带有 v-bind：type 的输入
   if (__DEV__) {
     const value = el.attrsMap['v-bind:value'] || el.attrsMap[':value']
     const typeBinding = el.attrsMap['v-bind:type'] || el.attrsMap[':type']

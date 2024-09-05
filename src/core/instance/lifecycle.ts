@@ -35,7 +35,7 @@ export function setActiveInstance(vm: Component) {
 export function initLifecycle(vm: Component) {
   const options = vm.$options
 
-  // locate first non-abstract parent
+  // 找到第一个非抽象父级
   let parent = options.parent
   if (parent && !options.abstract) {
     while (parent.$options.abstract && parent.$parent) {
@@ -66,24 +66,23 @@ export function lifecycleMixin(Vue: typeof Component) {
     const prevVnode = vm._vnode
     const restoreActiveInstance = setActiveInstance(vm)
     vm._vnode = vnode
-    // Vue.prototype.__patch__ is injected in entry points
-    // based on the rendering backend used.
+    // Vue.prototype.__patch__根据使用的渲染后端注入到入口点中。
     if (!prevVnode) {
-      // initial render
+      // 初始渲染
       vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false /* removeOnly */)
     } else {
-      // updates
+      // 更新
       vm.$el = vm.__patch__(prevVnode, vnode)
     }
     restoreActiveInstance()
-    // update __vue__ reference
+    // 更新 __vue__ 参考
     if (prevEl) {
       prevEl.__vue__ = null
     }
     if (vm.$el) {
       vm.$el.__vue__ = vm
     }
-    // if parent is an HOC, update its $el as well
+    // 如果 parent 是 HOC，则还要更新其 $el
     let wrapper: Component | undefined = vm
     while (
       wrapper &&
@@ -94,8 +93,8 @@ export function lifecycleMixin(Vue: typeof Component) {
       wrapper.$parent.$el = wrapper.$el
       wrapper = wrapper.$parent
     }
-    // updated hook is called by the scheduler to ensure that children are
-    // updated in a parent's updated hook.
+    // updated 钩子被调度器调用，以确保子
+// updated 的 hook 中。
   }
 
   Vue.prototype.$forceUpdate = function () {
@@ -112,32 +111,32 @@ export function lifecycleMixin(Vue: typeof Component) {
     }
     callHook(vm, 'beforeDestroy')
     vm._isBeingDestroyed = true
-    // remove self from parent
+    // Remove Self from Parent（从父项中删除自身）
     const parent = vm.$parent
     if (parent && !parent._isBeingDestroyed && !vm.$options.abstract) {
       remove(parent.$children, vm)
     }
-    // teardown scope. this includes both the render watcher and other
-    // watchers created
+    // teardown 范围。这包括 Render Watcher 和其他
+// 已创建 Watchers
     vm._scope.stop()
-    // remove reference from data ob
-    // frozen object may not have observer.
+    // 从数据 OB 中删除引用
+// 冻结的对象可能没有 Observer。
     if (vm._data.__ob__) {
       vm._data.__ob__.vmCount--
     }
-    // call the last hook...
+    // 调用最后一个钩子...
     vm._isDestroyed = true
-    // invoke destroy hooks on current rendered tree
+    // 在当前渲染的树上调用 Destroy 钩子
     vm.__patch__(vm._vnode, null)
-    // fire destroyed hook
+    // 火烧毁了钩子
     callHook(vm, 'destroyed')
-    // turn off all instance listeners.
+    // 关闭所有实例侦听器。
     vm.$off()
-    // remove __vue__ reference
+    // 删除__vue__引用
     if (vm.$el) {
       vm.$el.__vue__ = null
     }
-    // release circular reference (#6759)
+    // 发布循环引用 （#6759）
     if (vm.$vnode) {
       vm.$vnode.parent = null
     }
@@ -151,7 +150,7 @@ export function mountComponent(
 ): Component {
   vm.$el = el
   if (!vm.$options.render) {
-    // @ts-expect-error invalid type
+    // @ts-expect-error 类型无效
     vm.$options.render = createEmptyVNode
     if (__DEV__) {
       /* istanbul ignore if */
@@ -214,19 +213,19 @@ export function mountComponent(
     watcherOptions.onTrigger = e => callHook(vm, 'renderTriggered', [e])
   }
 
-  // we set this to vm._watcher inside the watcher's constructor
-  // since the watcher's initial patch may call $forceUpdate (e.g. inside child
-  // component's mounted hook), which relies on vm._watcher being already defined
+  // 我们在 watcher 的构造函数中将其设置为 vm._watcher
+// 由于 watcher 的初始 patch 可能会调用 $forceUpdate（例如在 child 中
+// 组件的 mounted 钩子），它依赖于已经定义的 vm._watcher
   new Watcher(
     vm,
     updateComponent,
     noop,
     watcherOptions,
-    true /* isRenderWatcher */
+    true /* 是渲染观察器*/
   )
   hydrating = false
 
-  // flush buffer for flush: "pre" watchers queued in setup()
+  // flush buffer for flush： “pre” watchers in setup（） 中排队
   const preWatchers = vm._preWatchers
   if (preWatchers) {
     for (let i = 0; i < preWatchers.length; i++) {
@@ -234,8 +233,8 @@ export function mountComponent(
     }
   }
 
-  // manually mounted instance, call mounted on self
-  // mounted is called for render-created child components in its inserted hook
+  // 手动挂载的实例，调用 mounted on self
+// mounted 在其插入的钩子中为渲染创建的子组件调用
   if (vm.$vnode == null) {
     vm._isMounted = true
     callHook(vm, 'mounted')
@@ -254,12 +253,12 @@ export function updateChildComponent(
     isUpdatingChildComponent = true
   }
 
-  // determine whether component has slot children
-  // we need to do this before overwriting $options._renderChildren.
+  // 确定组件是否具有插槽子项
+// 我们需要在覆盖 $options._renderChildren 之前执行此操作。
 
-  // check if there are dynamic scopedSlots (hand-written or compiled but with
-  // dynamic slot names). Static scoped slots compiled from template has the
-  // "$stable" marker.
+  // 检查是否有动态 scopedSlots（手写或编译，但带有
+// 动态插槽名称）。从模板编译的静态作用域插槽具有
+// “$stable”标记。
   const newScopedSlots = parentVnode.data.scopedSlots
   const oldScopedSlots = vm.$scopedSlots
   const hasDynamicScopedSlot = !!(
@@ -269,32 +268,30 @@ export function updateChildComponent(
     (!newScopedSlots && vm.$scopedSlots.$key)
   )
 
-  // Any static slot children from the parent may have changed during parent's
-  // update. Dynamic scoped slots may also have changed. In such cases, a forced
-  // update is necessary to ensure correctness.
+  // 在父级更新期间，父级中的任何静态插槽子级都可能已更改。动态范围的槽也可能已更改。在这种情况下，必须强制更新以确保正确性。
   let needsForceUpdate = !!(
-    renderChildren || // has new static slots
-    vm.$options._renderChildren || // has old static slots
+    renderChildren || // 具有新的静态插槽
+    vm.$options._renderChildren || // 具有旧的静态插槽
     hasDynamicScopedSlot
   )
 
   const prevVNode = vm.$vnode
   vm.$options._parentVnode = parentVnode
-  vm.$vnode = parentVnode // update vm's placeholder node without re-render
+  vm.$vnode = parentVnode // 更新 VM 的占位符节点而不重新渲染
 
   if (vm._vnode) {
-    // update child tree's parent
+    // 更新子树的父级
     vm._vnode.parent = parentVnode
   }
   vm.$options._renderChildren = renderChildren
 
-  // update $attrs and $listeners hash
-  // these are also reactive so they may trigger child update if the child
-  // used them during render
+  // 更新 $attrs 和 $listeners 哈希
+// 这些也是响应式的，因此如果
+// 在渲染期间使用它们
   const attrs = parentVnode.data.attrs || emptyObject
   if (vm._attrsProxy) {
-    // force update if attrs are accessed and has changed since it may be
-    // passed to a child component.
+    // 如果 Attrs 被访问并已更改，则强制更新，因为它可能是
+// 传递给子组件。
     if (
       syncSetupProxy(
         vm._attrsProxy,
@@ -309,7 +306,7 @@ export function updateChildComponent(
   }
   vm.$attrs = attrs
 
-  // update listeners
+  // 更新侦听器
   listeners = listeners || emptyObject
   const prevListeners = vm.$options._parentListeners
   if (vm._listenersProxy) {
@@ -324,22 +321,22 @@ export function updateChildComponent(
   vm.$listeners = vm.$options._parentListeners = listeners
   updateComponentListeners(vm, listeners, prevListeners)
 
-  // update props
+  // 更新 props
   if (propsData && vm.$options.props) {
     toggleObserving(false)
     const props = vm._props
     const propKeys = vm.$options._propKeys || []
     for (let i = 0; i < propKeys.length; i++) {
       const key = propKeys[i]
-      const propOptions: any = vm.$options.props // wtf flow?
+      const propOptions: any = vm.$options.props // 什么鬼，流程？
       props[key] = validateProp(key, propOptions, propsData, vm)
     }
     toggleObserving(true)
-    // keep a copy of raw propsData
+    // 保留原始 propsData 的副本
     vm.$options.propsData = propsData
   }
 
-  // resolve slots + force update if has children
+  // 解决槽 + 强制更新（如果有子项）
   if (needsForceUpdate) {
     vm.$slots = resolveSlots(renderChildren, parentVnode.context)
     vm.$forceUpdate()
@@ -397,7 +394,7 @@ export function callHook(
   args?: any[],
   setContext = true
 ) {
-  // #7573 disable dep collection when invoking lifecycle hooks
+  // #7573 在调用生命周期钩子时禁用 dep 集合
   pushTarget()
   const prevInst = currentInstance
   const prevScope = getCurrentScope()

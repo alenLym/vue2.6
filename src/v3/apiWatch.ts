@@ -57,7 +57,7 @@ export interface WatchOptions<Immediate = boolean> extends WatchOptionsBase {
 
 export type WatchStopHandle = () => void
 
-// Simple effect.
+// 简单效果。
 export function watchEffect(
   effect: WatchEffect,
   options?: WatchOptionsBase
@@ -91,12 +91,12 @@ export function watchSyncEffect(
   )
 }
 
-// initial value for watchers to trigger on undefined initial values
+// 初始值，供观察程序在未定义的初始值上触发
 const INITIAL_WATCHER_VALUE = {}
 
 type MultiWatchSources = (WatchSource<unknown> | object)[]
 
-// overload: array of multiple sources + cb
+// 重载：多个源的数组 + CB
 export function watch<
   T extends MultiWatchSources,
   Immediate extends Readonly<boolean> = false
@@ -106,9 +106,9 @@ export function watch<
   options?: WatchOptions<Immediate>
 ): WatchStopHandle
 
-// overload: multiple sources w/ `as const`
-// watch([foo, bar] as const, () => {})
-// somehow [...T] breaks when the type is readonly
+// 过载：多个源 w/ 'as const'
+// watch（[foo， bar] as const， （） => {}）
+// 不知何故 [......T] 在类型为 readonly 时中断
 export function watch<
   T extends Readonly<MultiWatchSources>,
   Immediate extends Readonly<boolean> = false
@@ -118,14 +118,14 @@ export function watch<
   options?: WatchOptions<Immediate>
 ): WatchStopHandle
 
-// overload: single source + cb
+// 过载：单源 + CB
 export function watch<T, Immediate extends Readonly<boolean> = false>(
   source: WatchSource<T>,
   cb: WatchCallback<T, Immediate extends true ? T | undefined : T>,
   options?: WatchOptions<Immediate>
 ): WatchStopHandle
 
-// overload: watching reactive object w/ cb
+// 过载：使用 cb 监视响应式对象
 export function watch<
   T extends object,
   Immediate extends Readonly<boolean> = false
@@ -135,7 +135,7 @@ export function watch<
   options?: WatchOptions<Immediate>
 ): WatchStopHandle
 
-// implementation
+// 实现
 export function watch<T = any, Immediate extends Readonly<boolean> = false>(
   source: T | WatchSource<T>,
   cb: any,
@@ -222,10 +222,10 @@ function doWatch(
       })
   } else if (isFunction(source)) {
     if (cb) {
-      // getter with cb
+      // 带 CB 的 Getter
       getter = () => call(source, WATCHER_GETTER)
     } else {
-      // no cb -> simple effect
+      // 无 CB -> 简单效果
       getter = () => {
         if (instance && instance._isDestroyed) {
           return
@@ -253,10 +253,10 @@ function doWatch(
     }
   }
 
-  // in SSR there is no need to setup an actual effect, and it should be noop
-  // unless it's eager
+  // 在 SSR 中不需要设置实际效果，应该是 noop
+// 除非它很渴望
   if (isServerRendering()) {
-    // we will also not call the invalidate callback (+ runner is not set up)
+    // 我们也不会调用 Invalidate 回调（+ 未设置 runner）
     onCleanup = noop
     if (!cb) {
       getter()
@@ -276,7 +276,7 @@ function doWatch(
   watcher.noRecurse = !cb
 
   let oldValue = isMultiSource ? [] : INITIAL_WATCHER_VALUE
-  // overwrite default run
+  // 覆盖默认运行
   watcher.run = () => {
     if (!watcher.active) {
       return
@@ -293,20 +293,20 @@ function doWatch(
             )
           : hasChanged(newValue, oldValue))
       ) {
-        // cleanup before running cb again
+        // 再次运行 CB 之前的清理
         if (cleanup) {
           cleanup()
         }
         call(cb, WATCHER_CB, [
           newValue,
-          // pass undefined as the old value when it's changed for the first time
+          // 首次更改时，将 undefined 作为旧值传递
           oldValue === INITIAL_WATCHER_VALUE ? undefined : oldValue,
           onCleanup
         ])
         oldValue = newValue
       }
     } else {
-      // watchEffect
+      // 手表效果
       watcher.get()
     }
   }
@@ -320,7 +320,7 @@ function doWatch(
     // pre
     watcher.update = () => {
       if (instance && instance === currentInstance && !instance._isMounted) {
-        // pre-watcher triggered before
+        // pre-watcher 触发前
         const buffer = instance._preWatchers || (instance._preWatchers = [])
         if (buffer.indexOf(watcher) < 0) buffer.push(watcher)
       } else {
@@ -334,7 +334,7 @@ function doWatch(
     watcher.onTrigger = onTrigger
   }
 
-  // initial run
+  // 初始运行
   if (cb) {
     if (immediate) {
       watcher.run()

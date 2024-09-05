@@ -63,12 +63,12 @@ function createReadonly(target: any, shallow: boolean) {
     )
   }
 
-  // already a readonly object
+  // 已是 readonly 对象
   if (isReadonly(target)) {
     return target as any
   }
 
-  // already has a readonly proxy
+  // 已经有一个 readonly 代理
   const existingFlag = shallow ? rawToShallowReadonlyFlag : rawToReadonlyFlag
   const existingProxy = target[existingFlag]
   if (existingProxy) {
@@ -117,10 +117,8 @@ function defineReadonlyProperty(
 }
 
 /**
- * Returns a reactive-copy of the original object, where only the root level
- * properties are readonly, and does NOT unwrap refs nor recursively convert
- * returned properties.
- * This is used for creating the props proxy object for stateful components.
+ * 返回原始对象的响应式副本，其中只有根级属性是只读的，并且不解包引用，也不递归转换返回的属性。
+ * 这用于为有状态组件创建 props 代理对象。
  */
 export function shallowReadonly<T extends object>(target: T): Readonly<T> {
   return createReadonly(target, true)

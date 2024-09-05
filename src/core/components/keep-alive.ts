@@ -93,7 +93,7 @@ export default {
           componentInstance
         }
         keys.push(keyToCache)
-        // prune oldest entry
+        // 修剪最旧的条目
         if (this.max && keys.length > parseInt(this.max)) {
           pruneCacheEntry(cache, keys[0], keys, this._vnode)
         }
@@ -132,13 +132,13 @@ export default {
     const vnode = getFirstComponentChild(slot)
     const componentOptions = vnode && vnode.componentOptions
     if (componentOptions) {
-      // check pattern
+      // 格纹
       const name = _getComponentName(componentOptions)
       const { include, exclude } = this
       if (
-        // not included
+        // 不包括
         (include && (!name || !matches(include, name))) ||
-        // excluded
+        // 排除
         (exclude && name && matches(exclude, name))
       ) {
         return vnode
@@ -147,23 +147,23 @@ export default {
       const { cache, keys } = this
       const key =
         vnode.key == null
-          ? // same constructor may get registered as different local components
-            // so cid alone is not enough (#3269)
+          ? // 相同的构造函数可能会注册为不同的本地组件
+// 所以单独的 CID 是不够的 （#3269）
             componentOptions.Ctor.cid +
             (componentOptions.tag ? `::${componentOptions.tag}` : '')
           : vnode.key
       if (cache[key]) {
         vnode.componentInstance = cache[key].componentInstance
-        // make current key freshest
+        // 使当前密钥最新
         remove(keys, key)
         keys.push(key)
       } else {
-        // delay setting the cache until update
+        // 延迟设置缓存直到更新
         this.vnodeToCache = vnode
         this.keyToCache = key
       }
 
-      // @ts-expect-error can vnode.data can be undefined
+      // @ts-expect-error 可以是 vnode.data 可以是 undefined
       vnode.data.keepAlive = true
     }
     return vnode || (slot && slot[0])

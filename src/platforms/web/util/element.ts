@@ -20,8 +20,8 @@ export const isHTMLTag = makeMap(
     'content,element,shadow,template,blockquote,iframe,tfoot'
 )
 
-// this map is intentionally selective, only covering SVG elements that may
-// contain child elements.
+// 此映射是有意选择性的，仅涵盖可能
+// 包含子元素。
 export const isSVG = makeMap(
   'svg,animate,circle,clippath,cursor,defs,desc,ellipse,filter,font-face,' +
     'foreignobject,g,glyph,image,line,marker,mask,missing-glyph,path,pattern,' +
@@ -39,8 +39,8 @@ export function getTagNamespace(tag: string): string | undefined {
   if (isSVG(tag)) {
     return 'svg'
   }
-  // basic support for MathML
-  // note it doesn't support other MathML elements being component roots
+  // 对 MathML 的基本支持
+// 请注意，它不支持其他 MathML 元素作为组件根
   if (tag === 'math') {
     return 'math'
   }

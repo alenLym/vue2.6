@@ -24,15 +24,14 @@ export interface DepTarget extends DebuggerOptions {
 }
 
 /**
- * A dep is an observable that can have multiple
- * directives subscribing to it.
+ * dep 是一个 observable，可以有多个指令订阅它。
  * @internal
  */
 export default class Dep {
   static target?: DepTarget | null
   id: number
   subs: Array<DepTarget | null>
-  // pending subs cleanup
+  // 待处理的 subs 清理
   _pending = false
 
   constructor() {
@@ -45,10 +44,10 @@ export default class Dep {
   }
 
   removeSub(sub: DepTarget) {
-    // #12696 deps with massive amount of subscribers are extremely slow to
-    // clean up in Chromium
-    // to workaround this, we unset the sub for now, and clear them on
-    // next scheduler flush.
+    // #12696 拥有大量订阅者的 deps 速度非常慢
+// 在 Chromium 中清理
+// 为了解决这个问题，我们现在取消设置 sub，然后清除它们
+// next scheduler flush 的 Flush 命令。
     this.subs[this.subs.indexOf(sub)] = null
     if (!this._pending) {
       this._pending = true
@@ -69,12 +68,12 @@ export default class Dep {
   }
 
   notify(info?: DebuggerEventExtraInfo) {
-    // stabilize the subscriber list first
+    // 首先稳定订阅者列表
     const subs = this.subs.filter(s => s) as DepTarget[]
     if (__DEV__ && !config.async) {
-      // subs aren't sorted in scheduler if not running async
-      // we need to sort them now to make sure they fire in correct
-      // order
+      // 如果不运行 async，则不会在 Scheduler 中对 sub 进行排序
+// 我们现在需要对它们进行排序，以确保它们正确触发
+// 次序
       subs.sort((a, b) => a.id - b.id)
     }
     for (let i = 0, l = subs.length; i < l; i++) {
@@ -91,9 +90,8 @@ export default class Dep {
   }
 }
 
-// The current target watcher being evaluated.
-// This is globally unique because only one watcher
-// can be evaluated at a time.
+// 正在评估的当前目标观察程序。
+// 这是全局唯一的，因为一次只能评估一个 watcher。
 Dep.target = null
 const targetStack: Array<DepTarget | null | undefined> = []
 

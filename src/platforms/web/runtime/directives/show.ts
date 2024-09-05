@@ -2,7 +2,7 @@ import VNode from 'core/vdom/vnode'
 import type { VNodeDirective, VNodeWithData } from 'types/vnode'
 import { enter, leave } from 'web/runtime/modules/transition'
 
-// recursively search for possible transition defined inside the component root
+// 递归搜索组件根中定义的可能过渡
 function locateNode(vnode: VNode | VNodeWithData): VNodeWithData {
   // @ts-expect-error
   return vnode.componentInstance && (!vnode.data || !vnode.data.transition)

@@ -44,8 +44,8 @@ export function initSetup(vm: Component) {
     setCurrentInstance()
 
     if (isFunction(setupResult)) {
-      // render function
-      // @ts-ignore
+      // render 函数
+// @ts - 忽略
       options.render = setupResult
     } else if (isObject(setupResult)) {
       // bindings
@@ -56,7 +56,7 @@ export function initSetup(vm: Component) {
         )
       }
       vm._setupState = setupResult
-      // __sfc indicates compiled bindings from <script setup>
+      // __sfc 表示从 <script setup 编译的绑定>
       if (!setupResult.__sfc) {
         for (const key in setupResult) {
           if (!isReserved(key)) {
@@ -66,7 +66,7 @@ export function initSetup(vm: Component) {
           }
         }
       } else {
-        // exposed for compiled render fn
+        // 为编译的渲染 FN 公开
         const proxy = (vm._setupProxy = {})
         for (const key in setupResult) {
           if (key !== '__sfc') {
@@ -181,25 +181,25 @@ export function syncSetupSlots(to: any, from: any) {
 }
 
 /**
- * @internal use manual type def because public setup context type relies on
- * legacy VNode types
+ * @internal使用手动类型 def，因为公共设置上下文类型依赖于
+ * 传统 VNode 类型
  */
 export function useSlots(): SetupContext['slots'] {
   return getContext().slots
 }
 
 /**
- * @internal use manual type def because public setup context type relies on
- * legacy VNode types
+ * @internal使用手动类型 def，因为公共设置上下文类型依赖于
+ * 传统 VNode 类型
  */
 export function useAttrs(): SetupContext['attrs'] {
   return getContext().attrs
 }
 
 /**
- * Vue 2 only
- * @internal use manual type def because public setup context type relies on
- * legacy VNode types
+ * 仅限 Vue 2
+ * @internal使用手动类型 def，因为公共设置上下文类型依赖于
+ * 传统 VNode 类型
  */
 export function useListeners(): SetupContext['listeners'] {
   return getContext().listeners
@@ -214,8 +214,7 @@ function getContext(): SetupContext {
 }
 
 /**
- * Runtime helper for merging default declarations. Imported by compiled code
- * only.
+ * 用于合并默认声明的运行时帮助程序。仅由编译代码导入。
  * @internal
  */
 export function mergeDefaults(

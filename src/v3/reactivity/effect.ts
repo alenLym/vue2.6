@@ -2,11 +2,10 @@ import Watcher from 'core/observer/watcher'
 import { noop } from 'shared/util'
 import { currentInstance } from '../currentInstance'
 
-// export type EffectScheduler = (...args: any[]) => any
-
+// 导出类型 EffectScheduler = （...args： any[]） => 任何
 /**
- * @internal since we are not exposing this in Vue 2, it's used only for
- * internal testing.
+ * @internal 由于我们没有在 Vue 2 中公开它，它仅用于
+ * 内部测试。
  */
 export function effect(fn: () => any, scheduler?: (cb: any) => void) {
   const watcher = new Watcher(currentInstance, fn, noop, {

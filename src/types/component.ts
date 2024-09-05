@@ -13,10 +13,10 @@ import { EffectScope } from 'v3/reactivity/effectScope'
  */
 export declare class Component {
   constructor(options?: any)
-  // constructor information
+  // 构造函数信息
   static cid: number
   static options: Record<string, any>
-  // extend
+  // 扩展
   static extend: GlobalAPI['extend']
   static superOptions: Record<string, any>
   static extendOptions: Record<string, any>
@@ -26,13 +26,13 @@ export declare class Component {
   static directive: GlobalAPI['directive']
   static component: GlobalAPI['component']
   static filter: GlobalAPI['filter']
-  // functional context constructor
+  // 函数上下文构造函数
   static FunctionalRenderContext: Function
   static mixin: GlobalAPI['mixin']
   static use: GlobalAPI['use']
 
-  // public properties
-  $el: any // so that we can attach __vue__ to it
+  // 公共属性
+  $el: any // 以便我们可以将 __vue__ 附加到它
   $data: Record<string, any>
   $props: Record<string, any>
   $options: ComponentOptions
@@ -44,12 +44,12 @@ export declare class Component {
   }
   $slots: { [key: string]: Array<VNode> }
   $scopedSlots: { [key: string]: () => VNode[] | undefined }
-  $vnode: VNode // the placeholder node for the component in parent's render tree
+  $vnode: VNode // 父级渲染树中组件的占位符节点
   $attrs: { [key: string]: string }
   $listeners: Record<string, Function | Array<Function>>
   $isServer: boolean
 
-  // public methods
+  // 公共方法
   $mount: (
     el?: Element | string,
     hydrating?: boolean
@@ -81,9 +81,9 @@ export declare class Component {
     children?: VNodeChildren
   ) => VNode
 
-  // private properties
+  // 私有属性
   _uid: number | string
-  _name: string // this only exists in dev mode
+  _name: string // 这仅存在于开发模式下
   _isVue: true
   __v_skip: true
   _self: Component
@@ -100,8 +100,8 @@ export declare class Component {
   _isMounted: boolean
   _isDestroyed: boolean
   _isBeingDestroyed: boolean
-  _vnode?: VNode | null // self root node
-  _staticTrees?: Array<VNode> | null // v-once cached trees
+  _vnode?: VNode | null // 自根节点
+  _staticTrees?: Array<VNode> | null // v-once 缓存树
   _hasHookEvent: boolean
   _provided: Record<string, any>
   // _virtualComponents?: { [key: string]: Component };
@@ -115,14 +115,14 @@ export declare class Component {
   _slotsProxy?: Record<string, () => VNode[]>
   _preWatchers?: Watcher[]
 
-  // private methods
+  // 私有方法
 
-  // lifecycle
+  // 生命周期
   _init: Function
   _mount: (el?: Element | void, hydrating?: boolean) => Component
   _update: (vnode: VNode, hydrating?: boolean) => void
 
-  // rendering
+  // 渲染
   _render: () => VNode
 
   __patch__: (
@@ -134,9 +134,9 @@ export declare class Component {
     refElm?: any
   ) => any
 
-  // createElement
+  // Create 元素
 
-  // _c is internal that accepts `normalizationType` optimization hint
+  // _c 是接受 'normalizationType' 优化提示的内部
   _c: (
     vnode?: VNode,
     data?: VNodeData,
@@ -144,37 +144,37 @@ export declare class Component {
     normalizationType?: number
   ) => VNode | void
 
-  // renderStatic
+  // 渲染静态
   _m: (index: number, isInFor?: boolean) => VNode | VNodeChildren
-  // markOnce
+  // 标记一次
   _o: (
     vnode: VNode | Array<VNode>,
     index: number,
     key: string
   ) => VNode | VNodeChildren
-  // toString
+  // 目标字符串
   _s: (value: any) => string
-  // text to VNode
+  // 文本到 VNode
   _v: (value: string | number) => VNode
-  // toNumber
+  // 编号
   _n: (value: string) => number | string
-  // empty vnode
+  // 空 vnode
   _e: () => VNode
-  // loose equal
+  // 松散等于
   _q: (a: any, b: any) => boolean
-  // loose indexOf
+  // 松散的 indexOf
   _i: (arr: Array<any>, val: any) => number
-  // resolveFilter
+  // 解决过滤器
   _f: (id: string) => Function
-  // renderList
+  // 渲染列表
   _l: (val: any, render: Function) => Array<VNode> | null
-  // renderSlot
+  // 渲染槽
   _t: (
     name: string,
     fallback?: Array<VNode>,
     props?: Record<string, any>
   ) => Array<VNode> | null
-  // apply v-bind object
+  // 应用 v-bind 对象
   _b: (
     data: any,
     tag: string,
@@ -182,22 +182,22 @@ export declare class Component {
     asProp: boolean,
     isSync?: boolean
   ) => VNodeData
-  // apply v-on object
+  // 应用 V-On 对象
   _g: (data: any, value: any) => VNodeData
-  // check custom keyCode
+  // 检查自定义 keyCode
   _k: (
     eventKeyCode: number,
     key: string,
     builtInAlias?: number | Array<number>,
     eventKeyName?: string
   ) => boolean | null
-  // resolve scoped slots
+  // 解析作用域插槽
   _u: (
     scopedSlots: ScopedSlotsData,
     res?: Record<string, any>
   ) => { [key: string]: Function }
 
-  // SSR specific
+  // SSR 特定
   _ssrNode: Function
   _ssrList: Function
   _ssrEscape: Function
@@ -207,6 +207,6 @@ export declare class Component {
   _ssrClass: Function
   _ssrStyle: Function
 
-  // allow dynamic method registration
-  // [key: string]: any
+  // 允许动态方法注册
+// [key： string]： 任意
 }

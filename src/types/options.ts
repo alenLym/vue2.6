@@ -49,7 +49,7 @@ export type ComponentOptions = {
   renderError?: (h: () => VNode, err: Error) => VNode
   staticRenderFns?: Array<() => VNode>
 
-  // lifecycle
+  // 生命周期
   beforeCreate?: Function
   created?: Function
   beforeMount?: Function
@@ -83,7 +83,7 @@ export type ComponentOptions = {
     event?: string
   }
 
-  // misc
+  // 杂项
   parent?: Component
   mixins?: Array<object>
   name?: string
@@ -92,7 +92,7 @@ export type ComponentOptions = {
   comments?: boolean
   inheritAttrs?: boolean
 
-  // Legacy API
+  // 旧版 API
   abstract?: any
 
   // private

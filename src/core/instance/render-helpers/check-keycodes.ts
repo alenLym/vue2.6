@@ -10,9 +10,9 @@ function isKeyNotMatch<T>(expect: T | Array<T>, actual: T): boolean {
 }
 
 /**
- * Runtime helper for checking keyCodes from config.
- * exposed as Vue.prototype._k
- * passing in eventKeyName as last argument separately for backwards compat
+ * 用于从 config 中检查 keyCodes 的运行时帮助程序。
+ * 公开为 Vue.prototype._k
+ * 单独传入 eventKeyName 作为向后兼容性的最后一个参数
  */
 export function checkKeyCodes(
   eventKeyCode: number,

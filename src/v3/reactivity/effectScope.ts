@@ -21,18 +21,18 @@ export class EffectScope {
    */
   parent: EffectScope | undefined
   /**
-   * record undetached scopes
+   * 记录未分离的范围
    * @internal
    */
   scopes: EffectScope[] | undefined
   /**
-   * indicates this being a component root scope
+   * 表示这是组件根范围
    * @internal
    */
   _vm?: boolean
   /**
-   * track a child scope's index in its parent's scopes array for optimized
-   * removal
+   * 跟踪子 scope 在其父 scopes 数组中的索引以进行优化
+   * 免职
    */
   private index: number | undefined
 
@@ -61,7 +61,7 @@ export class EffectScope {
   }
 
   /**
-   * This should only be called on non-detached scopes
+   * 这应该只在非分离的作用域上调用
    * @internal
    */
   on() {
@@ -69,7 +69,7 @@ export class EffectScope {
   }
 
   /**
-   * This should only be called on non-detached scopes
+   * 这应该只在非分离的作用域上调用
    * @internal
    */
   off() {
@@ -90,9 +90,9 @@ export class EffectScope {
           this.scopes[i].stop(true)
         }
       }
-      // nested scope, dereference from parent to avoid memory leaks
+      // 嵌套范围，从 parent 取消引用以避免内存泄漏
       if (!this.detached && this.parent && !fromParent) {
-        // optimized O(1) removal
+        // 优化的 O（1） 去除
         const last = this.parent.scopes!.pop()
         if (last && last !== this) {
           this.parent.scopes![this.index!] = last

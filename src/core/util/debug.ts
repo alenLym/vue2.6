@@ -6,7 +6,7 @@ import { getComponentName } from '../vdom/create-component'
 
 export let warn: (msg: string, vm?: Component | null) => void = noop
 export let tip = noop
-export let generateComponentTrace: (vm: Component) => string // work around flow check
+export let generateComponentTrace: (vm: Component) => string // 解决方法 Flow Check
 export let formatComponentName: (vm: Component, includeFile?: false) => string
 
 if (__DEV__) {

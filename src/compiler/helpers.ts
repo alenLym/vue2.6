@@ -44,7 +44,7 @@ export function addAttr(
   el.plain = false
 }
 
-// add a raw attr (use this in preTransforms)
+// 添加一个原始 attr （在 preTransforms 中使用它）
 export function addRawAttr(
   el: ASTElement,
   name: string,
@@ -86,7 +86,7 @@ function prependModifierMarker(
   name: string,
   dynamic?: boolean
 ): string {
-  return dynamic ? `_p(${name},"${symbol}")` : symbol + name // mark the event as captured
+  return dynamic ? `_p(${name},"${symbol}")` : symbol + name // 将事件标记为已捕获
 }
 
 export function addHandler(
@@ -100,7 +100,7 @@ export function addHandler(
   dynamic?: boolean
 ) {
   modifiers = modifiers || emptyObject
-  // warn prevent and passive modifier
+  // warn prevent 和 passive 修饰符
   /* istanbul ignore if */
   if (__DEV__ && warn && modifiers.prevent && modifiers.passive) {
     warn(
@@ -110,9 +110,9 @@ export function addHandler(
     )
   }
 
-  // normalize click.right and click.middle since they don't actually fire
-  // this is technically browser-specific, but at least for now browsers are
-  // the only target envs that have right/middle clicks.
+  // 规范化 Click.Right 和 Click.Middle，因为它们实际上并没有触发
+// 这在技术上是特定于浏览器的，但至少目前浏览器是
+// 唯一具有右键单击/中键单击的目标 env。
   if (modifiers.right) {
     if (dynamic) {
       name = `(${name})==='click'?'contextmenu':(${name})`
@@ -128,7 +128,7 @@ export function addHandler(
     }
   }
 
-  // check capture modifier
+  // 检查捕获修饰符
   if (modifiers.capture) {
     delete modifiers.capture
     name = prependModifierMarker('!', name, dynamic)
@@ -194,10 +194,9 @@ export function getBindingAttr(
   }
 }
 
-// note: this only removes the attr from the Array (attrsList) so that it
-// doesn't get processed by processAttrs.
-// By default it does NOT remove it from the map (attrsMap) because the map is
-// needed during codegen.
+// 注意：这只会从 Array （attrsList） 中删除 attr，以便它
+// 不会被 processAttrs 处理。
+// 默认情况下，它不会将其从映射 （attrsMap） 中删除，因为在 codegen 期间需要该映射。
 export function getAndRemoveAttr(
   el: ASTElement,
   name: string,

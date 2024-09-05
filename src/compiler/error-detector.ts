@@ -3,8 +3,8 @@ import { dirRE, onRE } from './parser/index'
 
 type Range = { start?: number; end?: number }
 
-// these keywords should not appear inside expressions, but operators like
-// typeof, instanceof and in are allowed
+// 这些关键字不应出现在表达式中，但
+// typeof、instanceof 和 in 是允许的
 const prohibitedKeywordRE = new RegExp(
   '\\b' +
     (
@@ -17,18 +17,18 @@ const prohibitedKeywordRE = new RegExp(
     '\\b'
 )
 
-// these unary operators should not be used as property/method names
+// 这些一元运算符不应用作属性/方法名称
 const unaryOperatorsRE = new RegExp(
   '\\b' +
     'delete,typeof,void'.split(',').join('\\s*\\([^\\)]*\\)|\\b') +
     '\\s*\\([^\\)]*\\)'
 )
 
-// strip strings in expressions
+// 在表达式中去除字符串
 const stripStringRE =
   /'(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|`(?:[^`\\]|\\.)*\$\{|\}(?:[^`\\]|\\.)*`|`(?:[^`\\]|\\.)*`/g
 
-// detect problematic expressions in a template
+// 检测模板中有问题的表达式
 export function detectErrors(ast: ASTNode | undefined, warn: Function) {
   if (ast) {
     checkNode(ast, warn)

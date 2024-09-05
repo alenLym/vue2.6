@@ -26,16 +26,16 @@ export function FunctionalRenderContext(
   Ctor: typeof Component
 ) {
   const options = Ctor.options
-  // ensure the createElement function in functional components
-  // gets a unique context - this is necessary for correct named slot check
+  // 确保功能组件中的 createElement 函数
+// 获取唯一上下文 - 这对于正确的命名槽检查是必需的
   let contextVm
   if (hasOwn(parent, '_uid')) {
     contextVm = Object.create(parent)
     contextVm._original = parent
   } else {
-    // the context vm passed in is a functional context as well.
-    // in this case we want to make sure we are able to get a hold to the
-    // real context instance.
+    // 传入的上下文 VM 也是一个功能上下文。
+// 在这种情况下，我们希望确保能够保留
+// real context 实例。
     contextVm = parent
     // @ts-ignore
     parent = parent._original
@@ -67,11 +67,11 @@ export function FunctionalRenderContext(
     }
   } as any)
 
-  // support for compiled functional template
+  // 支持已编译的功能模板
   if (isCompiled) {
-    // exposing $options for renderStatic()
+    // 为 renderStatic（） 公开 $options
     this.$options = options
-    // pre-resolve slots for renderSlot()
+    // renderSlot（） 的预解析槽
     this.$slots = this.slots()
     this.$scopedSlots = normalizeScopedSlots(
       parent,
@@ -157,9 +157,9 @@ function cloneAndMarkFunctionalResult(
   options,
   renderContext
 ) {
-  // #7817 clone node before setting fnContext, otherwise if the node is reused
-  // (e.g. it was from a cached normal slot) the fnContext causes named slots
-  // that should not be matched to match.
+  // #7817 在设置 fnContext 之前克隆节点，否则如果该节点被重用
+// （例如，它来自缓存的普通插槽）fnContext 导致命名插槽
+// 这不应该被匹配到 MATCH。
   const clone = cloneVNode(vnode)
   clone.fnContext = contextVm
   clone.fnOptions = options

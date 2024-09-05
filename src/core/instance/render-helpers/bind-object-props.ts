@@ -12,7 +12,7 @@ import {
 import type { VNodeData } from 'types/vnode'
 
 /**
- * Runtime helper for merging v-bind="object" into a VNode's data.
+ * 用于将 v-bind=“object” 合并到 VNode 数据的运行时辅助工具。
  */
 export function bindObjectProps(
   data: any,

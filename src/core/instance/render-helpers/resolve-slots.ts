@@ -2,7 +2,7 @@ import type VNode from 'core/vdom/vnode'
 import type { Component } from 'types/component'
 
 /**
- * Runtime helper for resolving raw children VNodes into a slot object.
+ * 用于将原始子 VNode 解析为 slot 对象的运行时帮助程序。
  */
 export function resolveSlots(
   children: Array<VNode> | null | undefined,
@@ -15,12 +15,12 @@ export function resolveSlots(
   for (let i = 0, l = children.length; i < l; i++) {
     const child = children[i]
     const data = child.data
-    // remove slot attribute if the node is resolved as a Vue slot node
+    // 如果节点被解析为 Vue 插槽节点，则删除 slot 属性
     if (data && data.attrs && data.attrs.slot) {
       delete data.attrs.slot
     }
-    // named slots should only be respected if the vnode was rendered in the
-    // same context.
+    // 仅当 vnode 在
+// 相同的上下文。
     if (
       (child.context === context || child.fnContext === context) &&
       data &&
@@ -37,7 +37,7 @@ export function resolveSlots(
       ;(slots.default || (slots.default = [])).push(child)
     }
   }
-  // ignore slots that contains only whitespace
+  // 忽略仅包含空格的插槽
   for (const name in slots) {
     if (slots[name].every(isWhitespace)) {
       delete slots[name]

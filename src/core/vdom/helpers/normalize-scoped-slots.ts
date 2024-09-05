@@ -19,7 +19,7 @@ export function normalizeScopedSlots(
   if (!scopedSlots) {
     res = {}
   } else if (scopedSlots._normalized) {
-    // fast path 1: child component re-render only, parent did not change
+    // 快速路径 1：仅重新渲染子组件，父组件未更改
     return scopedSlots._normalized
   } else if (
     isStable &&
@@ -29,8 +29,8 @@ export function normalizeScopedSlots(
     !hasNormalSlots &&
     !prevScopedSlots.$hasNormal
   ) {
-    // fast path 2: stable scoped slots w/ no normal slots to proxy,
-    // only need to normalize once
+    // Fast Path 2：稳定的 Scoped 插槽，没有普通的插槽到代理，
+// 只需要规范化一次
     return prevScopedSlots
   } else {
     res = {}
@@ -45,14 +45,14 @@ export function normalizeScopedSlots(
       }
     }
   }
-  // expose normal slots on scopedSlots
+  // 在 scopedSlots 上公开普通插槽
   for (const key in normalSlots) {
     if (!(key in res)) {
       res[key] = proxyNormalSlot(normalSlots, key)
     }
   }
-  // avoriaz seems to mock a non-extensible $scopedSlots object
-  // and when that is passed down this would cause an error
+  // Avoriaz 似乎模拟了一个不可扩展的 $scopedSlots 对象
+// 当它被传递时，这将导致错误
   if (scopedSlots && Object.isExtensible(scopedSlots)) {
     scopedSlots._normalized = res
   }
@@ -69,7 +69,7 @@ function normalizeScopedSlot(vm, normalSlots, key, fn) {
     let res = arguments.length ? fn.apply(null, arguments) : fn({})
     res =
       res && typeof res === 'object' && !isArray(res)
-        ? [res] // single vnode
+        ? [res] // 单个 vnode
         : normalizeChildren(res)
     const vnode: VNode | null = res && res[0]
     setCurrentInstance(cur)
@@ -79,9 +79,9 @@ function normalizeScopedSlot(vm, normalSlots, key, fn) {
       ? undefined
       : res
   }
-  // this is a slot using the new v-slot syntax without scope. although it is
-  // compiled as a scoped slot, render fn users would expect it to be present
-  // on this.$slots because the usage is semantically a normal slot.
+  // 这是一个使用新的 v-slot 语法的 slot ，没有 scope。虽然它是
+// 编译为范围插槽，则 render fn 用户会期望它存在
+// 在 this.$slots 上，因为该用法在语义上是一个普通的 slot。
   if (fn.proxy) {
     Object.defineProperty(normalSlots, key, {
       get: normalized,

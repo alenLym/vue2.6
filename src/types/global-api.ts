@@ -5,7 +5,7 @@ import { Component } from './component'
  * @internal
  */
 export interface GlobalAPI {
-  // new(options?: any): Component
+  // new（options？： any）：组件
   (options?: any): void
   cid: number
   options: Record<string, any>
@@ -32,6 +32,6 @@ export interface GlobalAPI {
 
   observable: <T>(value: T) => T
 
-  // allow dynamic method registration
+  // 允许动态方法注册
   [key: string]: any
 }

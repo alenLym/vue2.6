@@ -43,20 +43,20 @@ export function createCompilerCreator(baseCompile: Function): Function {
             ;(tip ? tips : errors).push(data)
           }
         }
-        // merge custom modules
+        // 合并自定义模块
         if (options.modules) {
           finalOptions.modules = (baseOptions.modules || []).concat(
             options.modules
           )
         }
-        // merge custom directives
+        // 合并自定义指令
         if (options.directives) {
           finalOptions.directives = extend(
             Object.create(baseOptions.directives || null),
             options.directives
           )
         }
-        // copy other options
+        // 复制其他选项
         for (const key in options) {
           if (key !== 'modules' && key !== 'directives') {
             finalOptions[key] = options[key as keyof CompilerOptions]

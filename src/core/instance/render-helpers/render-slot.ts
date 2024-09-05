@@ -2,7 +2,7 @@ import { extend, warn, isObject, isFunction } from 'core/util/index'
 import VNode from 'core/vdom/vnode'
 
 /**
- * Runtime helper for rendering <slot>
+ * 用于渲染<slot>的运行时帮助程序
  */
 export function renderSlot(
   name: string,

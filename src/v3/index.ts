@@ -85,7 +85,7 @@ export { useCssModule } from './sfc-helpers/useCssModule'
 export { useCssVars } from './sfc-helpers/useCssVars'
 
 /**
- * @internal type is manually declared in <root>/types/v3-define-component.d.ts
+ * @internal类型在 <root>/types/v3-define-component.d.ts 中手动声明
  */
 export function defineComponent(options: any) {
   return options

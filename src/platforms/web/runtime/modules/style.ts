@@ -24,9 +24,9 @@ const setProp = (el, name, val) => {
   } else {
     const normalizedName = normalize(name)
     if (Array.isArray(val)) {
-      // Support values array created by autoprefixer, e.g.
-      // {display: ["-webkit-box", "-ms-flexbox", "flex"]}
-      // Set them one by one, and the browser will only set those it can recognize
+      // 支持由 autoprefixer 创建的 values 数组，例如
+// {display： [“-webkit-box”， “-ms-flexbox”， “flex”]}
+// 逐个设置，浏览器只会设置它能识别的
       for (let i = 0, len = val.length; i < len; i++) {
         el.style[normalizedName!] = val[i]
       }
@@ -72,14 +72,14 @@ function updateStyle(oldVnode: VNodeWithData, vnode: VNodeWithData) {
   const oldStaticStyle: any = oldData.staticStyle
   const oldStyleBinding: any = oldData.normalizedStyle || oldData.style || {}
 
-  // if static style exists, stylebinding already merged into it when doing normalizeStyleData
+  // 如果存在静态样式，则在执行 normalizeStyleData 时，stylebinding 已合并到其中
   const oldStyle = oldStaticStyle || oldStyleBinding
 
   const style = normalizeStyleBinding(vnode.data.style) || {}
 
-  // store normalized style under a different key for next diff
-  // make sure to clone it if it's reactive, since the user likely wants
-  // to mutate it.
+  // 将规范化样式存储在 next diff 的不同键下
+// 如果它是反应式的，请确保克隆它，因为用户可能想要
+// 来改变它。
   vnode.data.normalizedStyle = isDef(style.__ob__) ? extend({}, style) : style
 
   const newStyle = getStyle(vnode, true)
@@ -91,7 +91,7 @@ function updateStyle(oldVnode: VNodeWithData, vnode: VNodeWithData) {
   }
   for (name in newStyle) {
     cur = newStyle[name]
-    // ie9 setting to null has no effect, must use empty string
+    // IE9 设置为 null 无效，必须使用空字符串
     setProp(el, name, cur == null ? '' : cur)
   }
 }

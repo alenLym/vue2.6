@@ -14,9 +14,9 @@ export function extractPropsFromVNodeData(
   Ctor: typeof Component,
   tag?: string
 ): object | undefined {
-  // we are only extracting raw values here.
-  // validation and default values are handled in the child
-  // component itself.
+  // 我们在这里只提取 Raw 值。
+// validation 和 default values 在子
+// 组件本身。
   const propOptions = Ctor.options.props
   if (isUndef(propOptions)) {
     return

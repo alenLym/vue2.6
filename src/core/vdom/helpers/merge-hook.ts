@@ -15,8 +15,8 @@ export function mergeVNodeHook(
 
   function wrappedHook() {
     hook.apply(this, arguments)
-    // important: remove merged hook to ensure it's called only once
-    // and prevent memory leak
+    // 重要提示：删除合并的 hook 以确保它只被调用一次
+// 并防止内存泄漏
     remove(invoker.fns, wrappedHook)
   }
 
@@ -26,11 +26,11 @@ export function mergeVNodeHook(
   } else {
     /* istanbul ignore if */
     if (isDef(oldHook.fns) && isTrue(oldHook.merged)) {
-      // already a merged invoker
+      // 已经是合并的祈求者
       invoker = oldHook
       invoker.fns.push(wrappedHook)
     } else {
-      // existing plain hook
+      // 现有的普通钩
       invoker = createFnInvoker([oldHook, wrappedHook])
     }
   }

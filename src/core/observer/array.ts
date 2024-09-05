@@ -1,6 +1,6 @@
 /*
- * not type checking this file because flow doesn't play well with
- * dynamically accessing methods on Array prototype
+ * 不对此文件进行类型检查，因为 flow 不能很好地配合
+ * 动态访问 Array 原型上的方法
  */
 
 import { TriggerOpTypes } from '../../v3'
@@ -20,10 +20,10 @@ const methodsToPatch = [
 ]
 
 /**
- * Intercept mutating methods and emit events
+ * 拦截 mutating 方法并发出事件
  */
 methodsToPatch.forEach(function (method) {
-  // cache original method
+  // 缓存原始方法
   const original = arrayProto[method]
   def(arrayMethods, method, function mutator(...args) {
     const result = original.apply(this, args)
@@ -39,7 +39,7 @@ methodsToPatch.forEach(function (method) {
         break
     }
     if (inserted) ob.observeArray(inserted)
-    // notify change
+    // 通知更改
     if (__DEV__) {
       ob.dep.notify({
         type: TriggerOpTypes.ARRAY_MUTATION,

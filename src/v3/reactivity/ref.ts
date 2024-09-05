@@ -20,9 +20,8 @@ export const RefFlag = `__v_isRef`
 export interface Ref<T = any> {
   value: T
   /**
-   * Type differentiator only.
-   * We need this to be in public d.ts but don't want it to show up in IDE
-   * autocomplete, so we use a private Symbol instead.
+   * 仅类型区分器。
+   * 我们需要它位于 public d.ts 中，但不希望它出现在 IDE 自动完成中，因此我们改用私有 Symbol。
    */
   [RefSymbol]: true
   /**
@@ -234,21 +233,18 @@ export function toRef<T extends object, K extends keyof T>(
 }
 
 /**
- * This is a special exported interface for other packages to declare
- * additional types that should bail out for ref unwrapping. For example
- * \@vue/runtime-dom can declare it like so in its d.ts:
+ * 这是一个特殊的导出接口，供其他包声明其他类型，这些类型应该为 ref 解包而退出。例如
+ * \@vue/runtime-dom 可以在其d.ts中像这样声明它：
  *
- * ``` ts
- * declare module 'vue' {
- *   export interface RefUnwrapBailTypes {
- *     runtimeDOMBailTypes: Node | Window
+ * ''' TS
+ * 声明模块 'vue' {
+ *   导出接口 RefUnwrapBailTypes {
+ *     runtimeDOMBailTypes： 节点 |窗
  *   }
  * }
  * ```
  *
- * Note that api-extractor somehow refuses to include `declare module`
- * augmentations in its generated d.ts, so we have to manually append them
- * to the final generated d.ts in our build process.
+ * 请注意，api-extractor 以某种方式拒绝在其生成的d.ts中包含 'declare module' 增强，因此我们必须在构建过程中手动将它们附加到最终生成的d.ts中。
  */
 export interface RefUnwrapBailTypes {
   runtimeDOMBailTypes: Node | Window
@@ -257,7 +253,7 @@ export interface RefUnwrapBailTypes {
 export type ShallowUnwrapRef<T> = {
   [K in keyof T]: T[K] extends Ref<infer V>
     ? V
-    : // if `V` is `unknown` that means it does not extend `Ref` and is undefined
+    : // 如果 'V' 是 'unknown'，则意味着它不扩展 'Ref' 并且未定义
     T[K] extends Ref<infer V> | undefined
     ? unknown extends V
       ? undefined

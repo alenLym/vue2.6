@@ -8,7 +8,7 @@ export default {
   create: updateDirectives,
   update: updateDirectives,
   destroy: function unbindDirectives(vnode: VNodeWithData) {
-    // @ts-expect-error emptyNode is not VNodeWithData
+    // @ts-expect-error emptyNode 不是 VNodeWithData
     updateDirectives(vnode, emptyNode)
   }
 }
@@ -36,13 +36,13 @@ function _update(oldVnode, vnode) {
     oldDir = oldDirs[key]
     dir = newDirs[key]
     if (!oldDir) {
-      // new directive, bind
+      // new 指令、bind
       callHook(dir, 'bind', vnode, oldVnode)
       if (dir.def && dir.def.inserted) {
         dirsWithInsert.push(dir)
       }
     } else {
-      // existing directive, update
+      // existing directive， update
       dir.oldValue = oldDir.value
       dir.oldArg = oldDir.arg
       callHook(dir, 'update', vnode, oldVnode)
@@ -76,7 +76,7 @@ function _update(oldVnode, vnode) {
   if (!isCreate) {
     for (key in oldDirs) {
       if (!newDirs[key]) {
-        // no longer present, unbind
+        // 不再存在，取消绑定
         callHook(oldDirs[key], 'unbind', oldVnode, oldVnode, isDestroy)
       }
     }

@@ -23,7 +23,7 @@ function transformNode(el: ASTElement, options: CompilerOptions) {
     el.staticStyle = JSON.stringify(parseStyleText(staticStyle))
   }
 
-  const styleBinding = getBindingAttr(el, 'style', false /* getStatic */)
+  const styleBinding = getBindingAttr(el, 'style', false /* 获取静态*/)
   if (styleBinding) {
     el.styleBinding = styleBinding
   }

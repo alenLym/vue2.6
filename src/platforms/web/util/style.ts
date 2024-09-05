@@ -15,11 +15,11 @@ export const parseStyleText = cached(function (cssText) {
   return res
 })
 
-// merge static and dynamic style data on the same vnode
+// 在同一个 vnode 上合并静态和动态样式数据
 function normalizeStyleData(data: VNodeData): Record<string, any> {
   const style = normalizeStyleBinding(data.style)
-  // static style is pre-processed into an object during compilation
-  // and is always a fresh object, so it's safe to merge into it
+  // static 样式在编译时被预处理成一个对象
+// 并且始终是一个新鲜对象，因此可以安全地合并到其中
   return data.staticStyle ? extend(data.staticStyle, style) : style
 }
 
@@ -35,8 +35,8 @@ export function normalizeStyleBinding(bindingStyle: any): Record<string, any> {
 }
 
 /**
- * parent component style should be after child's
- * so that parent component's style could override it
+ * 父组件样式应位于 Child 的
+ * ，以便父组件的样式可以覆盖它
  */
 export function getStyle(vnode: VNodeWithData, checkChild: boolean): Object {
   const res = {}
@@ -61,7 +61,7 @@ export function getStyle(vnode: VNodeWithData, checkChild: boolean): Object {
   }
 
   let parentNode: VNodeWithData | VNode | undefined = vnode
-  // @ts-expect-error parentNode.parent not VNodeWithData
+  // @ts-expect-error parentNode.parent 不是 VNodeWithData
   while ((parentNode = parentNode.parent)) {
     if (parentNode.data && (styleData = normalizeStyleData(parentNode.data))) {
       extend(res, styleData)

@@ -9,7 +9,7 @@ export function initUse(Vue: GlobalAPI) {
       return this
     }
 
-    // additional parameters
+    // 其他参数
     const args = toArray(arguments, 1)
     args.unshift(this)
     if (isFunction(plugin.install)) {

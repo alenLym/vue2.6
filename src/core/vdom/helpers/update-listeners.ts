@@ -15,7 +15,7 @@ const normalizeEvent = cached(
   } => {
     const passive = name.charAt(0) === '&'
     name = passive ? name.slice(1) : name
-    const once = name.charAt(0) === '~' // Prefixed last, checked first
+    const once = name.charAt(0) === '~' // 前缀 last，选中 first
     name = once ? name.slice(1) : name
     const capture = name.charAt(0) === '!'
     name = capture ? name.slice(1) : name
@@ -46,7 +46,7 @@ export function createFnInvoker(
         )
       }
     } else {
-      // return handler return value for single handlers
+      // 返回处理程序 单个处理程序的返回值
       return invokeWithErrorHandling(
         fns,
         null,

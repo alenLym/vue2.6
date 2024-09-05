@@ -1,7 +1,7 @@
 import { ASTElement, ASTModifiers } from 'types/compiler'
 
 /**
- * Cross-platform code generation for component v-model
+ * 组件 v-model 的跨平台代码生成
  */
 export function genComponentModel(
   el: ASTElement,
@@ -31,7 +31,7 @@ export function genComponentModel(
 }
 
 /**
- * Cross-platform codegen helper for generating v-model value assignment code.
+ * 用于生成 v-model 值赋值代码的跨平台 codegen 帮助程序。
  */
 export function genAssignmentCode(value: string, assignment: string): string {
   const res = parseModel(value)
@@ -43,17 +43,17 @@ export function genAssignmentCode(value: string, assignment: string): string {
 }
 
 /**
- * Parse a v-model expression into a base path and a final key segment.
- * Handles both dot-path and possible square brackets.
+ * 将 v-model 表达式解析为基本路径和最终键段。
+ * 处理点路径和可能的方括号。
  *
- * Possible cases:
+ * 可能的情况：
  *
- * - test
+ * -测试
  * - test[key]
  * - test[test1[key]]
- * - test["a"][key]
- * - xxx.test[a[a].test1[key]]
- * - test.xxx.a["asa"][test1[key]]
+ * - test[“a”][键]
+ * - xxx.test[a[a].test1[键]]
+ * - test.xxx.a[“asa”][test1[密钥]]
  *
  */
 

@@ -4,6 +4,7 @@ import type { Component } from 'types/component'
 import { resolveProvided } from 'v3/apiInject'
 
 export function initProvide(vm: Component) {
+  //! 获取provide
   const provideOption = vm.$options.provide
   if (provideOption) {
     const provided = isFunction(provideOption)
@@ -13,8 +14,7 @@ export function initProvide(vm: Component) {
       return
     }
     const source = resolveProvided(vm)
-    // IE9 doesn't support Object.getOwnPropertyDescriptors so we have to
-    // iterate the keys ourselves.
+    // IE9 不支持 Object.getOwnPropertyDescriptors，因此我们必须自己迭代键。
     const keys = hasSymbol ? Reflect.ownKeys(provided) : Object.keys(provided)
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]
@@ -55,13 +55,13 @@ export function resolveInject(
   vm: Component
 ): Record<string, any> | undefined | null {
   if (inject) {
-    // inject is :any because flow is not smart enough to figure out cached
+    // inject 是 ：any，因为 flow 不够智能，无法找出缓存的
     const result = Object.create(null)
     const keys = hasSymbol ? Reflect.ownKeys(inject) : Object.keys(inject)
 
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i]
-      // #6574 in case the inject object is observed...
+      // #6574 如果观察到 inject 对象...
       if (key === '__ob__') continue
       const provideKey = inject[key].from
       if (provideKey in vm._provided) {

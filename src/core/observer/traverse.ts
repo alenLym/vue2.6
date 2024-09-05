@@ -6,9 +6,7 @@ import { isRef } from '../../v3'
 const seenObjects = new Set()
 
 /**
- * Recursively traverse an object to evoke all converted
- * getters, so that every nested property inside the object
- * is collected as a "deep" dependency.
+ * 递归遍历对象以调用所有已转换的 getter，以便对象中的每个嵌套属性都作为“深”依赖项收集。
  */
 export function traverse(val: any) {
   _traverse(val, seenObjects)
@@ -21,7 +19,7 @@ function _traverse(val: any, seen: SimpleSet) {
   const isA = isArray(val)
   if (
     (!isA && !isObject(val)) ||
-    val.__v_skip /* ReactiveFlags.SKIP */ ||
+    val.__v_skip /* 响应式 flags.skip*/ ||
     Object.isFrozen(val) ||
     val instanceof VNode
   ) {

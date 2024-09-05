@@ -59,7 +59,7 @@ export function generate(
   options: CompilerOptions
 ): CodegenResult {
   const state = new CodegenState(options)
-  // fix #11483, Root level <script> tags should not be rendered.
+  // 修复 #11483，<script>不应渲染根级别标签。
   const code = ast
     ? ast.tag === 'script'
       ? 'null'
@@ -89,7 +89,7 @@ export function genElement(el: ASTElement, state: CodegenState): string {
   } else if (el.tag === 'slot') {
     return genSlot(el, state)
   } else {
-    // component or element
+    // 组件或元素
     let code
     if (el.component) {
       code = genComponent(el.component, el, state)
@@ -101,7 +101,7 @@ export function genElement(el: ASTElement, state: CodegenState): string {
       }
 
       let tag: string | undefined
-      // check if this is a component in <script setup>
+      // 检查这是否是 <Script Setup 中的组件>
       const bindings = state.options.bindings
       if (maybeComponent && bindings && bindings.__isScriptSetup !== false) {
         tag = checkBindingType(bindings, el.tag)
@@ -115,7 +115,7 @@ export function genElement(el: ASTElement, state: CodegenState): string {
         children ? `,${children}` : '' // children
       })`
     }
-    // module transforms
+    // 模块转换
     for (let i = 0; i < state.transforms.length; i++) {
       code = state.transforms[i](el, code)
     }
@@ -156,9 +156,7 @@ function checkBindingType(bindings: BindingMetadata, key: string) {
 // hoist static sub-trees out
 function genStatic(el: ASTElement, state: CodegenState): string {
   el.staticProcessed = true
-  // Some elements (templates) need to behave differently inside of a v-pre
-  // node.  All pre nodes are static roots, so we can use this as a location to
-  // wrap a state change and reset it upon exiting the pre node.
+  // 一些元素（模板）在 v-pre 节点中需要有不同的行为。 所有 pre 节点都是静态根，因此我们可以将其用作包装状态更改并在退出 pre 节点时重置它的位置。
   const originalPreState = state.pre
   if (el.pre) {
     state.pre = el.pre
@@ -228,7 +226,7 @@ function genIfConditions(
     return `${genTernaryExp(condition.block)}`
   }
 
-  // v-if with v-once should generate code like (a)?_m(0):_m(1)
+  // v-if 和 v-once 应该生成类似 （a）？_m（0）：_m（1） 的代码
   function genTernaryExp(el) {
     return altGen
       ? altGen(el, state)
@@ -277,8 +275,8 @@ export function genFor(
 export function genData(el: ASTElement, state: CodegenState): string {
   let data = '{'
 
-  // directives first.
-  // directives may mutate the el's other properties before they are generated.
+  // 指令。
+// 指令可以在生成 EL 的其他属性之前对其进行更改。
   const dirs = genDirectives(el, state)
   if (dirs) data += dirs + ','
 
@@ -297,43 +295,43 @@ export function genData(el: ASTElement, state: CodegenState): string {
   if (el.pre) {
     data += `pre:true,`
   }
-  // record original tag name for components using "is" attribute
+  // 使用 “is” 属性记录组件的原始标签名称
   if (el.component) {
     data += `tag:"${el.tag}",`
   }
-  // module data generation functions
+  // 模块数据生成函数
   for (let i = 0; i < state.dataGenFns.length; i++) {
     data += state.dataGenFns[i](el)
   }
-  // attributes
+  // 属性
   if (el.attrs) {
     data += `attrs:${genProps(el.attrs)},`
   }
-  // DOM props
+  // DOM 属性
   if (el.props) {
     data += `domProps:${genProps(el.props)},`
   }
-  // event handlers
+  // 事件处理程序
   if (el.events) {
     data += `${genHandlers(el.events, false)},`
   }
   if (el.nativeEvents) {
     data += `${genHandlers(el.nativeEvents, true)},`
   }
-  // slot target
-  // only for non-scoped slots
+  // slot 目标
+// 仅适用于非范围槽
   if (el.slotTarget && !el.slotScope) {
     data += `slot:${el.slotTarget},`
   }
-  // scoped slots
+  // 范围插槽
   if (el.scopedSlots) {
     data += `${genScopedSlots(el, el.scopedSlots, state)},`
   }
-  // component v-model
+  // 组件 V 模型
   if (el.model) {
     data += `model:{value:${el.model.value},callback:${el.model.callback},expression:${el.model.expression}},`
   }
-  // inline-template
+  // 内联模板
   if (el.inlineTemplate) {
     const inlineTemplate = genInlineTemplate(el, state)
     if (inlineTemplate) {
@@ -341,17 +339,17 @@ export function genData(el: ASTElement, state: CodegenState): string {
     }
   }
   data = data.replace(/,$/, '') + '}'
-  // v-bind dynamic argument wrap
-  // v-bind with dynamic arguments must be applied using the same v-bind object
-  // merge helper so that class/style/mustUseProp attrs are handled correctly.
+  // v-bind 动态参数包装
+// 带有动态参数的 v-bind 必须使用相同的 v-bind 对象
+// merge 辅助函数，以便正确处理 class/style/mustUseProp 属性。
   if (el.dynamicAttrs) {
     data = `_b(${data},"${el.tag}",${genProps(el.dynamicAttrs)})`
   }
-  // v-bind data wrap
+  // v-bind 数据包装
   if (el.wrapData) {
     data = el.wrapData(data)
   }
-  // v-on data wrap
+  // v-on 数据包装
   if (el.wrapListeners) {
     data = el.wrapListeners(data)
   }
@@ -369,8 +367,8 @@ function genDirectives(el: ASTElement, state: CodegenState): string | void {
     needRuntime = true
     const gen: DirectiveFunction = state.directives[dir.name]
     if (gen) {
-      // compile-time directive that manipulates AST.
-      // returns true if it also needs a runtime counterpart.
+      // 编译时指令。
+// 如果它还需要运行时对应项，则返回 true。
       needRuntime = !!gen(el, dir, state.warn)
     }
     if (needRuntime) {
@@ -415,30 +413,28 @@ function genScopedSlots(
   slots: { [key: string]: ASTElement },
   state: CodegenState
 ): string {
-  // by default scoped slots are considered "stable", this allows child
-  // components with only scoped slots to skip forced updates from parent.
-  // but in some cases we have to bail-out of this optimization
-  // for example if the slot contains dynamic names, has v-if or v-for on them...
+  // 默认情况下，作用域的插槽被认为是 “稳定的”，这允许子
+// 组件，用于跳过来自 Parent 的强制更新。
+// 但在某些情况下，我们必须摆脱这种优化
+// 例如，如果插槽包含动态名称，上面有 v-if 或 v-for......
   let needsForceUpdate =
     el.for ||
     Object.keys(slots).some(key => {
       const slot = slots[key]
       return (
-        slot.slotTargetDynamic || slot.if || slot.for || containsSlotChild(slot) // is passing down slot from parent which may be dynamic
+        slot.slotTargetDynamic || slot.if || slot.for || containsSlotChild(slot) // 是从父级向下传递插槽，这可能是动态的
       )
     })
 
-  // #9534: if a component with scoped slots is inside a conditional branch,
-  // it's possible for the same component to be reused but with different
-  // compiled slot content. To avoid that, we generate a unique key based on
-  // the generated code of all the slot contents.
+  // #9534： 如果具有作用域插槽的组件位于条件分支内，
+// 可以重复使用相同的组件，但使用不同的
+// 编译的插槽内容。为了避免这种情况，我们根据
+// 所有插槽内容的生成代码。
   let needsKey = !!el.if
 
-  // OR when it is inside another scoped slot or v-for (the reactivity may be
-  // disconnected due to the intermediate scope variable)
-  // #9438, #9506
-  // TODO: this can be further optimized by properly analyzing in-scope bindings
-  // and skip force updating ones that do not actually use scope variables.
+  // 或者当它位于另一个作用域插槽或 v-for 内时（由于中间作用域变量，响应性可能会断开连接）
+// #9438, #9506
+// TODO：这可以通过正确分析范围内绑定并跳过实际不使用范围变量的绑定来进一步优化。
   if (!needsForceUpdate) {
     let parent = el.parent
     while (parent) {
@@ -505,7 +501,7 @@ function genScopedSlot(el: ASTElement, state: CodegenState): string {
           : genChildren(el, state) || 'undefined'
         : genElement(el, state)
     }}`
-  // reverse proxy v-slot without scope on this.$slots
+  // 反向代理 v-slot 没有 this 的 scope $slots
   const reverseProxy = slotScope ? `` : `,proxy:true`
   return `{key:${el.slotTarget || `"default"`},fn:${fn}${reverseProxy}}`
 }
@@ -520,7 +516,7 @@ export function genChildren(
   const children = el.children
   if (children.length) {
     const el: any = children[0]
-    // optimize single v-for
+    // 优化单个 V-For
     if (
       children.length === 1 &&
       el.for &&
@@ -544,10 +540,10 @@ export function genChildren(
   }
 }
 
-// determine the normalization needed for the children array.
-// 0: no normalization needed
-// 1: simple normalization needed (possible 1-level deep nested array)
-// 2: full normalization needed
+// 确定 children 数组所需的规范化。
+// 0：无需标准化
+// 1：需要简单规范化（可能是 1 层深嵌套数组）
+// 2：需要完全规范化
 function getNormalizationType(
   children: Array<ASTNode>,
   maybeComponent: (el: ASTElement) => boolean
@@ -593,7 +589,7 @@ function genNode(node: ASTNode, state: CodegenState): string {
 export function genText(text: ASTText | ASTExpression): string {
   return `_v(${
     text.type === 2
-      ? text.expression // no need for () because already wrapped in _s()
+      ? text.expression // 不需要 （），因为已经包装在 _s（） 中
       : transformSpecialNewlines(JSON.stringify(text.text))
   })`
 }
@@ -610,7 +606,7 @@ function genSlot(el: ASTElement, state: CodegenState): string {
     el.attrs || el.dynamicAttrs
       ? genProps(
           (el.attrs || []).concat(el.dynamicAttrs || []).map(attr => ({
-            // slot props are camelized
+            // slot props 被驼峰化
             name: camelize(attr.name),
             value: attr.value,
             dynamic: attr.dynamic
@@ -630,7 +626,7 @@ function genSlot(el: ASTElement, state: CodegenState): string {
   return res + ')'
 }
 
-// componentName is el.component, take it as argument to shun flow's pessimistic refinement
+// componentName 为 el.component，将其作为参数来避开 flow 的悲观细化
 function genComponent(
   componentName: string,
   el: ASTElement,

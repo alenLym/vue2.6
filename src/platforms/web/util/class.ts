@@ -12,7 +12,7 @@ export function genClassForVnode(vnode: VNodeWithData): string {
       data = mergeClassData(childNode.data, data)
     }
   }
-  // @ts-expect-error parentNode.parent not VNodeWithData
+  // @ts-expect-error parentNode.parent 不是 VNodeWithData
   while (isDef((parentNode = parentNode.parent))) {
     if (parentNode && parentNode.data) {
       data = mergeClassData(data, parentNode.data)
@@ -41,7 +41,7 @@ export function renderClass(
   if (isDef(staticClass) || isDef(dynamicClass)) {
     return concat(staticClass, stringifyClass(dynamicClass))
   }
-  /* istanbul ignore next */
+  /* Istanbul 忽略下一个*/
   return ''
 }
 

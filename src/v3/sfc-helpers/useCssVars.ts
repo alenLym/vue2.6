@@ -3,7 +3,7 @@ import { inBrowser, warn } from 'core/util'
 import { currentInstance } from '../currentInstance'
 
 /**
- * Runtime helper for SFC's CSS variable injection feature.
+ * SFC 的 CSS 变量注入功能的运行时帮助程序。
  * @private
  */
 export function useCssVars(

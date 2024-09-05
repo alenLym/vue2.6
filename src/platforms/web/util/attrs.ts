@@ -1,7 +1,7 @@
 import { makeMap } from 'shared/util'
 
-// these are reserved for web because they are directly compiled away
-// during template compilation
+// 这些是保留给 Web 的，因为它们是直接编译掉的
+// 在模板编译期间
 export const isReservedAttr = makeMap('style,class')
 
 // attributes that should be using props for binding
@@ -28,7 +28,7 @@ const isValidContentEditableValue = makeMap(
 export const convertEnumeratedValue = (key: string, value: any) => {
   return isFalsyAttrValue(value) || value === 'false'
     ? 'false'
-    : // allow arbitrary string value for contenteditable
+    : // 允许 ContentEditable 的任意字符串值
     key === 'contenteditable' && isValidContentEditableValue(value)
     ? value
     : 'true'

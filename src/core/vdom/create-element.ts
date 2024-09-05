@@ -22,8 +22,8 @@ import type { VNodeData } from 'types/vnode'
 const SIMPLE_NORMALIZE = 1
 const ALWAYS_NORMALIZE = 2
 
-// wrapper function for providing a more flexible interface
-// without getting yelled at by flow
+// wrapper 函数提供更灵活的接口
+// 而不会被 Flow 大喊大叫
 export function createElement(
   context: Component,
   tag: any,
@@ -60,15 +60,15 @@ export function _createElement(
       )
     return createEmptyVNode()
   }
-  // object syntax in v-bind
+  // v-bind 中的对象语法
   if (isDef(data) && isDef(data.is)) {
     tag = data.is
   }
   if (!tag) {
-    // in case of component :is set to falsy value
+    // 如果组件 ：设置为 falsy 值
     return createEmptyVNode()
   }
-  // warn against non-primitive key
+  // 针对非原始键发出警告
   if (__DEV__ && isDef(data) && isDef(data.key) && !isPrimitive(data.key)) {
     warn(
       'Avoid using non-primitive value as key, ' +
@@ -76,7 +76,7 @@ export function _createElement(
       context
     )
   }
-  // support single function children as default scoped slot
+  // 支持单个函数 children 作为默认作用域 slot
   if (isArray(children) && isFunction(children[0])) {
     data = data || {}
     data.scopedSlots = { default: children[0] }
@@ -92,7 +92,7 @@ export function _createElement(
     let Ctor
     ns = (context.$vnode && context.$vnode.ns) || config.getTagNamespace(tag)
     if (config.isReservedTag(tag)) {
-      // platform built-in elements
+      // 平台内置元素
       if (
         __DEV__ &&
         isDef(data) &&
@@ -119,13 +119,13 @@ export function _createElement(
       // component
       vnode = createComponent(Ctor, data, context, children, tag)
     } else {
-      // unknown or unlisted namespaced elements
-      // check at runtime because it may get assigned a namespace when its
-      // parent normalizes children
+      // 未知或未列出的命名空间元素
+// 检查，因为它可能会在其
+// 父级 （parent） 规范化子项
       vnode = new VNode(tag, data, children, undefined, undefined, context)
     }
   } else {
-    // direct component options / constructor
+    // 直接组件选项 / 构造函数
     vnode = createComponent(tag as any, data, context, children)
   }
   if (isArray(vnode)) {
@@ -142,7 +142,7 @@ export function _createElement(
 function applyNS(vnode, ns, force?: boolean) {
   vnode.ns = ns
   if (vnode.tag === 'foreignObject') {
-    // use default namespace inside foreignObject
+    // 在 foreignObject 中使用 default 命名空间
     ns = undefined
     force = true
   }
@@ -159,9 +159,9 @@ function applyNS(vnode, ns, force?: boolean) {
   }
 }
 
-// ref #5318
-// necessary to ensure parent re-render when deep bindings like :style and
-// :class are used on slot nodes
+// 编号 #5318
+// 确保父级在深度绑定（如 ：style 和
+// ：class 用于插槽节点
 function registerDeepBindings(data) {
   if (isObject(data.style)) {
     traverse(data.style)

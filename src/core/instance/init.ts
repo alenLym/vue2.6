@@ -16,7 +16,7 @@ let uid = 0
 export function initMixin(Vue: typeof Component) {
   Vue.prototype._init = function (options?: Record<string, any>) {
     const vm: Component = this
-    // a uid
+    // 一个 UID
     vm._uid = uid++
 
     let startTag, endTag
@@ -27,22 +27,22 @@ export function initMixin(Vue: typeof Component) {
       mark(startTag)
     }
 
-    // a flag to mark this as a Vue instance without having to do instanceof
-    // check
+    // 一个标志，用于将其标记为 Vue 实例，而无需执行 instanceof
+    // 检查
     vm._isVue = true
-    // avoid instances from being observed
+    // 避免实例被观察
     vm.__v_skip = true
-    // effect scope
+    // 效果范围
     vm._scope = new EffectScope(true /* detached */)
-    // #13134 edge case where a child component is manually created during the
-    // render of a parent component
+    // #13134 在
+    // 父组件的 render
     vm._scope.parent = undefined
     vm._scope._vm = true
     // merge options
     if (options && options._isComponent) {
-      // optimize internal component instantiation
-      // since dynamic options merging is pretty slow, and none of the
-      // internal component options needs special treatment.
+      // 优化内部组件实例化
+      // 由于 Dynamic Options 合并非常缓慢，并且没有
+      // 内部组件选项需要特殊处理。
       initInternalComponent(vm, options as any)
     } else {
       vm.$options = mergeOptions(
@@ -57,15 +57,15 @@ export function initMixin(Vue: typeof Component) {
     } else {
       vm._renderProxy = vm
     }
-    // expose real self
+    // 暴露真实的自我
     vm._self = vm
     initLifecycle(vm)
     initEvents(vm)
     initRender(vm)
     callHook(vm, 'beforeCreate', undefined, false /* setContext */)
-    initInjections(vm) // resolve injections before data/props
+    initInjections(vm) // 在 data/props 之前解决注入
     initState(vm)
-    initProvide(vm) // resolve provide after data/props
+    initProvide(vm) // 在 data/props 之后解析 Provide
     callHook(vm, 'created')
 
     /* istanbul ignore if */
@@ -86,7 +86,7 @@ export function initInternalComponent(
   options: InternalComponentOptions
 ) {
   const opts = (vm.$options = Object.create((vm.constructor as any).options))
-  // doing this because it's faster than dynamic enumeration.
+  // 这样做是因为它比动态枚举更快。
   const parentVnode = options._parentVnode
   opts.parent = options.parent
   opts._parentVnode = parentVnode
@@ -109,12 +109,12 @@ export function resolveConstructorOptions(Ctor: typeof Component) {
     const superOptions = resolveConstructorOptions(Ctor.super)
     const cachedSuperOptions = Ctor.superOptions
     if (superOptions !== cachedSuperOptions) {
-      // super option changed,
-      // need to resolve new options.
+      // super 选项已更改，
+      // 需要解决新的选项。
       Ctor.superOptions = superOptions
-      // check if there are any late-modified/attached options (#4976)
+      // 检查是否有任何延迟修改/附加的选项 （#4976）
       const modifiedOptions = resolveModifiedOptions(Ctor)
-      // update base extend options
+      // 更新基础扩展选项
       if (modifiedOptions) {
         extend(Ctor.extendOptions, modifiedOptions)
       }

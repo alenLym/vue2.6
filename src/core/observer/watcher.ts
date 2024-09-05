@@ -33,9 +33,8 @@ export interface WatcherOptions extends DebuggerOptions {
 }
 
 /**
- * A watcher parses an expression, collects dependencies,
- * and fires callback when the expression value changes.
- * This is used for both the $watch() api and directives.
+ * 侦听器解析表达式、收集依赖项，并在表达式值更改时触发回调。
+ * 这用于 $watch（） API 和指令。
  * @internal
  */
 export default class Watcher implements DepTarget {
@@ -60,7 +59,7 @@ export default class Watcher implements DepTarget {
   value: any
   post: boolean
 
-  // dev only
+  // 仅限 dev
   onTrack?: ((event: DebuggerEvent) => void) | undefined
   onTrigger?: ((event: DebuggerEvent) => void) | undefined
 
@@ -73,8 +72,8 @@ export default class Watcher implements DepTarget {
   ) {
     recordEffectScope(
       this,
-      // if the active effect scope is manually created (not a component scope),
-      // prioritize it
+      // 如果活动效果范围是手动创建的（不是组件范围），
+// 确定 IT 的优先级
       activeEffectScope && !activeEffectScope._vm
         ? activeEffectScope
         : vm
@@ -84,7 +83,7 @@ export default class Watcher implements DepTarget {
     if ((this.vm = vm) && isRenderWatcher) {
       vm._watcher = this
     }
-    // options
+    // 选项
     if (options) {
       this.deep = !!options.deep
       this.user = !!options.user
@@ -99,16 +98,16 @@ export default class Watcher implements DepTarget {
       this.deep = this.user = this.lazy = this.sync = false
     }
     this.cb = cb
-    this.id = ++uid // uid for batching
+    this.id = ++uid // 用于批处理的 uid
     this.active = true
     this.post = false
-    this.dirty = this.lazy // for lazy watchers
+    this.dirty = this.lazy // 对于懒惰的观察者
     this.deps = []
     this.newDeps = []
     this.depIds = new Set()
     this.newDepIds = new Set()
     this.expression = __DEV__ ? expOrFn.toString() : ''
-    // parse expression for getter
+    // getter 的 Parse 表达式
     if (isFunction(expOrFn)) {
       this.getter = expOrFn
     } else {
@@ -128,7 +127,7 @@ export default class Watcher implements DepTarget {
   }
 
   /**
-   * Evaluate the getter, and re-collect dependencies.
+   * 评估 getter，并重新收集依赖项。
    */
   get() {
     pushTarget(this)
@@ -143,8 +142,8 @@ export default class Watcher implements DepTarget {
         throw e
       }
     } finally {
-      // "touch" every property so they are all tracked as
-      // dependencies for deep watching
+      // “touch” 每个属性，以便将它们全部作为
+// 深度监视的依赖项
       if (this.deep) {
         traverse(value)
       }
@@ -155,7 +154,7 @@ export default class Watcher implements DepTarget {
   }
 
   /**
-   * Add a dependency to this directive.
+   * 向此指令添加依赖项。
    */
   addDep(dep: Dep) {
     const id = dep.id
@@ -169,7 +168,7 @@ export default class Watcher implements DepTarget {
   }
 
   /**
-   * Clean up for dependency collection.
+   * 清理依赖项集合。
    */
   cleanupDeps() {
     let i = this.deps.length
@@ -190,8 +189,8 @@ export default class Watcher implements DepTarget {
   }
 
   /**
-   * Subscriber interface.
-   * Will be called when a dependency changes.
+   * 订阅者接口。
+   * 将在依赖项更改时调用。
    */
   update() {
     /* istanbul ignore else */
@@ -205,21 +204,19 @@ export default class Watcher implements DepTarget {
   }
 
   /**
-   * Scheduler job interface.
-   * Will be called by the scheduler.
+   * Scheduler 作业接口。
+   * 将由调度程序调用。
    */
   run() {
     if (this.active) {
       const value = this.get()
       if (
         value !== this.value ||
-        // Deep watchers and watchers on Object/Arrays should fire even
-        // when the value is the same, because the value may
-        // have mutated.
+        // 即使值相同，深度观察器和 Object/Arrays 上的 watcher 也应该触发，因为该值可能已经改变。
         isObject(value) ||
         this.deep
       ) {
-        // set new value
+        // 设置新值
         const oldValue = this.value
         this.value = value
         if (this.user) {
@@ -239,8 +236,8 @@ export default class Watcher implements DepTarget {
   }
 
   /**
-   * Evaluate the value of the watcher.
-   * This only gets called for lazy watchers.
+   * 评估观察程序的值。
+   * 这只会为懒惰的观察者调用。
    */
   evaluate() {
     this.value = this.get()
@@ -248,7 +245,7 @@ export default class Watcher implements DepTarget {
   }
 
   /**
-   * Depend on all deps collected by this watcher.
+   * 依赖于此 watcher 收集的所有 deps。
    */
   depend() {
     let i = this.deps.length
@@ -258,7 +255,7 @@ export default class Watcher implements DepTarget {
   }
 
   /**
-   * Remove self from all dependencies' subscriber list.
+   * 从所有依赖项的订阅者列表中删除 self。
    */
   teardown() {
     if (this.vm && !this.vm._isBeingDestroyed) {

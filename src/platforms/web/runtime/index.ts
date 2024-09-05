@@ -18,21 +18,21 @@ import platformDirectives from './directives/index'
 import platformComponents from './components/index'
 import type { Component } from 'types/component'
 
-// install platform specific utils
+// 安装特定于平台的 Utils
 Vue.config.mustUseProp = mustUseProp
 Vue.config.isReservedTag = isReservedTag
 Vue.config.isReservedAttr = isReservedAttr
 Vue.config.getTagNamespace = getTagNamespace
 Vue.config.isUnknownElement = isUnknownElement
 
-// install platform runtime directives & components
+// 安装平台运行时指令和组件
 extend(Vue.options.directives, platformDirectives)
 extend(Vue.options.components, platformComponents)
 
-// install platform patch function
+// 安装平台补丁功能
 Vue.prototype.__patch__ = inBrowser ? patch : noop
 
-// public mount method
+// public mount 方法
 Vue.prototype.$mount = function (
   el?: string | Element,
   hydrating?: boolean
@@ -41,8 +41,8 @@ Vue.prototype.$mount = function (
   return mountComponent(this, el, hydrating)
 }
 
-// devtools global hook
-/* istanbul ignore next */
+// DevTools 全局钩子
+/* Istanbul 忽略下一个*/
 if (inBrowser) {
   setTimeout(() => {
     if (config.devtools) {

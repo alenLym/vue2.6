@@ -22,8 +22,7 @@ const arrayKeys = Object.getOwnPropertyNames(arrayMethods)
 const NO_INITIAL_VALUE = {}
 
 /**
- * In some cases we may want to disable observation inside a component's
- * update computation.
+ * 在某些情况下，我们可能希望在组件的更新计算中禁用 Observation。
  */
 export let shouldObserve: boolean = true
 
@@ -31,7 +30,7 @@ export function toggleObserving(value: boolean) {
   shouldObserve = value
 }
 
-// ssr mock dep
+// SSR 模拟 dep
 const mockDep = {
   notify: noop,
   depend: noop,
@@ -40,17 +39,14 @@ const mockDep = {
 } as Dep
 
 /**
- * Observer class that is attached to each observed
- * object. Once attached, the observer converts the target
- * object's property keys into getter/setters that
- * collect dependencies and dispatch updates.
+ * 附加到每个被观察对象的 Observer 类。附加后，观察者将目标对象的属性键转换为收集依赖项并分派更新的 getter/setter。
  */
 export class Observer {
   dep: Dep
   vmCount: number // number of vms that have this object as root $data
 
   constructor(public value: any, public shallow = false, public mock = false) {
-    // this.value = value
+    // this.value = 值
     this.dep = mock ? mockDep : new Dep()
     this.vmCount = 0
     def(value, '__ob__', this)
@@ -72,9 +68,7 @@ export class Observer {
       }
     } else {
       /**
-       * Walk through all properties and convert them into
-       * getter/setters. This method should only be called when
-       * value type is Object.
+       * 遍历所有属性并将它们转换为 getter/setter。仅当值类型为 Object 时，才应调用此方法。
        */
       const keys = Object.keys(value)
       for (let i = 0; i < keys.length; i++) {
@@ -85,7 +79,7 @@ export class Observer {
   }
 
   /**
-   * Observe a list of Array items.
+   * 观察 Array 项的列表。
    */
   observeArray(value: any[]) {
     for (let i = 0, l = value.length; i < l; i++) {
@@ -94,12 +88,9 @@ export class Observer {
   }
 }
 
-// helpers
-
+// 助手
 /**
- * Attempt to create an observer instance for a value,
- * returns the new observer if successfully observed,
- * or the existing observer if the value already has one.
+ * 尝试为值创建观察者实例，如果成功观察，则返回新的观察者，如果值已有观察者，则返回现有观察者。
  */
 export function observe(
   value: any,
@@ -114,7 +105,7 @@ export function observe(
     (ssrMockReactivity || !isServerRendering()) &&
     (isArray(value) || isPlainObject(value)) &&
     Object.isExtensible(value) &&
-    !value.__v_skip /* ReactiveFlags.SKIP */ &&
+    !value.__v_skip /* 响应式 flags.skip*/ &&
     !isRef(value) &&
     !(value instanceof VNode)
   ) {
@@ -123,7 +114,7 @@ export function observe(
 }
 
 /**
- * Define a reactive property on an Object.
+ * 在 Object 上定义响应式属性。
  */
 export function defineReactive(
   obj: object,
@@ -141,7 +132,7 @@ export function defineReactive(
     return
   }
 
-  // cater for pre-defined getter/setters
+  // 满足预定义的 getter/setter
   const getter = property && property.get
   const setter = property && property.set
   if (
@@ -187,7 +178,7 @@ export function defineReactive(
       if (setter) {
         setter.call(obj, newVal)
       } else if (getter) {
-        // #7981: for accessor properties without setter
+        // #7981： 对于没有 setter 的访问器属性
         return
       } else if (!shallow && isRef(value) && !isRef(newVal)) {
         value.value = newVal
@@ -214,9 +205,7 @@ export function defineReactive(
 }
 
 /**
- * Set a property on an object. Adds the new property and
- * triggers change notification if the property doesn't
- * already exist.
+ * 在对象上设置属性。添加新属性，如果该属性尚不存在，则触发更改通知。
  */
 export function set<T>(array: T[], key: number, value: T): T
 export function set<T>(object: object, key: string | number, value: T): T
@@ -238,7 +227,7 @@ export function set(
   if (isArray(target) && isValidArrayIndex(key)) {
     target.length = Math.max(target.length, key)
     target.splice(key, 1, val)
-    // when mocking for SSR, array methods are not hijacked
+    // 当模拟 SSR 时，数组方法不会被劫持
     if (ob && !ob.shallow && ob.mock) {
       observe(val, false, true)
     }
@@ -276,7 +265,7 @@ export function set(
 }
 
 /**
- * Delete a property and trigger change if necessary.
+ * 删除属性并在必要时触发更改。
  */
 export function del<T>(array: T[], key: number): void
 export function del(object: object, key: string | number): void
@@ -323,8 +312,7 @@ export function del(target: any[] | object, key: any) {
 }
 
 /**
- * Collect dependencies on array elements when the array is touched, since
- * we cannot intercept array element access like property getters.
+ * 当数组被触摸时收集对数组元素的依赖，因为我们无法像属性 getter 那样拦截数组元素访问。
  */
 function dependArray(value: Array<any>) {
   for (let e, i = 0, l = value.length; i < l; i++) {

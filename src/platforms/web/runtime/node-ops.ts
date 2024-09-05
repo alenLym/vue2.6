@@ -6,7 +6,7 @@ export function createElement(tagName: string, vnode: VNode): Element {
   if (tagName !== 'select') {
     return elm
   }
-  // false or null will remove the attribute but undefined will not
+  // false 或 null 将删除该属性，但 undefined 不会
   if (
     vnode.data &&
     vnode.data.attrs &&

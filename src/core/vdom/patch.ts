@@ -1,13 +1,11 @@
 /**
- * Virtual DOM patching algorithm based on Snabbdom by
- * Simon Friis Vindum (@paldepind)
- * Licensed under the MIT License
- * https://github.com/paldepind/snabbdom/blob/master/LICENSE
+ * 基于 Snabbdom 的虚拟 DOM 修补算法 by
+ * 西蒙·弗里斯·温杜姆 （Simon Friis Vindum） （@paldepind）
+ * 根据 MIT License https://github.com/paldepind/snabbdom/blob/master/LICENSE 获得许可
  *
- * modified by Evan You (@yyx990803)
+ * 修改者 Evan You （@yyx990803）
  *
- * Not type-checking this because this file is perf-critical and the cost
- * of making flow understand it is not worth it.
+ * 不进行类型检查，因为此文件对性能至关重要，并且让 flow 理解它的成本不值得。
  */
 
 import VNode, { cloneVNode } from './vnode'
@@ -94,7 +92,7 @@ export function createPatchFunction(backend) {
 
   function removeNode(el) {
     const parent = nodeOps.parentNode(el)
-    // element may have already been removed due to v-html / v-text
+    // 元素可能由于 v-html / v-text 而被删除
     if (isDef(parent)) {
       nodeOps.removeChild(parent, el)
     }
@@ -128,15 +126,11 @@ export function createPatchFunction(backend) {
     index?: any
   ) {
     if (isDef(vnode.elm) && isDef(ownerArray)) {
-      // This vnode was used in a previous render!
-      // now it's used as a new node, overwriting its elm would cause
-      // potential patch errors down the road when it's used as an insertion
-      // reference node. Instead, we clone the node on-demand before creating
-      // associated DOM element for it.
+      // 这个 vnode 在之前的渲染中使用过！现在它被用作新节点，覆盖其 ELM 将导致在用作插入引用节点时出现潜在的补丁错误。相反，我们会在为其创建关联的 DOM 元素之前按需克隆节点。
       vnode = ownerArray[index] = cloneVNode(vnode)
     }
 
-    vnode.isRootInsert = !nested // for transition enter check
+    vnode.isRootInsert = !nested // 对于转场，请输入 Check
     if (createComponent(vnode, insertedVnodeQueue, parentElm, refElm)) {
       return
     }
@@ -191,10 +185,10 @@ export function createPatchFunction(backend) {
       if (isDef((i = i.hook)) && isDef((i = i.init))) {
         i(vnode, false /* hydrating */)
       }
-      // after calling the init hook, if the vnode is a child component
-      // it should've created a child instance and mounted it. the child
-      // component also has set the placeholder vnode's elm.
-      // in that case we can just return the element and be done.
+      // 调用 init 钩子后，如果 vnode 是子组件
+// 它应该创建一个子实例并挂载它。孩子
+// 组件还设置了占位符 vnode 的 elm。
+// 在这种情况下，我们只需返回元素即可完成。
       if (isDef(vnode.componentInstance)) {
         initComponent(vnode, insertedVnodeQueue)
         insert(parentElm, vnode.elm, refElm)
@@ -219,20 +213,20 @@ export function createPatchFunction(backend) {
       invokeCreateHooks(vnode, insertedVnodeQueue)
       setScope(vnode)
     } else {
-      // empty component root.
-      // skip all element-related modules except for ref (#3455)
+      // 空组件根。
+// 跳过除 ref 之外的所有元素相关模块 （#3455）
       registerRef(vnode)
-      // make sure to invoke the insert hook
+      // 确保调用 Insert 钩子
       insertedVnodeQueue.push(vnode)
     }
   }
 
   function reactivateComponent(vnode, insertedVnodeQueue, parentElm, refElm) {
     let i
-    // hack for #4339: a reactivated component with inner transition
-    // does not trigger because the inner node's created hooks are not called
-    // again. It's not ideal to involve module-specific logic in here but
-    // there doesn't seem to be a better way to do it.
+    // 针对 #4339 的 hack：具有内部过渡的重新激活组件
+// 不会触发，因为内部节点创建的钩子没有被调用
+// 再。在这里涉及特定于模块的 logic 并不理想，但是
+// 似乎没有更好的方法来做到这一点。
     let innerNode = vnode
     while (innerNode.componentInstance) {
       innerNode = innerNode.componentInstance._vnode
@@ -244,8 +238,8 @@ export function createPatchFunction(backend) {
         break
       }
     }
-    // unlike a newly created component,
-    // a reactivated keep-alive component doesn't insert itself
+    // 与新创建的组件不同，
+// 重新激活的 keep-alive 组件不会自行插入
     insert(parentElm, vnode.elm, refElm)
   }
 
@@ -293,16 +287,16 @@ export function createPatchFunction(backend) {
     for (let i = 0; i < cbs.create.length; ++i) {
       cbs.create[i](emptyNode, vnode)
     }
-    i = vnode.data.hook // Reuse variable
+    i = vnode.data.hook // 重用变量
     if (isDef(i)) {
       if (isDef(i.create)) i.create(emptyNode, vnode)
       if (isDef(i.insert)) insertedVnodeQueue.push(vnode)
     }
   }
 
-  // set scope id attribute for scoped CSS.
-  // this is implemented as a special case to avoid the overhead
-  // of going through the normal attribute patching process.
+  // set scope id 属性。
+// 这是作为特殊情况实现的，以避免开销
+// 完成正常的属性修补过程。
   function setScope(vnode) {
     let i
     if (isDef((i = vnode.fnScopeId))) {
@@ -316,7 +310,7 @@ export function createPatchFunction(backend) {
         ancestor = ancestor.parent
       }
     }
-    // for slot content they should also get the scopeId from the host instance.
+    // 对于槽内容，它们还应从主机实例获取 scopeId。
     if (
       isDef((i = activeInstance)) &&
       i !== vnode.context &&
@@ -382,14 +376,14 @@ export function createPatchFunction(backend) {
       let i
       const listeners = cbs.remove.length + 1
       if (isDef(rm)) {
-        // we have a recursively passed down rm callback
-        // increase the listeners count
+        // 我们有一个递归传递的 rm 回调
+// 增加侦听器计数
         rm.listeners += listeners
       } else {
         // directly removing
         rm = createRmCb(vnode.elm, listeners)
       }
-      // recursively invoke hooks on child component root node
+      // 递归调用子组件根节点上的钩子
       if (
         isDef((i = vnode.componentInstance)) &&
         isDef((i = i._vnode)) &&
@@ -427,9 +421,9 @@ export function createPatchFunction(backend) {
     let newEndVnode = newCh[newEndIdx]
     let oldKeyToIdx, idxInOld, vnodeToMove, refElm
 
-    // removeOnly is a special flag used only by <transition-group>
-    // to ensure removed elements stay in correct relative positions
-    // during leaving transitions
+    // removeOnly 是仅由<transition-group>
+// 确保删除的元素保持在正确的相对位置
+// 在离开过渡期间
     const canMove = !removeOnly
 
     if (__DEV__) {
@@ -438,7 +432,7 @@ export function createPatchFunction(backend) {
 
     while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
       if (isUndef(oldStartVnode)) {
-        oldStartVnode = oldCh[++oldStartIdx] // Vnode has been moved left
+        oldStartVnode = oldCh[++oldStartIdx] // Vnode 已向左移动
       } else if (isUndef(oldEndVnode)) {
         oldEndVnode = oldCh[--oldEndIdx]
       } else if (sameVnode(oldStartVnode, newStartVnode)) {
@@ -462,7 +456,7 @@ export function createPatchFunction(backend) {
         oldEndVnode = oldCh[--oldEndIdx]
         newEndVnode = newCh[--newEndIdx]
       } else if (sameVnode(oldStartVnode, newEndVnode)) {
-        // Vnode moved right
+        // Vnode 向右移动
         patchVnode(
           oldStartVnode,
           newEndVnode,
@@ -479,7 +473,7 @@ export function createPatchFunction(backend) {
         oldStartVnode = oldCh[++oldStartIdx]
         newEndVnode = newCh[--newEndIdx]
       } else if (sameVnode(oldEndVnode, newStartVnode)) {
-        // Vnode moved left
+        // Vnode 向左移动
         patchVnode(
           oldEndVnode,
           newStartVnode,
@@ -498,7 +492,7 @@ export function createPatchFunction(backend) {
           ? oldKeyToIdx[newStartVnode.key]
           : findIdxInOld(newStartVnode, oldCh, oldStartIdx, oldEndIdx)
         if (isUndef(idxInOld)) {
-          // New element
+          // 新元素
           createElm(
             newStartVnode,
             insertedVnodeQueue,
@@ -526,7 +520,7 @@ export function createPatchFunction(backend) {
                 oldStartVnode.elm
               )
           } else {
-            // same key but different element. treat as new element
+            // 相同的键但不同的元素。视为新元素
             createElm(
               newStartVnode,
               insertedVnodeQueue,
@@ -594,7 +588,7 @@ export function createPatchFunction(backend) {
     }
 
     if (isDef(vnode.elm) && isDef(ownerArray)) {
-      // clone reused vnode
+      // 克隆重用的 vnode
       vnode = ownerArray[index] = cloneVNode(vnode)
     }
 
@@ -609,10 +603,10 @@ export function createPatchFunction(backend) {
       return
     }
 
-    // reuse element for static trees.
-    // note we only do this if the vnode is cloned -
-    // if the new node is not cloned it means the render functions have been
-    // reset by the hot-reload-api and we need to do a proper re-render.
+    // reuse 元素。
+// 注意：我们只在 vnode 被克隆时执行此操作 -
+// 如果未克隆新节点，则表示渲染函数已
+// reset 的 reset ，我们需要做一个正确的重新渲染。
     if (
       isTrue(vnode.isStatic) &&
       isTrue(oldVnode.isStatic) &&
@@ -659,8 +653,8 @@ export function createPatchFunction(backend) {
   }
 
   function invokeInsertHook(vnode, queue, initial) {
-    // delay insert hooks for component root nodes, invoke them after the
-    // element is really inserted
+    // delay insert 钩子，请在组件根节点的
+// 元素确实插入了
     if (isTrue(initial) && isDef(vnode.parent)) {
       vnode.parent.data.pendingInsert = queue
     } else {
@@ -671,13 +665,12 @@ export function createPatchFunction(backend) {
   }
 
   let hydrationBailed = false
-  // list of modules that can skip create hook during hydration because they
-  // are already rendered on the client or has no need for initialization
-  // Note: style is excluded because it relies on initial clone for future
-  // deep updates (#7063).
+  // 可以在 hydration 期间跳过 create hook 的模块列表，因为它们
+// 已在客户端上呈现或不需要初始化
+// 注意：排除 style 是因为它依赖于初始克隆进行未来的深度更新 （#7063）。
   const isRenderedModule = makeMap('attrs,class,staticClass,staticStyle,key')
 
-  // Note: this is a browser-only function so we can assume elms are DOM nodes.
+  // 注意：这是一个仅限浏览器的函数，因此我们可以假设 elms 是 DOM 节点。
   function hydrate(elm, vnode, insertedVnodeQueue, inVPre?: boolean) {
     let i
     const { tag, data, children } = vnode
@@ -688,7 +681,7 @@ export function createPatchFunction(backend) {
       vnode.isAsyncPlaceholder = true
       return true
     }
-    // assert node match
+    // 断言节点匹配
     if (__DEV__) {
       if (!assertNodeMatch(elm, vnode, inVPre)) {
         return false
@@ -698,18 +691,18 @@ export function createPatchFunction(backend) {
       if (isDef((i = data.hook)) && isDef((i = i.init)))
         i(vnode, true /* hydrating */)
       if (isDef((i = vnode.componentInstance))) {
-        // child component. it should have hydrated its own tree.
+        // 子组件。它应该给自己的树补水。
         initComponent(vnode, insertedVnodeQueue)
         return true
       }
     }
     if (isDef(tag)) {
       if (isDef(children)) {
-        // empty element, allow client to pick up and populate children
+        // 空元素，允许 Client 端选取并填充 children
         if (!elm.hasChildNodes()) {
           createChildren(vnode, children, insertedVnodeQueue)
         } else {
-          // v-html and domProps: innerHTML
+          // v-html 和 domProps：innerHTML
           if (
             isDef((i = data)) &&
             isDef((i = i.domProps)) &&
@@ -730,7 +723,7 @@ export function createPatchFunction(backend) {
               return false
             }
           } else {
-            // iterate and compare children lists
+            // 迭代和比较子列表
             let childrenMatch = true
             let childNode = elm.firstChild
             for (let i = 0; i < children.length; i++) {
@@ -743,8 +736,8 @@ export function createPatchFunction(backend) {
               }
               childNode = childNode.nextSibling
             }
-            // if childNode is not null, it means the actual childNodes list is
-            // longer than the virtual children list.
+            // 如果 childNode 不为 null，则表示实际的 childNodes 列表为
+// 比 Virtual Children 列表长。
             if (!childrenMatch || childNode) {
               /* istanbul ignore if */
               if (
@@ -775,7 +768,7 @@ export function createPatchFunction(backend) {
           }
         }
         if (!fullInvoke && data['class']) {
-          // ensure collecting deps for deep class bindings for future updates
+          // 确保为深层类绑定收集 deps 以供将来更新
           traverse(data['class'])
         }
       }
@@ -808,19 +801,19 @@ export function createPatchFunction(backend) {
     const insertedVnodeQueue: any[] = []
 
     if (isUndef(oldVnode)) {
-      // empty mount (likely as component), create new root element
+      // 空挂载（可能作为组件），创建新的根元素
       isInitialPatch = true
       createElm(vnode, insertedVnodeQueue)
     } else {
       const isRealElement = isDef(oldVnode.nodeType)
       if (!isRealElement && sameVnode(oldVnode, vnode)) {
-        // patch existing root node
+        // 修补现有根节点
         patchVnode(oldVnode, vnode, insertedVnodeQueue, null, null, removeOnly)
       } else {
         if (isRealElement) {
-          // mounting to a real element
-          // check if this is server-rendered content and if we can perform
-          // a successful hydration.
+          // 安装到真实元件
+// 检查这是否是服务器渲染的内容，以及我们是否可以执行
+// 一次成功的补水。
           if (oldVnode.nodeType === 1 && oldVnode.hasAttribute(SSR_ATTR)) {
             oldVnode.removeAttribute(SSR_ATTR)
             hydrating = true
@@ -839,27 +832,27 @@ export function createPatchFunction(backend) {
               )
             }
           }
-          // either not server-rendered, or hydration failed.
-          // create an empty node and replace it
+          // 未服务器渲染，或者 hydration 失败。
+// 创建一个空节点并替换它
           oldVnode = emptyNodeAt(oldVnode)
         }
 
-        // replacing existing element
+        // 替换现有元素
         const oldElm = oldVnode.elm
         const parentElm = nodeOps.parentNode(oldElm)
 
-        // create new node
+        // 创建新节点
         createElm(
           vnode,
           insertedVnodeQueue,
-          // extremely rare edge case: do not insert if old element is in a
-          // leaving transition. Only happens when combining transition +
-          // keep-alive + HOCs. (#4590)
+          // 极其罕见的边缘情况：如果旧元素位于
+// 离开过渡。仅在将过渡 +
+// keep-alive + HOC 中。(#4590)
           oldElm._leaveCb ? null : parentElm,
           nodeOps.nextSibling(oldElm)
         )
 
-        // update parent placeholder node element, recursively
+        // 递归更新 Parent Placeholder Node 元素
         if (isDef(vnode.parent)) {
           let ancestor = vnode.parent
           const patchable = isPatchable(vnode)
@@ -873,13 +866,13 @@ export function createPatchFunction(backend) {
                 cbs.create[i](emptyNode, ancestor)
               }
               // #6513
-              // invoke insert hooks that may have been merged by create hooks.
-              // e.g. for directives that uses the "inserted" hook.
+// 调用可能已被 create hooks 合并的 Insert hooks。
+// 例如，对于使用 “inserted” 钩子的指令。
               const insert = ancestor.data.hook.insert
               if (insert.merged) {
-                // start at index 1 to avoid re-invoking component mounted hook
-                // clone insert hooks to avoid being mutated during iteration.
-                // e.g. for customed directives under transition group.
+                // 从索引 1 开始，以避免重新调用组件挂载的钩子
+// clone insert hooks 以避免在迭代过程中发生突变。
+// 例如，对于 transition group 下的自定义指令。
                 const cloned = insert.fns.slice(1)
                 for (let i = 0; i < cloned.length; i++) {
                   cloned[i]()
@@ -892,7 +885,7 @@ export function createPatchFunction(backend) {
           }
         }
 
-        // destroy old node
+        // 销毁旧节点
         if (isDef(parentElm)) {
           removeVnodes([oldVnode], 0, 0)
         } else if (isDef(oldVnode.tag)) {

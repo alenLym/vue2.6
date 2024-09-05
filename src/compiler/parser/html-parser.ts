@@ -1,12 +1,10 @@
 /**
- * Not type-checking this file because it's mostly vendor code.
+ * 不对此文件进行类型检查，因为它主要是供应商代码。
  */
-
 /*!
- * HTML Parser By John Resig (ejohn.org)
- * Modified by Juriy "kangax" Zaytsev
- * Original code by Erik Arvidsson (MPL-1.1 OR Apache-2.0 OR GPL-2.0-or-later)
- * http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
+ * HTML 解析器 作者：John Resig （ejohn.org）
+ * 修改者 Juriy “kangax” Zaytsev
+ * 原始代码由 Erik Arvidsson（MPL-1.1 或 Apache-2.0 或 GPL-2.0 或更高版本）http://erik.eae.net/simplehtmlparser/simplehtmlparser.js
  */
 
 import { makeMap, no } from 'shared/util'
@@ -14,7 +12,7 @@ import { isNonPhrasingTag } from 'web/compiler/util'
 import { unicodeRegExp } from 'core/util/lang'
 import { ASTAttr, CompilerOptions } from 'types/compiler'
 
-// Regular Expressions for parsing tags and attributes
+// 用于解析标签和属性的正则表达式
 const attribute =
   /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/
 const dynamicArgAttribute =
@@ -25,11 +23,11 @@ const startTagOpen = new RegExp(`^<${qnameCapture}`)
 const startTagClose = /^\s*(\/?)>/
 const endTag = new RegExp(`^<\\/${qnameCapture}[^>]*>`)
 const doctype = /^<!DOCTYPE [^>]+>/i
-// #7298: escape - to avoid being passed as HTML comment when inlined in page
+// #7298： 转义 - 避免在页面内联时作为 HTML 注释传递
 const comment = /^<!\--/
 const conditionalComment = /^<!\[/
 
-// Special Elements (can contain anything)
+// 特殊元素（可以包含任何内容）
 export const isPlainTextElement = makeMap('script,style,textarea', true)
 const reCache = {}
 
@@ -77,7 +75,7 @@ export function parseHTML(html, options: HTMLParserOptions) {
   let last, lastTag
   while (html) {
     last = html
-    // Make sure we're not in a plaintext content element like script/style
+    // 确保我们不在 script/style 等纯文本内容元素中
     if (!lastTag || !isPlainTextElement(lastTag)) {
       let textEnd = html.indexOf('<')
       if (textEnd === 0) {
@@ -108,14 +106,14 @@ export function parseHTML(html, options: HTMLParserOptions) {
           }
         }
 
-        // Doctype:
+        // 文档类型：
         const doctypeMatch = html.match(doctype)
         if (doctypeMatch) {
           advance(doctypeMatch[0].length)
           continue
         }
 
-        // End tag:
+        // End 标记：
         const endTagMatch = html.match(endTag)
         if (endTagMatch) {
           const curIndex = index
@@ -124,7 +122,7 @@ export function parseHTML(html, options: HTMLParserOptions) {
           continue
         }
 
-        // Start tag:
+        // Start 标签：
         const startTagMatch = parseStartTag()
         if (startTagMatch) {
           handleStartTag(startTagMatch)
@@ -144,7 +142,7 @@ export function parseHTML(html, options: HTMLParserOptions) {
           !comment.test(rest) &&
           !conditionalComment.test(rest)
         ) {
-          // < in plain text, be forgiving and treat it as text
+          // <纯文本，请宽容并将其视为文本
           next = rest.indexOf('<', 1)
           if (next < 0) break
           textEnd += next
@@ -204,7 +202,7 @@ export function parseHTML(html, options: HTMLParserOptions) {
     }
   }
 
-  // Clean up any remaining tags
+  // 清理所有剩余标签
   parseEndTag()
 
   function advance(n) {
@@ -295,7 +293,7 @@ export function parseHTML(html, options: HTMLParserOptions) {
     if (start == null) start = index
     if (end == null) end = index
 
-    // Find the closest opened tag of the same type
+    // 查找最近的已打开的相同类型的标签
     if (tagName) {
       lowerCasedTagName = tagName.toLowerCase()
       for (pos = stack.length - 1; pos >= 0; pos--) {
@@ -304,12 +302,12 @@ export function parseHTML(html, options: HTMLParserOptions) {
         }
       }
     } else {
-      // If no tag name is provided, clean shop
+      // 如果未提供标签名称，请清理商店
       pos = 0
     }
 
     if (pos >= 0) {
-      // Close all the open elements, up the stack
+      // 关闭堆栈上的所有打开的元素
       for (let i = stack.length - 1; i >= pos; i--) {
         if (__DEV__ && (i > pos || !tagName) && options.warn) {
           options.warn(`tag <${stack[i].tag}> has no matching end tag.`, {
@@ -322,7 +320,7 @@ export function parseHTML(html, options: HTMLParserOptions) {
         }
       }
 
-      // Remove the open elements from the stack
+      // 从堆栈中删除打开的元素
       stack.length = pos
       lastTag = pos && stack[pos - 1].tag
     } else if (lowerCasedTagName === 'br') {

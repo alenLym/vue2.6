@@ -83,7 +83,7 @@ if (__DEV__) {
 
   initProxy = function initProxy(vm) {
     if (hasProxy) {
-      // determine which proxy handler to use
+      // 确定要使用的代理处理程序
       const options = vm.$options
       const handlers =
         options.render && options.render._withStripped ? getHandler : hasHandler

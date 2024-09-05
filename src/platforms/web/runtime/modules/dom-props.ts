@@ -12,7 +12,7 @@ function updateDOMProps(oldVnode: VNodeWithData, vnode: VNodeWithData) {
   const elm: any = vnode.elm
   const oldProps = oldVnode.data.domProps || {}
   let props = vnode.data.domProps || {}
-  // clone observed objects, as the user probably wants to mutate it
+  // 克隆观察到的对象，因为用户可能想要改变它
   if (isDef(props.__ob__) || isTrue(props._v_attr_proxy)) {
     props = vnode.data.domProps = extend({}, props)
   }
@@ -25,24 +25,24 @@ function updateDOMProps(oldVnode: VNodeWithData, vnode: VNodeWithData) {
 
   for (key in props) {
     cur = props[key]
-    // ignore children if the node has textContent or innerHTML,
-    // as these will throw away existing DOM nodes and cause removal errors
-    // on subsequent patches (#3360)
+    // 如果节点具有 textContent 或 innerHTML，则忽略 children，
+// 因为它们会丢弃现有的 DOM 节点并导致删除错误
+// 在后续补丁中 （#3360）
     if (key === 'textContent' || key === 'innerHTML') {
       if (vnode.children) vnode.children.length = 0
       if (cur === oldProps[key]) continue
-      // #6601 work around Chrome version <= 55 bug where single textNode
-      // replaced by innerHTML/textContent retains its parentNode property
+      // #6601 解决 Chrome 版本 <= 55 单个 textNode 的 bug
+// 替换为 innerHTML/textContent 保留其 parentNode 属性
       if (elm.childNodes.length === 1) {
         elm.removeChild(elm.childNodes[0])
       }
     }
 
     if (key === 'value' && elm.tagName !== 'PROGRESS') {
-      // store value as _value as well since
-      // non-string values will be stringified
+      // 存储值也_value因为
+// 非字符串值将被字符串化
       elm._value = cur
-      // avoid resetting cursor position when value is the same
+      // 避免在 Value 相同时重置光标位置
       const strCur = isUndef(cur) ? '' : String(cur)
       if (shouldUpdateValue(elm, strCur)) {
         elm.value = strCur
@@ -52,7 +52,7 @@ function updateDOMProps(oldVnode: VNodeWithData, vnode: VNodeWithData) {
       isSVG(elm.tagName) &&
       isUndef(elm.innerHTML)
     ) {
-      // IE doesn't support innerHTML for SVG elements
+      // IE 不支持 SVG 元素的 innerHTML
       svgContainer = svgContainer || document.createElement('div')
       svgContainer.innerHTML = `<svg>${cur}</svg>`
       const svg = svgContainer.firstChild
@@ -63,14 +63,14 @@ function updateDOMProps(oldVnode: VNodeWithData, vnode: VNodeWithData) {
         elm.appendChild(svg.firstChild)
       }
     } else if (
-      // skip the update if old and new VDOM state is the same.
-      // `value` is handled separately because the DOM value may be temporarily
-      // out of sync with VDOM state due to focus, composition and modifiers.
-      // This  #4521 by skipping the unnecessary `checked` update.
+      // 如果新旧 VDOM 状态相同，则跳过更新。
+// 'value' 是单独处理的，因为 DOM 值可能是临时的
+// 由于焦点、合成和修饰符的原因，与 VDOM 状态不同步。
+// 此 #4521 通过跳过不必要的“checked”更新。
       cur !== oldProps[key]
     ) {
-      // some property updates can throw
-      // e.g. `value` on <progress> w/ non-finite value
+      // 某些属性更新可能会引发
+// 例如，<progress>w/ 非有限值上的 'value'
       try {
         elm[key] = cur
       } catch (e: any) {}
@@ -92,11 +92,11 @@ function shouldUpdateValue(elm: acceptValueElm, checkVal: string): boolean {
 }
 
 function isNotInFocusAndDirty(elm: acceptValueElm, checkVal: string): boolean {
-  // return true when textbox (.number and .trim) loses focus and its value is
-  // not equal to the updated value
+  // 当 TextBox（.number 和 .trim）失去焦点且其值为
+// 不等于更新的值
   let notInFocus = true
   // #6157
-  // work around IE bug when accessing document.activeElement in an iframe
+// 解决在 iframe 中访问 document.activeElement 时的 IE 错误
   try {
     notInFocus = document.activeElement !== elm
   } catch (e: any) {}
@@ -105,7 +105,7 @@ function isNotInFocusAndDirty(elm: acceptValueElm, checkVal: string): boolean {
 
 function isDirtyWithModifiers(elm: any, newVal: string): boolean {
   const value = elm.value
-  const modifiers = elm._vModifiers // injected by v-model runtime
+  const modifiers = elm._vModifiers // 由 V-Model 运行时注入
   if (isDef(modifiers)) {
     if (modifiers.number) {
       return toNumber(value) !== toNumber(newVal)

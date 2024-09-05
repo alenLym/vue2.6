@@ -24,7 +24,7 @@ export interface Target {
   [ReactiveFlags.RAW]?: any
 }
 
-// only unwrap nested ref
+// Only Unwrap 嵌套 ref
 export type UnwrapNestedRefs<T> = T extends Ref ? T : UnwrapRefSimple<T>
 
 export function reactive<T extends object>(target: T): UnwrapNestedRefs<T>
@@ -38,9 +38,7 @@ export declare const ShallowReactiveMarker: unique symbol
 export type ShallowReactive<T> = T & { [ShallowReactiveMarker]?: true }
 
 /**
- * Return a shallowly-reactive copy of the original object, where only the root
- * level properties are reactive. It also does not auto-unwrap refs (even at the
- * root level).
+ * 返回原始对象的浅层响应式副本，其中只有根级属性是响应式的。它也不会自动解包引用（即使在根级别）。
  */
 export function shallowReactive<T extends object>(
   target: T
@@ -119,7 +117,7 @@ export function toRaw<T>(observed: T): T {
 export function markRaw<T extends object>(
   value: T
 ): T & { [RawSymbol]?: true } {
-  // non-extensible objects won't be observed anyway
+  // 无论如何都不会观察不可扩展的对象
   if (Object.isExtensible(value)) {
     def(value, ReactiveFlags.SKIP, true)
   }

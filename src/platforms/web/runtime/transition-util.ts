@@ -36,7 +36,7 @@ export const hasTransition = inBrowser && !isIE9
 const TRANSITION = 'transition'
 const ANIMATION = 'animation'
 
-// Transition property/event sniffing
+// Transition 属性/事件探查
 export let transitionProp = 'transition'
 export let transitionEndEvent = 'transitionend'
 export let animationProp = 'animation'
@@ -59,7 +59,7 @@ if (hasTransition) {
   }
 }
 
-// binding to window is necessary to make hot reload work in IE in strict mode
+// 绑定到窗口是必要的，才能使热重载在 IE 中以严格模式工作
 const raf = inBrowser
   ? window.requestAnimationFrame
     ? window.requestAnimationFrame.bind(window)
@@ -130,7 +130,7 @@ export function getTransitionInfo(
   hasTransform: boolean
 } {
   const styles: any = window.getComputedStyle(el)
-  // JSDOM may return undefined for transition properties
+  // JSDOM 可能会为 transition 属性返回 undefined
   const transitionDelays: Array<string> = (
     styles[transitionProp + 'Delay'] || ''
   ).split(', ')
@@ -206,10 +206,8 @@ function getTimeout(delays: Array<string>, durations: Array<string>): number {
   )
 }
 
-// Old versions of Chromium (below 61.0.3163.100) formats floating pointer numbers
-// in a locale-dependent way, using a comma instead of a dot.
-// If comma is not replaced with a dot, the input will be rounded down (i.e. acting
-// as a floor function) causing unexpected behaviors
+// 旧版本的 Chromium（低于 61.0.3163.100）以与区域设置相关的方式格式化浮动指针数字，使用逗号而不是点。
+// 如果逗号没有被点替换，则输入将被向下舍入（即充当向下取整函数），从而导致意外行为
 function toMs(s: string): number {
   return Number(s.slice(0, -1).replace(',', '.')) * 1000
 }

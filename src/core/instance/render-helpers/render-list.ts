@@ -2,7 +2,7 @@ import { isObject, isDef, hasSymbol, isArray } from 'core/util/index'
 import VNode from 'core/vdom/vnode'
 
 /**
- * Runtime helper for rendering v-for lists.
+ * 用于渲染 v-for 列表的运行时帮助程序。
  */
 export function renderList(
   val: any,

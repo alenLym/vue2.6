@@ -35,7 +35,7 @@ export type MountedComponentVNode = VNode & {
 /**
  * @internal
  */
-// interface for vnodes in update modules
+// 更新模块中 vnode 的接口
 export type VNodeWithData = VNode & {
   tag: string
   data: VNodeData

@@ -1,7 +1,7 @@
-// can we use __proto__?
+// 我们可以使用 __proto__ 吗？
 export const hasProto = '__proto__' in {}
 
-// Browser environment sniffing
+// 浏览器环境探查
 export const inBrowser = typeof window !== 'undefined'
 export const UA = inBrowser && window.navigator.userAgent.toLowerCase()
 export const isIE = UA && /msie|trident/.test(UA)
@@ -13,8 +13,8 @@ export const isChrome = UA && /chrome\/\d+/.test(UA) && !isEdge
 export const isPhantomJS = UA && /phantomjs/.test(UA)
 export const isFF = UA && UA.match(/firefox\/(\d+)/)
 
-// Firefox has a "watch" function on Object.prototype...
-// @ts-expect-error firebox support
+// Firefox 在 Object.prototype 上有一个 “watch” 函数...
+// @ts-expect-error firebox 支持
 export const nativeWatch = {}.watch
 
 export let supportsPassive = false
@@ -31,15 +31,15 @@ if (inBrowser) {
   } catch (e: any) {}
 }
 
-// this needs to be lazy-evaled because vue may be required before
-// vue-server-renderer can set VUE_ENV
+// 这需要 lazy-evale，因为之前可能需要 Vue
+// vue-server-renderer 可以设置 VUE_ENV
 let _isServer
 export const isServerRendering = () => {
   if (_isServer === undefined) {
     /* istanbul ignore if */
     if (!inBrowser && typeof global !== 'undefined') {
-      // detect presence of vue-server-renderer and avoid
-      // Webpack shimming the process
+      // 检测 vue-server-renderer 的存在并避免
+// Webpack 填充进程
       _isServer =
         global['process'] && global['process'].env.VUE_ENV === 'server'
     } else {
@@ -49,7 +49,7 @@ export const isServerRendering = () => {
   return _isServer
 }
 
-// detect devtools
+// 检测 DevTools
 export const devtools = inBrowser && window.__VUE_DEVTOOLS_GLOBAL_HOOK__
 
 /* istanbul ignore next */
@@ -65,10 +65,10 @@ export const hasSymbol =
 
 let _Set // $flow-disable-line
 /* istanbul ignore if */ if (typeof Set !== 'undefined' && isNative(Set)) {
-  // use native Set when available.
+  // 如果可用，请使用 native Set。
   _Set = Set
 } else {
-  // a non-standard Set polyfill that only works with primitive keys.
+  // 一个非标准的 Set polyfill，仅适用于原始键。
   _Set = class Set implements SimpleSet {
     set: Record<string, boolean> = Object.create(null)
 

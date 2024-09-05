@@ -1,13 +1,12 @@
-// Provides transition support for list items.
-// supports move transitions using the FLIP technique.
-
-// Because the vdom's children update algorithm is "unstable" - i.e.
-// it doesn't guarantee the relative positioning of removed elements,
-// we force transition-group to update its children into two passes:
-// in the first pass, we remove all nodes that need to be removed,
-// triggering their leaving transition; in the second pass, we insert/move
-// into the final desired state. This way in the second pass removed
-// nodes will remain where they should be.
+// 为列表项提供过渡支持。
+// 支持使用 FLIP 技术移动过渡。
+// 因为 vdom 的 children 更新算法是“不稳定的”——即
+// 它不保证已删除元素的相对位置，
+// 我们强制 transition-group 将其子节点更新为两个过程：
+// 在第一遍中，我们删除所有需要删除的节点，
+// 触发他们的离开过渡;在第二个通道中，我们插入/移动
+// 进入最终所需状态。这样在第二次传递中删除
+// 节点将保留在它们应该位于的位置。
 
 import { warn, extend } from 'core/util/index'
 import { addClass, removeClass } from 'web/runtime/class-util'
@@ -42,12 +41,12 @@ export default {
     const update = this._update
     this._update = (vnode, hydrating) => {
       const restoreActiveInstance = setActiveInstance(this)
-      // force removing pass
+      // 强制删除路径
       this.__patch__(
         this._vnode,
         this.kept,
         false, // hydrating
-        true // removeOnly (!important, avoids unnecessary moves)
+        true // removeOnly （！important，避免不必要的移动）
       )
       this._vnode = this.kept
       restoreActiveInstance()
@@ -86,7 +85,7 @@ export default {
       for (let i = 0; i < prevChildren.length; i++) {
         const c: VNode = prevChildren[i]
         c.data!.transition = transitionData
-        // @ts-expect-error .getBoundingClientRect is not typed in Node
+        // @ts-expect-error .getBoundingClientRect 未在 Node 中键入
         c.data!.pos = c.elm.getBoundingClientRect()
         if (map[c.key!]) {
           kept.push(c)
@@ -108,15 +107,15 @@ export default {
       return
     }
 
-    // we divide the work into three loops to avoid mixing DOM reads and writes
-    // in each iteration - which helps prevent layout thrashing.
+    // 我们将工作分为三个循环，以避免混合 DOM 读取和写入
+// 在每次迭代中 - 这有助于防止布局抖动。
     children.forEach(callPendingCbs)
     children.forEach(recordPosition)
     children.forEach(applyTranslation)
 
-    // force reflow to put everything in position
-    // assign to this to avoid being removed in tree-shaking
-    // $flow-disable-line
+    // 强制回流焊以将所有内容都放到适当的位置
+// assign to this 以避免在 tree-shaking 中删除
+// $flow禁用行
     this._reflow = document.body.offsetHeight
 
     children.forEach((c: VNode) => {
@@ -152,11 +151,8 @@ export default {
       if (this._hasMove) {
         return this._hasMove
       }
-      // Detect whether an element with the move class applied has
-      // CSS transitions. Since the element may be inside an entering
-      // transition at this very moment, we make a clone of it and remove
-      // all other transition classes applied to ensure only the move class
-      // is applied.
+      // 检测应用了 move 类的元素是否具有
+// CSS 过渡。由于该元素此时可能位于进入的过渡内，因此我们克隆它并删除所有其他应用的过渡类，以确保仅应用 move 类。
       const clone: HTMLElement = el.cloneNode()
       if (el._transitionClasses) {
         el._transitionClasses.forEach((cls: string) => {

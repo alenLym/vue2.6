@@ -7,7 +7,7 @@ import type { Component } from 'types/component'
  * @internal
  */
 export interface Config {
-  // user
+  // 用户
   optionMergeStrategies: { [key: string]: Function }
   silent: boolean
   productionTip: boolean
@@ -18,7 +18,7 @@ export interface Config {
   ignoredElements: Array<string | RegExp>
   keyCodes: { [key: string]: number | Array<number> }
 
-  // platform
+  // 平台
   isReservedTag: (x: string) => boolean | undefined
   isReservedAttr: (x: string) => true | undefined
   parsePlatformTagName: (x: string) => string
@@ -26,103 +26,101 @@ export interface Config {
   getTagNamespace: (x: string) => string | undefined
   mustUseProp: (tag: string, type?: string | null, name?: string) => boolean
 
-  // private
+  // 私人
   async: boolean
 
-  // legacy
+  // 遗产
   _lifecycleHooks: Array<string>
 }
 
 export default {
   /**
-   * Option merge strategies (used in core/util/options)
+   * 选项合并策略（用于 core/util/options）
    */
-  // $flow-disable-line
+// $flow禁用行
   optionMergeStrategies: Object.create(null),
 
   /**
-   * Whether to suppress warnings.
+   * 是否禁止显示警告。
    */
   silent: false,
 
   /**
-   * Show production mode tip message on boot?
+   * 启动时显示生产模式提示消息？
    */
   productionTip: __DEV__,
 
   /**
-   * Whether to enable devtools
+   * 是否启用 devtools
    */
   devtools: __DEV__,
 
   /**
-   * Whether to record perf
+   * 是否录制性能
    */
   performance: false,
 
   /**
-   * Error handler for watcher errors
+   * 观察程序错误的错误处理程序
    */
   errorHandler: null,
 
   /**
-   * Warn handler for watcher warns
+   * 用于观察程序警告的 Warn 处理程序
    */
   warnHandler: null,
 
   /**
-   * Ignore certain custom elements
+   * 忽略某些自定义元素
    */
   ignoredElements: [],
 
   /**
-   * Custom user key aliases for v-on
+   * v-on 的自定义用户密钥别名
    */
-  // $flow-disable-line
+// $flow禁用行
   keyCodes: Object.create(null),
 
   /**
-   * Check if a tag is reserved so that it cannot be registered as a
-   * component. This is platform-dependent and may be overwritten.
+   * 检查标记是否被保留，以便无法将其注册为组件。这与平台相关，可能会被覆盖。
    */
   isReservedTag: no,
 
   /**
-   * Check if an attribute is reserved so that it cannot be used as a component
-   * prop. This is platform-dependent and may be overwritten.
+   * 检查是否保留了 attribute ，使其不能用作 component prop。这与平台相关，可能会被覆盖。
    */
   isReservedAttr: no,
 
   /**
-   * Check if a tag is an unknown element.
-   * Platform-dependent.
+   * 检查标签是否为未知元素。
+   * 取决于平台。
    */
   isUnknownElement: no,
 
   /**
-   * Get the namespace of an element
+   * 获取元素的命名空间
    */
   getTagNamespace: noop,
 
   /**
-   * Parse the real tag name for the specific platform.
+   * 解析特定平台的真实标签名称。
    */
   parsePlatformTagName: identity,
 
   /**
-   * Check if an attribute must be bound using property, e.g. value
-   * Platform-dependent.
+   * 检查是否必须使用 property 绑定 attribute，例如 value
+   * 取决于平台。
    */
   mustUseProp: no,
 
   /**
-   * Perform updates asynchronously. Intended to be used by Vue Test Utils
-   * This will significantly reduce performance if set to false.
+   * 异步执行更新。旨在供 Vue Test Utils 使用
+   * 如果设置为 false，这将显著降低性能。
    */
   async: true,
 
   /**
-   * Exposed for legacy reasons
+   * 因遗留原因而公开
    */
   _lifecycleHooks: LIFECYCLE_HOOKS
 } as unknown as Config

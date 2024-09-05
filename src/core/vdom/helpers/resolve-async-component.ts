@@ -49,7 +49,7 @@ export function resolveAsyncComponent(
 
   const owner = currentRenderingInstance
   if (owner && isDef(factory.owners) && factory.owners.indexOf(owner) === -1) {
-    // already pending
+    // 已待定
     factory.owners.push(owner)
   }
 
@@ -84,10 +84,10 @@ export function resolveAsyncComponent(
     }
 
     const resolve = once((res: Object | Component) => {
-      // cache resolved
+      // 缓存已解决
       factory.resolved = ensureCtor(res, baseCtor)
-      // invoke callbacks only if this is not a synchronous resolve
-      // (async resolves are shimmed as synchronous during SSR)
+      // 仅当这不是同步解析时才调用回调
+// （异步解析在 SSR 期间被填充为同步）
       if (!sync) {
         forceRender(true)
       } else {
@@ -111,7 +111,7 @@ export function resolveAsyncComponent(
 
     if (isObject(res)) {
       if (isPromise(res)) {
-        // () => Promise
+        // （） => 承诺
         if (isUndef(factory.resolved)) {
           res.then(resolve, reject)
         }
@@ -151,7 +151,7 @@ export function resolveAsyncComponent(
     }
 
     sync = false
-    // return in case resolved synchronously
+    // return 在同步解决的情况下
     return factory.loading ? factory.loadingComp : factory.resolved
   }
 }

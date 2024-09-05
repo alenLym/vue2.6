@@ -25,7 +25,7 @@ function updateAttrs(oldVnode: VNodeWithData, vnode: VNodeWithData) {
   const elm = vnode.elm
   const oldAttrs = oldVnode.data.attrs || {}
   let attrs: any = vnode.data.attrs || {}
-  // clone observed objects, as the user probably wants to mutate it
+  // 克隆观察到的对象，因为用户可能想要改变它
   if (isDef(attrs.__ob__) || isTrue(attrs._v_attr_proxy)) {
     attrs = vnode.data.attrs = extend({}, attrs)
   }
@@ -37,8 +37,8 @@ function updateAttrs(oldVnode: VNodeWithData, vnode: VNodeWithData) {
       setAttr(elm, key, cur, vnode.data.pre)
     }
   }
-  // #4391: in IE9, setting type can reset value for input[type=radio]
-  // #6666: IE/Edge forces progress value down to 1 before setting a max
+  // #4391： 在 IE9 中，设置类型可以重置 input[type=radio] 的值
+// #6666： IE/Edge 在设置最大值之前强制进度值降低到 1
   /* istanbul ignore if */
   if ((isIE || isEdge) && attrs.value !== oldAttrs.value) {
     setAttr(elm, 'value', attrs.value)
@@ -58,13 +58,13 @@ function setAttr(el: Element, key: string, value: any, isInPre?: any) {
   if (isInPre || el.tagName.indexOf('-') > -1) {
     baseSetAttr(el, key, value)
   } else if (isBooleanAttr(key)) {
-    // set attribute for blank value
-    // e.g. <option disabled>Select one</option>
+    // 为空白值设置属性
+// 例如<option disabled>选择一个</option>
     if (isFalsyAttrValue(value)) {
       el.removeAttribute(key)
     } else {
-      // technically allowfullscreen is a boolean attribute for <iframe>,
-      // but Flash expects a value of "true" when used on <embed> tag
+      // 从技术上讲，allowFullScreen 是 的布尔属性 <iframe>，
+// 但 Flash 在用于标记时需要值 “true”<embed>
       value = key === 'allowfullscreen' && el.tagName === 'EMBED' ? 'true' : key
       el.setAttribute(key, value)
     }
@@ -85,9 +85,9 @@ function baseSetAttr(el, key, value) {
   if (isFalsyAttrValue(value)) {
     el.removeAttribute(key)
   } else {
-    // #7138: IE10 & 11 fires input event when setting placeholder on
-    // <textarea>... block the first input event and remove the blocker
-    // immediately.
+    // #7138： IE10 & 11 在将 placeholder 设置为 ON 时触发输入事件
+// <textarea>...阻止第一个 input 事件并删除阻止程序
+// 马上。
     /* istanbul ignore if */
     if (
       isIE &&
@@ -103,7 +103,7 @@ function baseSetAttr(el, key, value) {
       }
       el.addEventListener('input', blocker)
       // $flow-disable-line
-      el.__ieph = true /* IE placeholder patched */
+      el.__ieph = true /* IE 占位符已修补*/
     }
     el.setAttribute(key, value)
   }

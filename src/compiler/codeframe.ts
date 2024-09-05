@@ -18,7 +18,7 @@ export function generateCodeFrame(
         )
         const lineLength = lines[j].length
         if (j === i) {
-          // push underline
+          // 推下划线
           const pad = start - (count - lineLength) + 1
           const length = end > count ? lineLength - pad : end - start
           res.push(`   |  ` + repeat(` `, pad) + repeat(`^`, length))

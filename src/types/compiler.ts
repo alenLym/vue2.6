@@ -1,22 +1,22 @@
 import { BindingMetadata } from 'sfc/types'
 
 export type CompilerOptions = {
-  warn?: Function // allow customizing warning in different environments; e.g. node
-  modules?: Array<ModuleOptions> // platform specific modules; e.g. style; class
-  directives?: { [key: string]: Function } // platform specific directives
-  staticKeys?: string // a list of AST properties to be considered static; for optimization
-  isUnaryTag?: (tag: string) => boolean | undefined // check if a tag is unary for the platform
-  canBeLeftOpenTag?: (tag: string) => boolean | undefined // check if a tag can be left opened
-  isReservedTag?: (tag: string) => boolean | undefined // check if a tag is a native for the platform
-  preserveWhitespace?: boolean // preserve whitespace between elements? (Deprecated)
-  whitespace?: 'preserve' | 'condense' // whitespace handling strategy
-  optimize?: boolean // optimize static content?
+  warn?: Function // 允许在不同环境中自定义警告;例如 Node
+  modules?: Array<ModuleOptions> // 平台特定模块;例如，风格;类
+  directives?: { [key: string]: Function } // 特定于平台的指令
+  staticKeys?: string // 被视为静态的 AST 属性列表;用于优化
+  isUnaryTag?: (tag: string) => boolean | undefined // 检查标签是否为平台的一元
+  canBeLeftOpenTag?: (tag: string) => boolean | undefined // 检查标记是否可以保持打开状态
+  isReservedTag?: (tag: string) => boolean | undefined // 检查标记是否为平台的本机标记
+  preserveWhitespace?: boolean // 保留元素之间的空格？（已弃用）
+  whitespace?: 'preserve' | 'condense' // 空格处理策略
+  optimize?: boolean // 优化静态内容？
 
   // web specific
-  mustUseProp?: (tag: string, type: string | null, name: string) => boolean // check if an attribute should be bound as a property
-  isPreTag?: (attr: string) => boolean | null // check if a tag needs to preserve whitespace
-  getTagNamespace?: (tag: string) => string | undefined // check the namespace for a tag
-  expectHTML?: boolean // only false for non-web builds
+  mustUseProp?: (tag: string, type: string | null, name: string) => boolean // 检查是否应将属性绑定为属性
+  isPreTag?: (attr: string) => boolean | null // 检查标签是否需要保留空格
+  getTagNamespace?: (tag: string) => string | undefined // 检查标记的命名空间
+  expectHTML?: boolean // 对于非 Web 构建，仅 false
   isFromDOM?: boolean
   shouldDecodeTags?: boolean
   shouldDecodeNewlines?: boolean
@@ -24,14 +24,14 @@ export type CompilerOptions = {
   outputSourceRange?: boolean
   shouldKeepComment?: boolean
 
-  // runtime user-configurable
-  delimiters?: [string, string] // template delimiters
-  comments?: boolean // preserve comments in template
+  // 运行时用户可配置
+  delimiters?: [string, string] // 模板分隔符
+  comments?: boolean // 在模板中保留注释
 
-  // for ssr optimization compiler
+  // 对于 SSR 优化编译器
   scopeId?: string
 
-  // SFC analyzed script bindings from `compileScript()`
+  // SFC 分析了来自 'compileScript（）' 的脚本绑定
   bindings?: BindingMetadata
 }
 
@@ -51,17 +51,17 @@ export type CompiledResult = {
 }
 
 export type ModuleOptions = {
-  // transform an AST node before any attributes are processed
-  // returning an ASTElement from pre/transforms replaces the element
+  // 在处理任何属性之前转换 AST 节点
+// 从 pre/transforms 返回 ASTElement 将替换元素
   preTransformNode?: (el: ASTElement) => ASTElement | null | void
-  // transform an AST node after built-ins like v-if, v-for are processed
+  // 在处理完 v-if、v-for 等内置函数后转换 AST 节点
   transformNode?: (el: ASTElement) => ASTElement | null | void
-  // transform an AST node after its children have been processed
-  // cannot return replacement in postTransform because tree is already finalized
+  // 在处理 AST 节点的子节点后转换 AST 节点
+// 无法在 postTransform 中返回替换，因为 tree 已经完成
   postTransformNode?: (el: ASTElement) => void
-  genData?: (el: ASTElement) => string // generate extra data string for an element
-  transformCode?: (el: ASTElement, code: string) => string // further transform generated code for an element
-  staticKeys?: Array<string> // AST properties to be considered static
+  genData?: (el: ASTElement) => string // 为元素生成额外的数据字符串
+  transformCode?: (el: ASTElement, code: string) => string // Further transform 为元素生成的代码
+  staticKeys?: Array<string> // AST 属性被视为静态
 }
 
 export type ASTModifiers = { [key: string]: boolean }
@@ -200,7 +200,7 @@ export type ASTText = {
   text: string
   static?: boolean
   isComment?: boolean
-  // 2.4 ssr optimization
+  // 2.4 SSR 优化
   ssrOptimizability?: number
   start?: number
   end?: number

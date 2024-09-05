@@ -4,10 +4,10 @@ import { isFunction, isPlainObject, validateComponentName } from '../util/index'
 
 export function initAssetRegisters(Vue: GlobalAPI) {
   /**
-   * Create asset registration methods.
+   * 创建资产注册方法。
    */
   ASSET_TYPES.forEach(type => {
-    // @ts-expect-error function is not exact same type
+    // @ts-expect-error 函数的类型不完全相同
     Vue[type] = function (
       id: string,
       definition?: Function | Object

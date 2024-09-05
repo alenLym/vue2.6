@@ -31,7 +31,7 @@ export function parseFilters(exp: string): string {
       !paren
     ) {
       if (expression === undefined) {
-        // first filter, end of expression
+        // 第一个过滤器，表达式结束
         lastFilterIndex = i + 1
         expression = exp.slice(0, i).trim()
       } else {
@@ -71,7 +71,7 @@ export function parseFilters(exp: string): string {
         // /
         let j = i - 1
         let p
-        // find first non-whitespace prev char
+        // 查找第一个非空格 prev char
         for (; j >= 0; j--) {
           p = exp.charAt(j)
           if (p !== ' ') break

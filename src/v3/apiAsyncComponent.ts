@@ -24,9 +24,9 @@ type AsyncComponentFactory = () => {
 }
 
 /**
- * v3-compatible async component API.
- * @internal the type is manually declared in <root>/types/v3-define-async-component.d.ts
- * because it relies on existing manual types
+ * 兼容 v3 的异步组件 API。
+ * @internal类型是在 <root>/types/v3-define-async-component.d.ts 中手动声明的
+ * 因为它依赖于现有的手动类型
  */
 export function defineAsyncComponent(
   source: (() => any) | AsyncComponentOptions
@@ -41,7 +41,7 @@ export function defineAsyncComponent(
     errorComponent,
     delay = 200,
     timeout, // undefined = never times out
-    suspensible = false, // in Vue 3 default is true
+    suspensible = false, // 在 Vue 3 中，default 为 true
     onError: userOnError
   } = source
 
@@ -88,7 +88,7 @@ export function defineAsyncComponent(
                   `If you are using retry(), make sure to return its return value.`
               )
             }
-            // interop module default
+            // 互操作模块默认值
             if (
               comp &&
               (comp.__esModule || comp[Symbol.toStringTag] === 'Module')

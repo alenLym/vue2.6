@@ -53,7 +53,7 @@ export function initState(vm: Component) {
   const opts = vm.$options
   if (opts.props) initProps(vm, opts.props)
 
-  // Composition API
+  // 组合式 API
   initSetup(vm)
 
   if (opts.methods) initMethods(vm, opts.methods)
@@ -72,11 +72,11 @@ export function initState(vm: Component) {
 function initProps(vm: Component, propsOptions: Object) {
   const propsData = vm.$options.propsData || {}
   const props = (vm._props = shallowReactive({}))
-  // cache prop keys so that future props updates can iterate using Array
-  // instead of dynamic object key enumeration.
+  // cache prop 键，以便将来的 props 更新可以使用 Array 进行迭代
+// 而不是动态对象键枚举。
   const keys: string[] = (vm.$options._propKeys = [])
   const isRoot = !vm.$parent
-  // root instance props should be converted
+  // 根实例 props 应该被转换
   if (!isRoot) {
     toggleObserving(false)
   }
@@ -115,9 +115,9 @@ function initProps(vm: Component, propsOptions: Object) {
     } else {
       defineReactive(props, key, value, undefined, true /* shallow */)
     }
-    // static props are already proxied on the component's prototype
-    // during Vue.extend(). We only need to proxy props defined at
-    // instantiation here.
+    // static props 已经代理在组件的原型上
+// 在 Vue.extend（） 期间。我们只需要代理定义在
+// 实例化。
     if (!(key in vm)) {
       proxy(vm, `_props`, key)
     }
@@ -137,7 +137,7 @@ function initData(vm: Component) {
         vm
       )
   }
-  // proxy data on instance
+  // 实例上的代理数据
   const keys = Object.keys(data)
   const props = vm.$options.props
   const methods = vm.$options.methods
@@ -160,13 +160,13 @@ function initData(vm: Component) {
       proxy(vm, `_data`, key)
     }
   }
-  // observe data
+  // 观察数据
   const ob = observe(data)
   ob && ob.vmCount++
 }
 
 export function getData(data: Function, vm: Component): any {
-  // #7573 disable dep collection when invoking data getters
+  // #7573 在调用 Data Getter 时禁用 dep 收集
   pushTarget()
   try {
     return data.call(vm, vm)
@@ -183,7 +183,7 @@ const computedWatcherOptions = { lazy: true }
 function initComputed(vm: Component, computed: Object) {
   // $flow-disable-line
   const watchers = (vm._computedWatchers = Object.create(null))
-  // computed properties are just getters during SSR
+  // 计算属性只是 SSR 期间的 getter
   const isSSR = isServerRendering()
 
   for (const key in computed) {
@@ -194,7 +194,7 @@ function initComputed(vm: Component, computed: Object) {
     }
 
     if (!isSSR) {
-      // create internal watcher for the computed property.
+      // 为 computed 属性创建内部 watcher。
       watchers[key] = new Watcher(
         vm,
         getter || noop,
@@ -203,9 +203,9 @@ function initComputed(vm: Component, computed: Object) {
       )
     }
 
-    // component-defined computed properties are already defined on the
-    // component prototype. We only need to define computed properties defined
-    // at instantiation here.
+    // 组件定义的计算属性已经在
+// 组件原型。我们只需要定义定义的计算属性
+// 在此处实例化。
     if (!(key in vm)) {
       defineComputed(vm, key, userDef)
     } else if (__DEV__) {
@@ -339,9 +339,9 @@ function createWatcher(
 }
 
 export function stateMixin(Vue: typeof Component) {
-  // flow somehow has problems with directly declared definition object
-  // when using Object.defineProperty, so we have to procedurally build up
-  // the object here.
+  // flow 不知何故与直接声明的定义对象有问题
+// 当使用 Object.defineProperty 时，我们必须按程序构建
+// 这里的对象。
   const dataDef: any = {}
   dataDef.get = function () {
     return this._data

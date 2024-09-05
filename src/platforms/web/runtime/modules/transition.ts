@@ -25,7 +25,7 @@ import VNode from 'core/vdom/vnode'
 export function enter(vnode: VNodeWithData, toggleDisplay?: () => void) {
   const el: any = vnode.elm
 
-  // call leave callback now
+  // 立即呼叫 leave callback
   if (isDef(el._leaveCb)) {
     el._leaveCb.cancelled = true
     el._leaveCb()
@@ -61,10 +61,10 @@ export function enter(vnode: VNodeWithData, toggleDisplay?: () => void) {
     duration
   } = data
 
-  // activeInstance will always be the <transition> component managing this
-  // transition. One edge case to check is when the <transition> is placed
-  // as the root node of a child component. In that case we need to check
-  // <transition>'s parent for appear check.
+  // activeInstance 将始终是<transition>管理此
+// 过渡。需要检查的一个极端情况是<transition>当
+// 作为子组件的根节点。在这种情况下，我们需要检查
+// <transition>的父项进行显示检查。
   let context = activeInstance
   let transitionNode = activeInstance.$vnode
   while (transitionNode && transitionNode.parent) {
@@ -119,7 +119,7 @@ export function enter(vnode: VNodeWithData, toggleDisplay?: () => void) {
   }))
 
   if (!vnode.data.show) {
-    // remove pending leave element on enter by injecting an insert hook
+    // 通过注入 Insert 钩子在 enter 时删除 pending leave 元素
     mergeVNodeHook(vnode, 'insert', () => {
       const parent = el.parentNode
       const pendingNode =
@@ -135,7 +135,7 @@ export function enter(vnode: VNodeWithData, toggleDisplay?: () => void) {
     })
   }
 
-  // start enter transition
+  // 开始 进入过渡
   beforeEnterHook && beforeEnterHook(el)
   if (expectsCSS) {
     addTransitionClass(el, startClass)
@@ -169,7 +169,7 @@ export function enter(vnode: VNodeWithData, toggleDisplay?: () => void) {
 export function leave(vnode: VNodeWithData, rm: Function) {
   const el: any = vnode.elm
 
-  // call enter callback now
+  // 立即调用 enter callback
   if (isDef(el._enterCb)) {
     el._enterCb.cancelled = true
     el._enterCb()
@@ -238,12 +238,12 @@ export function leave(vnode: VNodeWithData, rm: Function) {
   }
 
   function performLeave() {
-    // the delayed leave may have already been cancelled
-    // @ts-expect-error
+    // 延迟休假可能已被取消
+// @ts期望错误
     if (cb.cancelled) {
       return
     }
-    // record leaving element
+    // 记录离开元素
     if (!vnode.data.show && el.parentNode) {
       ;(el.parentNode._pending || (el.parentNode._pending = {}))[vnode.key!] =
         vnode
@@ -274,7 +274,7 @@ export function leave(vnode: VNodeWithData, rm: Function) {
   }
 }
 
-// only used in dev mode
+// 仅在开发模式下使用
 function checkDuration(val, name, vnode) {
   if (typeof val !== 'number') {
     warn(
@@ -296,10 +296,10 @@ function isValidDuration(val) {
 }
 
 /**
- * Normalize a transition hook's argument length. The hook may be:
- * - a merged hook (invoker) with the original in .fns
- * - a wrapped component method (check ._length)
- * - a plain function (.length)
+ * 规范化 transition hook 的参数长度。钩子可以是：
+ * - 与 .fns 中的原始钩子合并的钩子 （invoker）
+ * - 包装组件方法（检查 ._length）
+ * - 一个普通函数 （.length）
  */
 function getHookArgumentsLength(fn: Function): boolean {
   if (isUndef(fn)) {

@@ -64,8 +64,8 @@ export function computed<T>(
   }
 
   const ref = {
-    // some libs rely on the presence effect for checking computed refs
-    // from normal refs, but the implementation doesn't matter
+    // 一些库依赖于 Presence Effect 来检查计算的 ref
+// 来自普通的 refs，但实现无关紧要
     effect: watcher,
     get value() {
       if (watcher) {

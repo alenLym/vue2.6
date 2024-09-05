@@ -1,5 +1,5 @@
-// Provides transition support for a single element/component.
-// supports transition mode (out-in / in-out)
+// 为单个元素/组件提供过渡支持。
+// 支持过渡模式（Out-In / In-Out）
 
 import { warn } from 'core/util/index'
 import { camelize, extend, isPrimitive } from 'shared/util'
@@ -29,8 +29,8 @@ export const transitionProps = {
   duration: [Number, String, Object]
 }
 
-// in case the child is also an abstract component, e.g. <keep-alive>
-// we want to recursively retrieve the real component to be rendered
+// 如果 child 也是一个抽象组件，例如 <keep-alive>
+// 我们想递归地检索要渲染的真实组件
 function getRealChild(vnode?: VNode): VNode | undefined {
   const compOptions = vnode && vnode.componentOptions
   if (compOptions && compOptions.Ctor.options.abstract) {
@@ -47,8 +47,8 @@ export function extractTransitionData(comp: Component): Record<string, any> {
   for (const key in options.propsData) {
     data[key] = comp[key]
   }
-  // events.
-  // extract listeners and pass them directly to the transition methods
+  // 事件。
+// 提取侦听器并将其直接传递给 transition 方法
   const listeners = options._parentListeners
   for (const key in listeners) {
     data[camelize(key)] = listeners[key]
@@ -92,14 +92,14 @@ export default {
       return
     }
 
-    // filter out text nodes (possible whitespaces)
+    // 筛选出文本节点（可能的空格）
     children = children.filter(isNotTextNode)
     /* istanbul ignore if */
     if (!children.length) {
       return
     }
 
-    // warn multiple elements
+    // 警告多个元素
     if (__DEV__ && children.length > 1) {
       warn(
         '<transition> can only be used on a single element. Use ' +
@@ -110,21 +110,21 @@ export default {
 
     const mode: string = this.mode
 
-    // warn invalid mode
+    // warn 无效模式
     if (__DEV__ && mode && mode !== 'in-out' && mode !== 'out-in') {
       warn('invalid <transition> mode: ' + mode, this.$parent)
     }
 
     const rawChild: VNode = children[0]
 
-    // if this is a component root node and the component's
-    // parent container node also has transition, skip.
+    // 如果这是组件根节点，并且组件的
+// 父容器节点还具有 transition 和 skip。
     if (hasParentTransition(this.$vnode)) {
       return rawChild
     }
 
-    // apply transition data to child
-    // use getRealChild() to ignore abstract components e.g. keep-alive
+    // 将过渡数据应用于子项
+// 使用 getRealChild（） 忽略抽象组件，例如 keep-alive
     const child = getRealChild(rawChild)
     /* istanbul ignore if */
     if (!child) {
@@ -135,9 +135,9 @@ export default {
       return placeholder(h, rawChild)
     }
 
-    // ensure a key that is unique to the vnode type and to this transition
-    // component instance. This key will be used to remove pending leaving nodes
-    // during entering.
+    // 确保 vnode 类型和此转换的键是唯一的
+// component 实例。此键将用于删除待处理的离开节点
+// 在进入期间。
     const id: string = `__transition-${this._uid}-`
     child.key =
       child.key == null
@@ -155,8 +155,8 @@ export default {
     const oldRawChild: VNode = this._vnode
     const oldChild = getRealChild(oldRawChild)
 
-    // mark v-show
-    // so that the transition module can hand over the control to the directive
+    // Mark V-Show 展会
+// 这样 transition 模块就可以将控制权交给 Directive
     if (child.data.directives && child.data.directives.some(isVShowDirective)) {
       child.data.show = true
     }
@@ -166,18 +166,18 @@ export default {
       oldChild.data &&
       !isSameChild(child, oldChild) &&
       !isAsyncPlaceholder(oldChild) &&
-      // #6687 component root is a comment node
+      // #6687 组件根是一个 comment 节点
       !(
         oldChild.componentInstance &&
         oldChild.componentInstance._vnode!.isComment
       )
     ) {
-      // replace old child transition data with fresh one
-      // important for dynamic transitions!
+      // 将旧的子过渡数据替换为新的子过渡数据
+// 对于动态过渡很重要！
       const oldData: Object = (oldChild.data.transition = extend({}, data))
-      // handle transition mode
+      // 手柄过渡模式
       if (mode === 'out-in') {
-        // return placeholder node and queue update when leave finishes
+        // 离开时返回占位符节点和队列更新
         this._leaving = true
         mergeVNodeHook(oldData, 'afterLeave', () => {
           this._leaving = false

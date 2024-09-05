@@ -1,11 +1,11 @@
 /**
- * Expand input[v-model] with dynamic type bindings into v-if-else chains
- * Turn this:
- *   <input v-model="data[type]" :type="type">
- * into this:
- *   <input v-if="type === 'checkbox'" type="checkbox" v-model="data[type]">
- *   <input v-else-if="type === 'radio'" type="radio" v-model="data[type]">
- *   <input v-else :type="type" v-model="data[type]">
+ * 使用动态类型绑定将 input[v-model] 扩展到 v-if-else 链中
+ * 转这个：
+ *   <input v-model=“data[type]” ：type=“type”>
+ * 变成这样：
+ *   <input v-if=“type === 'checkbox'” type=“checkbox” v-model=“data[type]”>
+ *   <input v-else-if=“type === 'radio'” type=“radio” v-model=“data[type]”>
+ *   <input v-else ：type=“type” v-model=“data[type]”>
  */
 
 import { addRawAttr, getBindingAttr, getAndRemoveAttr } from 'compiler/helpers'
@@ -38,19 +38,19 @@ function preTransformNode(el: ASTElement, options: CompilerOptions) {
       const ifConditionExtra = ifCondition ? `&&(${ifCondition})` : ``
       const hasElse = getAndRemoveAttr(el, 'v-else', true) != null
       const elseIfCondition = getAndRemoveAttr(el, 'v-else-if', true)
-      // 1. checkbox
+      // 1. 复选框
       const branch0 = cloneASTElement(el)
-      // process for on the main node
+      // 主节点上的进程
       processFor(branch0)
       addRawAttr(branch0, 'type', 'checkbox')
       processElement(branch0, options)
-      branch0.processed = true // prevent it from double-processed
+      branch0.processed = true // 防止 IT 重复加工
       branch0.if = `(${typeBinding})==='checkbox'` + ifConditionExtra
       addIfCondition(branch0, {
         exp: branch0.if,
         block: branch0
       })
-      // 2. add radio else-if condition
+      // 2. 添加单选 Else-If 条件
       const branch1 = cloneASTElement(el)
       getAndRemoveAttr(branch1, 'v-for', true)
       addRawAttr(branch1, 'type', 'radio')
@@ -59,7 +59,7 @@ function preTransformNode(el: ASTElement, options: CompilerOptions) {
         exp: `(${typeBinding})==='radio'` + ifConditionExtra,
         block: branch1
       })
-      // 3. other
+      // 3. 其他
       const branch2 = cloneASTElement(el)
       getAndRemoveAttr(branch2, 'v-for', true)
       addRawAttr(branch2, ':type', typeBinding)

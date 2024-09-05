@@ -19,10 +19,10 @@ import { currentInstance, setCurrentInstance } from 'v3/currentInstance'
 import { syncSetupSlots } from 'v3/apiSetup'
 
 export function initRender(vm: Component) {
-  vm._vnode = null // the root of the child tree
-  vm._staticTrees = null // v-once cached trees
+  vm._vnode = null // 子树的根
+  vm._staticTrees = null // v-once 缓存树
   const options = vm.$options
-  const parentVnode = (vm.$vnode = options._parentVnode!) // the placeholder node in parent tree
+  const parentVnode = (vm.$vnode = options._parentVnode!) // 父树中的 placeholder 节点
   const renderContext = parentVnode && (parentVnode.context as Component)
   vm.$slots = resolveSlots(options._renderChildren, renderContext)
   vm.$scopedSlots = parentVnode
@@ -32,19 +32,19 @@ export function initRender(vm: Component) {
         vm.$slots
       )
     : emptyObject
-  // bind the createElement fn to this instance
-  // so that we get proper render context inside it.
-  // args order: tag, data, children, normalizationType, alwaysNormalize
-  // internal version is used by render functions compiled from templates
-  // @ts-expect-error
+  // 将 createElement fn 绑定到此实例
+// 这样我们就可以在其中获得适当的渲染上下文。
+// 参数顺序：tag、data、children、normalizationType、alwaysNormalize
+// internal 版本由从模板编译的 render 函数使用
+// @ts期望错误
   vm._c = (a, b, c, d) => createElement(vm, a, b, c, d, false)
-  // normalization is always applied for the public version, used in
-  // user-written render functions.
-  // @ts-expect-error
+  // 规范化始终应用于 Public 版本，用于
+// 用户编写的 render 函数。
+// @ts期望错误
   vm.$createElement = (a, b, c, d) => createElement(vm, a, b, c, d, true)
 
-  // $attrs & $listeners are exposed for easier HOC creation.
-  // they need to be reactive so that HOCs using them are always updated
+  // $attrs & $listeners 被公开，以便于创建 HOC。
+// 它们需要是响应式的，以便使用它们的 HOC 始终处于更新
   const parentData = parentVnode && parentVnode.data
 
   /* istanbul ignore else */
@@ -87,13 +87,13 @@ export function initRender(vm: Component) {
 
 export let currentRenderingInstance: Component | null = null
 
-// for testing only
+// 仅用于测试
 export function setCurrentRenderingInstance(vm: Component) {
   currentRenderingInstance = vm
 }
 
 export function renderMixin(Vue: typeof Component) {
-  // install runtime convenience helpers
+  // 安装 Runtime Convenience Helpers
   installRenderHelpers(Vue.prototype)
 
   Vue.prototype.$nextTick = function (fn: (...args: any[]) => any) {
@@ -116,10 +116,10 @@ export function renderMixin(Vue: typeof Component) {
       }
     }
 
-    // set parent vnode. this allows render functions to have access
-    // to the data on the placeholder node.
+    // 设置 Parent vnode。这允许 render 函数访问
+// 添加到占位符节点上的数据。
     vm.$vnode = _parentVnode!
-    // render self
+    // 渲染自身
     const prevInst = currentInstance
     const prevRenderInst = currentRenderingInstance
     let vnode
@@ -129,8 +129,8 @@ export function renderMixin(Vue: typeof Component) {
       vnode = render.call(vm._renderProxy, vm.$createElement)
     } catch (e: any) {
       handleError(e, vm, `render`)
-      // return error render result,
-      // or previous vnode to prevent render error causing blank component
+      // 返回错误渲染结果，
+// 或上一个 vnode 来防止渲染错误导致空白组件
       /* istanbul ignore else */
       if (__DEV__ && vm.$options.renderError) {
         try {
@@ -150,11 +150,11 @@ export function renderMixin(Vue: typeof Component) {
       currentRenderingInstance = prevRenderInst
       setCurrentInstance(prevInst)
     }
-    // if the returned array contains only a single node, allow it
+    // 如果返回的数组仅包含单个节点，则允许它
     if (isArray(vnode) && vnode.length === 1) {
       vnode = vnode[0]
     }
-    // return empty vnode in case the render function errored out
+    // 如果 render 函数出错，则返回空 vnode
     if (!(vnode instanceof VNode)) {
       if (__DEV__ && isArray(vnode)) {
         warn(
@@ -165,7 +165,7 @@ export function renderMixin(Vue: typeof Component) {
       }
       vnode = createEmptyVNode()
     }
-    // set parent
+    // 设置父级
     vnode.parent = _parentVnode
     return vnode
   }

@@ -22,6 +22,12 @@ const methodsToPatch = [
 /**
  * 拦截 mutating 方法并发出事件
  */
+
+// 备份数组原型上的原始方法。
+// 定义新方法，在执行原始操作后：
+// 对插入的新元素进行观察（仅针对 push、unshift 和 splice）。
+// 通知依赖更新。
+// 返回原始方法的结果。
 methodsToPatch.forEach(function (method) {
   // 缓存原始方法
   const original = arrayProto[method]

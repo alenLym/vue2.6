@@ -4,7 +4,10 @@ import { DebuggerOptions, DebuggerEventExtraInfo } from 'v3'
 let uid = 0
 
 const pendingCleanupDeps: Dep[] = []
-
+// 遍历 pendingCleanupDeps 数组中的每个依赖对象。
+// 清理每个依赖对象 dep 中的 subs（订阅者）列表，移除无效的订阅者。
+// 将每个依赖对象的 _pending 标记设为 false。
+// 清空 pendingCleanupDeps 数组。
 export const cleanupDeps = () => {
   for (let i = 0; i < pendingCleanupDeps.length; i++) {
     const dep = pendingCleanupDeps[i]
@@ -27,6 +30,11 @@ export interface DepTarget extends DebuggerOptions {
  * dep 是一个 observable，可以有多个指令订阅它。
  * @internal
  */
+
+// 依赖收集：通过 addSub 方法将观察者（DepTarget）添加到 subs 数组中。
+// 移除依赖：removeSub 方法从 subs 数组中移除指定观察者，并标记 _pending 为 true，以便后续清理。
+// 依赖追踪：depend 方法检查静态属性 target 是否存在，若存在则调用其 addDep 方法并记录调试信息。
+// 通知依赖：notify 方法遍历 subs 数组，过滤掉无效项后，按需排序并调用每个观察者的 update 方法，同时记录调试信息。
 export default class Dep {
   static target?: DepTarget | null
   id: number
@@ -95,11 +103,14 @@ export default class Dep {
 Dep.target = null
 const targetStack: Array<DepTarget | null | undefined> = []
 
+// 该函数将给定的 DepTarget 对象推入 targetStack 数组，并同时将其赋值给 Dep.target。
+// 这通常用于在执行依赖追踪时，记录当前操作的目标对象。
 export function pushTarget(target?: DepTarget | null) {
   targetStack.push(target)
   Dep.target = target
 }
-
+// 从栈顶移除一个元素。
+// 将栈的新顶部元素赋值给Dep.target，若栈为空，则Dep.target设为undefined。
 export function popTarget() {
   targetStack.pop()
   Dep.target = targetStack[targetStack.length - 1]

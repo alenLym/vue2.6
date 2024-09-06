@@ -47,6 +47,10 @@ if (__DEV__) {
 /**
  * 以递归方式将两个数据对象合并在一起的 Helper。
  */
+// 将 from 对象的属性值合并到 to 对象中。
+// 忽略 __ob__ 属性。
+// 如果 to 中没有某个键或禁用递归，则直接设置属性值。
+// 如果 to 和 from 的属性值均为普通对象且不相等，则递归合并。
 function mergeData(
   to: Record<string | symbol, any>,
   from: Record<string | symbol, any> | null,
@@ -81,6 +85,8 @@ function mergeData(
 /**
  * 数据
  */
+// 若 vm 不存在，则在 Vue.extend 合并中确保 parentVal 和 childVal 都是函数，并返回一个新函数，该函数执行二者合并结果。
+// 若 vm 存在，则针对实例进行合并：调用 childVal 和 parentVal 并返回它们的合并结果；若 instanceData 为空，则直接返回 defaultData。
 export function mergeDataOrFn(
   parentVal: any,
   childVal: any,
@@ -403,6 +409,12 @@ function assertObjectType(name: string, value: any, vm: Component | null) {
  * 将两个选项对象合并为一个新的选项对象。
  * 实例化和继承中使用的 Core 实用程序。
  */
+
+// 检查并处理子组件选项（child），包括其属性、注入依赖和指令等。
+// 如果子选项不是 mergeOptions 的结果，则递归合并 extends 和 mixins 选项。
+// 创建一个新的空对象 options，遍历父级 (parent) 和子级 (child) 选项，并将它们合并到 options 中。
+// 使用策略函数（strat）来决定如何具体合并每个字段。
+// 此函数确保组件配置正确且高效地合并
 export function mergeOptions(
   parent: Record<string, any>,
   child: Record<string, any>,

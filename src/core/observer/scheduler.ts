@@ -19,6 +19,11 @@ let index = 0
 /**
  * 重置调度程序的状态。
  */
+
+// 将 index、queue 的长度和 activatedChildren 的长度设为 0。
+// 清空 has 对象。
+// 如果在开发模式下（__DEV__），清空 circular 对象。
+// 将 waiting 和 flushing 标志设为 false。
 function resetSchedulerState() {
   index = queue.length = activatedChildren.length = 0
   has = {}
@@ -52,7 +57,9 @@ if (inBrowser && !isIE) {
     getNow = () => performance.now()
   }
 }
-
+// 当 a.post 为真，b.post 为假，返回1。
+// 当 a.post 为假，b.post 为真，返回-1。
+// 否则，按 a.id 和 b.id 的差值返回结果。
 const sortCompareFn = (a: Watcher, b: Watcher): number => {
   if (a.post) {
     if (!b.post) return 1
@@ -65,6 +72,14 @@ const sortCompareFn = (a: Watcher, b: Watcher): number => {
 /**
  * 刷新两个队列并运行观察程序。
  */
+
+// 此函数flushSchedulerQueue用于刷新并执行两个队列中的观察者：
+
+// 对队列进行排序，确保组件按父子顺序更新，并优先执行用户观察者。
+// 循环遍历队列，执行每个观察者的before钩子（若有），然后运行观察者。
+// 在开发环境下检测循环更新，超过限制则发出警告。
+// 重置调度状态后，调用激活和更新钩子，清理依赖。
+// 触发devtool钩子记录调试信息。
 function flushSchedulerQueue() {
   currentFlushTimestamp = getNow()
   flushing = true
@@ -123,7 +138,8 @@ function flushSchedulerQueue() {
     devtools.emit('flush')
   }
 }
-
+// 该函数callUpdatedHooks遍历传入的Watcher[]列表，依次检查每个Watcher对象关联的组件实例vm是否已挂载且未销毁。
+// 若条件满足，则调用该实例的生命周期钩子updated。主要用于Vue.js中更新后的生命周期管理。
 function callUpdatedHooks(queue: Watcher[]) {
   let i = queue.length
   while (i--) {
@@ -139,13 +155,17 @@ function callUpdatedHooks(queue: Watcher[]) {
  * 将 patch（修补）期间激活的 keept-alive 组件排队。
  * 修补整个树后，将处理队列。
  */
+
+// 该函数将组件 vm 的 _inactive 属性设置为 false，使其变为激活状态，以便渲染函数能正确识别其状态。
+// 随后将 vm 添加到 activatedChildren 数组中，用于跟踪激活的子组件。
 export function queueActivatedComponent(vm: Component) {
   // 在此处将 _inactive 设置为 false，以便 render 函数可以
   // 依赖于检查它是否在非活动树中（例如 router-view）
   vm._inactive = false
   activatedChildren.push(vm)
 }
-
+// 该函数遍历传入的组件队列，并将每个组件的 _inactive 属性设为 true，
+// 然后调用 activateChildComponent 函数激活组件，但参数中的 true 表示的具体含义未在函数内明确说明。
 function callActivatedHooks(queue) {
   for (let i = 0; i < queue.length; i++) {
     queue[i]._inactive = true
@@ -157,6 +177,11 @@ function callActivatedHooks(queue) {
  * 将观察程序推送到观察程序队列中。
  * 除非在刷新队列时推送具有重复 ID 的作业，否则将跳过该作业。
  */
+
+// 检查观察者是否已存在队列中，若已存在则直接返回。
+// 避免递归调用自身时重复入队。
+// 若当前未在执行队列中的任务，则直接将观察者添加到队尾；若正在执行，则按观察者的ID顺序插入队列。
+// 若尚未开始处理队列，则标记为等待状态，并在下一个事件循环开始时执行队列中的所有观察者。
 export function queueWatcher(watcher: Watcher) {
   const id = watcher.id
   if (has[id] != null) {

@@ -23,7 +23,9 @@ import { syncSetupProxy } from 'v3/apiSetup'
 
 export let activeInstance: any = null
 export let isUpdatingChildComponent: boolean = false
-
+// 将当前活跃实例保存为 prevActiveInstance；
+// 将传入的组件实例 vm 设置为新的活跃实例；
+// 返回一个清理函数，用于恢复之前的活跃实例。
 export function setActiveInstance(vm: Component) {
   const prevActiveInstance = activeInstance
   activeInstance = vm
@@ -31,7 +33,10 @@ export function setActiveInstance(vm: Component) {
     activeInstance = prevActiveInstance
   }
 }
-
+// 确定组件的直接非抽象父组件（若存在），并将其添加到父组件的 $children 数组中。
+// 设置组件的 $parent 和 $root 属性。
+// 初始化组件的 $children、$refs、_provided、_watcher、_inactive、
+// _directInactive、_isMounted、_isDestroyed 和 _isBeingDestroyed 属性。
 export function initLifecycle(vm: Component) {
   const options = vm.$options
 
@@ -58,7 +63,18 @@ export function initLifecycle(vm: Component) {
   vm._isDestroyed = false
   vm._isBeingDestroyed = false
 }
+// lifecycleMixin：
 
+// 为 Vue 添加 _update 方法，用于更新虚拟节点并同步到真实 DOM。
+// 初始化渲染或更新时调用 __patch__ 方法。
+// 更新元素上的 __vue__ 引用，并处理高阶组件的 $el 更新。
+// $forceUpdate：手动触发视图更新，通过更新 watcher 实现。
+
+// $destroy：销毁 Vue 实例，包括执行以下步骤：
+
+// 调用 beforeDestroy 和 destroyed 钩子。
+// 从父组件的子组件列表中移除自身。
+// 停止观察者、清理引用，并移除事件监听器。
 export function lifecycleMixin(Vue: typeof Component) {
   Vue.prototype._update = function (vnode: VNode, hydrating?: boolean) {
     const vm: Component = this
@@ -142,7 +158,13 @@ export function lifecycleMixin(Vue: typeof Component) {
     }
   }
 }
-
+// 设置组件的根元素。
+// 检查并警告缺少模板或渲染函数的情况。
+// 调用beforeMount生命周期钩子。
+// 定义updateComponent函数，用于更新组件视图，并在开发环境下记录性能指标。
+// 创建一个Watcher实例，监听组件状态变化并触发更新。
+// 初始化时运行预挂载观察者。
+// 若组件未挂载，则调用mounted生命周期钩子。
 export function mountComponent(
   vm: Component,
   el: Element | null | undefined,
@@ -241,7 +263,12 @@ export function mountComponent(
   }
   return vm
 }
-
+// 检查作用域插槽：确定新旧作用域插槽是否存在动态变化。
+// 判断是否需要强制更新：根据静态插槽、旧插槽及动态作用域插槽的变化决定是否需要强制更新。
+// 更新组件元数据：设置组件的新占位节点 (parentVnode) 并更新子树的父节点。
+// 同步属性和监听器：更新 $attrs 和 $listeners，并处理代理对象的同步。
+// 更新属性值：若存在 propsData，则更新组件的属性值。
+// 解决插槽并强制更新：若需要强制更新，则解析插槽并调用 $forceUpdate() 方法。
 export function updateChildComponent(
   vm: Component,
   propsData: Record<string, any> | null | undefined,
@@ -346,14 +373,19 @@ export function updateChildComponent(
     isUpdatingChildComponent = false
   }
 }
-
+// 该函数用于检查给定的 Vue 实例 (vm) 是否位于任何被标记为 _inactive 的父实例树中。
+// 通过逐层向上查找直到根节点，
+// 如果找到一个 _inactive 的父节点，则返回 true；否则返回 false。
 function isInInactiveTree(vm) {
   while (vm && (vm = vm.$parent)) {
     if (vm._inactive) return true
   }
   return false
 }
-
+// 如果direct为真，则直接设置vm._directInactive为false，并检查是否处于非激活树中，是则返回。
+// 若direct为假且vm._directInactive为真，则直接返回。
+// 当vm处于非激活状态时，将其设为激活状态，并递归激活其所有子组件。
+// 最后调用组件的activated钩子方法。
 export function activateChildComponent(vm: Component, direct?: boolean) {
   if (direct) {
     vm._directInactive = false
@@ -371,7 +403,10 @@ export function activateChildComponent(vm: Component, direct?: boolean) {
     callHook(vm, 'activated')
   }
 }
-
+// 如果 direct 为 true，则设置 _directInactive 为 true，并检查组件是否已处于停用树中，如果是，则直接返回。
+// 若组件尚未停用，则设置 _inactive 为 true。
+// 遍历所有子组件并递归调用 deactivateChildComponent 函数。
+// 最后调用组件的 deactivated 生命周期钩子。
 export function deactivateChildComponent(vm: Component, direct?: boolean) {
   if (direct) {
     vm._directInactive = true
@@ -387,7 +422,12 @@ export function deactivateChildComponent(vm: Component, direct?: boolean) {
     callHook(vm, 'deactivated')
   }
 }
-
+// 禁用依赖追踪。
+// 设置当前组件实例以便于钩子函数访问。
+// 调用组件内定义的钩子处理函数，并捕获错误。
+// 触发hook:<hook>事件，若组件支持。
+// 恢复之前的组件实例和作用域。
+// 恢复依赖追踪。
 export function callHook(
   vm: Component,
   hook: string,

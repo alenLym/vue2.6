@@ -17,7 +17,10 @@ import { isUpdatingChildComponent } from './lifecycle'
 import type { Component } from 'types/component'
 import { currentInstance, setCurrentInstance } from 'v3/currentInstance'
 import { syncSetupSlots } from 'v3/apiSetup'
-
+// 设置组件子树和静态节点缓存。
+// 获取父节点信息并解析插槽。
+// 绑定 createElement 方法到组件实例，提供内部 _c 和公共 $createElement 方法。
+// 设置响应式属性 $attrs 和 $listeners，并在开发模式下添加只读警告。
 export function initRender(vm: Component) {
   vm._vnode = null // 子树的根
   vm._staticTrees = null // v-once 缓存树
@@ -91,7 +94,14 @@ export let currentRenderingInstance: Component | null = null
 export function setCurrentRenderingInstance(vm: Component) {
   currentRenderingInstance = vm
 }
-
+// 安装渲染辅助函数：通过 installRenderHelpers 方法为 Vue 实例原型添加渲染相关的辅助方法。
+// 实现 $nextTick 方法：允许用户在 DOM 更新后执行回调函数。
+// 定义 _render 方法：
+// 处理作用域插槽。
+// 设置当前组件的父虚拟节点 ($vnode)。
+// 调用 render 函数生成虚拟节点。
+// 捕获渲染过程中的错误，并提供错误处理机制。
+// 确保返回单个根节点或空虚拟节点。
 export function renderMixin(Vue: typeof Component) {
   // 安装 Runtime Convenience Helpers
   installRenderHelpers(Vue.prototype)

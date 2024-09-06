@@ -38,7 +38,10 @@ const sharedPropertyDefinition = {
   get: noop,
   set: noop
 }
-
+// 在 target 对象上为指定的 key 创建一个代理属性。
+// 通过 sourceKey 指定的属性内部存储值。
+// get 方法从 sourceKey 中读取值。
+// set 方法将值写入 sourceKey 中。
 export function proxy(target: Object, sourceKey: string, key: string) {
   sharedPropertyDefinition.get = function proxyGetter() {
     return this[sourceKey][key]
@@ -48,7 +51,12 @@ export function proxy(target: Object, sourceKey: string, key: string) {
   }
   Object.defineProperty(target, key, sharedPropertyDefinition)
 }
-
+// 初始化属性（如果存在）。
+// 初始化组合式 API。
+// 初始化方法（如果存在）。
+// 初始化数据（如果存在），否则创建并观察空的数据对象。
+// 初始化计算属性（如果存在）。
+// 初始化监听器（如果存在且不是原生监听器）。
 export function initState(vm: Component) {
   const opts = vm.$options
   if (opts.props) initProps(vm, opts.props)
@@ -68,7 +76,12 @@ export function initState(vm: Component) {
     initWatch(vm, opts.watch)
   }
 }
-
+// 获取组件实例 (vm) 的属性数据 (propsData) 和创建一个浅层响应式对象 (props) 用于存储属性值。
+// 缓存属性键，便于后续更新时使用数组迭代。
+// 遍历所有属性选项，并验证每个属性的值。
+// 在开发模式下，检查属性名是否为保留属性，并发出警告；同时监听属性变化，若非根组件且非子组件更新时修改属性，也会发出警告。
+// 将属性值代理到组件实例上，以便访问。
+// 该函数确保了属性的响应式和正确性，并提供了调试信息。
 function initProps(vm: Component, propsOptions: Object) {
   const propsData = vm.$options.propsData || {}
   const props = (vm._props = shallowReactive({}))

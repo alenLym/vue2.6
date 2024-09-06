@@ -3,7 +3,11 @@ import { warn } from './debug'
 import { inBrowser } from './env'
 import { isPromise } from 'shared/util'
 import { pushTarget, popTarget } from '../observer/dep'
-
+// 停用依赖追踪避免无限渲染。
+// 如果存在vm，则遍历其父组件并调用每个父组件的errorCaptured钩子（若存在）。
+// 若有任意一个钩子返回false，则停止错误传播。
+// 若所有钩子执行完毕或未捕获，则进行全局错误处理。
+// 整个过程确保在最后恢复依赖追踪状态。
 export function handleError(err: Error, vm: any, info: string) {
   // 在处理错误处理程序时停用 deps tracking，以避免可能的无限渲染。
   // 另请： https://github.com/vuejs/vuex/issues/1505
@@ -30,7 +34,10 @@ export function handleError(err: Error, vm: any, info: string) {
     popTarget()
   }
 }
-
+// 尝试执行handler函数，并将结果存入res。
+// 如果res是Promise且未被处理，则捕获可能的错误，并标记为已处理以避免重复触发。
+// 捕捉执行过程中抛出的异常，并调用handleError进行处理。
+// 返回执行结果res。
 export function invokeWithErrorHandling(
   handler: Function,
   context: any,
@@ -52,7 +59,8 @@ export function invokeWithErrorHandling(
   }
   return res
 }
-
+// 检查是否存在自定义错误处理器，若有，则调用之；若处理器中抛出新错误且新错误与原错误不同，则记录新错误。
+// 若无自定义处理器或自定义处理器中未处理错误，则直接记录错误。
 function globalHandleError(err, vm, info) {
   if (config.errorHandler) {
     try {
@@ -67,7 +75,9 @@ function globalHandleError(err, vm, info) {
   }
   logError(err, vm, info)
 }
-
+// 如果在开发模式下，使用warn函数显示错误详情，包括错误类型和发生位置。
+// 如果在浏览器环境中且存在console对象，则将错误输出到控制台。
+// 否则，抛出错误。
 function logError(err, vm, info) {
   if (__DEV__) {
     warn(`Error in ${info}: "${err.toString()}"`, vm)

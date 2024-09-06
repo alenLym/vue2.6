@@ -37,26 +37,53 @@ export interface WatcherOptions extends DebuggerOptions {
  * 这用于 $watch（） API 和指令。
  * @internal
  */
+
+// 该 TypeScript 类 Watcher 实现了依赖追踪与更新机制，主要用于 Vue.js 中的数据监听。具体功能如下：
+
+// 构造函数：初始化观察者实例，设置各种标志位（如 deep, lazy 等），并解析传入的表达式或函数以生成 getter。
+
+// get 方法：执行 getter 函数获取值，并记录依赖关系。
+
+// addDep 方法：向当前观察者添加一个依赖。
+
+// cleanupDeps 方法：清理不再需要的依赖。
+
+// update 方法：当依赖发生变化时被调用，根据配置决定立即更新或延迟更新。
+
+// run 方法：实际执行更新逻辑，计算新值并与旧值比较后回调通知变化。
+
+// evaluate 方法：仅对懒加载观察者有效，用于首次计算其值。
+
+// depend 方法：通知所有依赖进行依赖收集。
+
+// teardown 方法：销毁观察者，移除所有相关联的依赖关系。
 export default class Watcher implements DepTarget {
-  vm?: Component | null
-  expression: string
-  cb: Function
-  id: number
-  deep: boolean
-  user: boolean
-  lazy: boolean
-  sync: boolean
-  dirty: boolean
-  active: boolean
+  vm?: Component | null  //组件实例引用。
+  expression: string  //数据绑定表达式。
+  cb: Function  //更新回调函数。
+  id: number  //观察者唯一标识。
+
+  // 标记观察者特性或行为
+  deep: boolean  //是否深度观察。
+  user: boolean  //是否懒加载。
+  lazy: boolean  //是否懒加载。
+  sync: boolean  //是否同步更新
+  dirty: boolean  //是否已标记为脏（需更新）。
+  active: boolean    //是否激活状态。
+
+  //当前和新的依赖列表。
   deps: Array<Dep>
   newDeps: Array<Dep>
+
+  //当前和新的依赖ID集合。
   depIds: SimpleSet
   newDepIds: SimpleSet
-  before?: Function
-  onStop?: Function
-  noRecurse?: boolean
-  getter: Function
-  value: any
+
+  before?: Function  //更新前回调函数。
+  onStop?: Function  //停止观察时回调函数。
+  noRecurse?: boolean  // 是否禁止递归触发。
+  getter: Function  //获取数据值的方法。
+  value: any  //当前缓存值。
   post: boolean
 
   // 仅限 dev

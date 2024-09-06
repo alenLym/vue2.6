@@ -54,7 +54,10 @@ if (__DEV__) {
       }
     })
   }
-
+  // 首先检查 key 是否在 target 中。
+  // 判断 key 是否属于允许的全局变量或以 _ 开头且不在 target.$data 中。
+  // 如果 key 不在 target 中且不属于允许的情况，则根据 key 是否存在于 target.$data 发出不同警告。
+  // 最后返回 key 是否在 target 中或不属于允许的情况。
   const hasHandler = {
     has(target, key) {
       const has = key in target
@@ -70,7 +73,9 @@ if (__DEV__) {
       return has || !isAllowed
     }
   }
-
+  // 当通过字符串键 key 访问目标对象 target 时，若 key 不是 target 的属性，则检查 target.$data 中是否存在该键。
+  // 若 key 在 target.$data 中存在，则发出警告提示前缀被保留；否则，提示键未出现。
+  // 最后返回 target[key] 的值。
   const getHandler = {
     get(target, key) {
       if (typeof key === 'string' && !(key in target)) {
@@ -80,7 +85,12 @@ if (__DEV__) {
       return target[key]
     }
   }
-
+  // 检查是否存在 Proxy 支持。
+  // 如果支持 Proxy：
+  // 获取 Vue 实例的选项 ($options)。
+  // 根据选项中的 render 方法确定使用哪种代理处理器。
+  // 创建一个新的 Proxy 对象，将 vm 作为目标对象，并使用选定的处理器。
+  // 如果不支持 Proxy，直接将 _renderProxy 设置为 vm 本身。
   initProxy = function initProxy(vm) {
     if (hasProxy) {
       // 确定要使用的代理处理程序

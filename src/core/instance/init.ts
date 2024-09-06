@@ -12,7 +12,12 @@ import type { InternalComponentOptions } from 'types/options'
 import { EffectScope } from 'v3/reactivity/effectScope'
 
 let uid = 0
-
+// 为实例分配唯一UID和设置内部标识 _isVue 和 __v_skip。
+// 创建并配置效果范围 _scope。
+// 合并选项：根据是否为内部组件选择不同的合并方式。
+// 初始化代理、生命周期、事件、渲染等核心功能。
+// 调用生命周期钩子 beforeCreate 和 created。
+// 若指定挂载元素，则进行挂载。
 export function initMixin(Vue: typeof Component) {
   Vue.prototype._init = function (options?: Record<string, any>) {
     const vm: Component = this
@@ -80,7 +85,9 @@ export function initMixin(Vue: typeof Component) {
     }
   }
 }
-
+// 设置组件选项：通过继承构造函数的选项创建新对象，并赋值给vm.$options。
+// 更新父节点信息：设置父节点VNode和组件选项，如属性数据、监听器、子组件及标签名。
+// 可选渲染函数：如果提供了渲染函数，则更新相关选项。
 export function initInternalComponent(
   vm: Component,
   options: InternalComponentOptions
@@ -102,7 +109,10 @@ export function initInternalComponent(
     opts.staticRenderFns = options.staticRenderFns
   }
 }
-
+// 获取构造器的选项。
+// 如果存在父级构造器，则递归解析父级选项，并检查是否发生变化。
+// 若父级选项变化，更新构造器的父级选项，并合并可能存在的延迟修改。
+// 合并父级选项与扩展选项，并更新组件名称对应的构造器。返回最终的选项。
 export function resolveConstructorOptions(Ctor: typeof Component) {
   let options = Ctor.options
   if (Ctor.super) {
@@ -126,7 +136,10 @@ export function resolveConstructorOptions(Ctor: typeof Component) {
   }
   return options
 }
-
+// 该函数resolveModifiedOptions接收一个名为Ctor的类类型参数，该类具有options和sealedOptions属性。
+// 函数遍历latest（即Ctor.options）的所有键，如果某个键的值与sealed（即Ctor.sealedOptions）
+// 中的对应值不同，则将这个键及其值存入modified对象中。最后返回modified对象或null。
+// 主要功能是找出并返回修改过的选项。
 function resolveModifiedOptions(
   Ctor: typeof Component
 ): Record<string, any> | null {
